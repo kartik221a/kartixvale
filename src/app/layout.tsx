@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   creator: "Kartix Vale",
   publisher: "Kartix Vale",
   icons: {
-    icon: "/favicon.ico",
+    icon: "/favicon-source.png",
   },
   metadataBase: new URL(siteUrl),
   openGraph: {

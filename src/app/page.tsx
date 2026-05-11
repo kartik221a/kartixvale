@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { BookCard } from "@/components/book-card";
 import { EmailCapture } from "@/components/email-capture";
 import { FaqSection } from "@/components/faq-section";
@@ -24,16 +25,28 @@ export default function HomePage() {
   return (
     <main className="min-h-screen flex flex-col">
       {/* ===== HERO SECTION ===== */}
-      <section className="relative hero-gradient min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Atmospheric orbs */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blood/5 rounded-full blur-3xl animate-pulse-slow" />
-          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-midnight/10 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: "2s" }} />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold/3 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: "4s" }} />
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        {/* Background image */}
+        <div className="absolute inset-0">
+          <Image
+            src="/hero-bg.png"
+            alt="Dark romantic atmosphere"
+            fill
+            className="object-cover object-center"
+            priority
+            quality={90}
+          />
+          {/* Dark overlays */}
+          <div className="absolute inset-0 bg-black/60" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/80" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.4)_70%,rgba(0,0,0,0.9)_100%)]" />
         </div>
 
-        {/* Vignette overlay */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.4)_70%,rgba(0,0,0,0.8)_100%)]" />
+        {/* Atmospheric orbs */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blood/10 rounded-full blur-3xl animate-pulse-slow" />
+          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-midnight/15 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: "2s" }} />
+        </div>
 
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
           <motion.div
@@ -41,6 +54,19 @@ export default function HomePage() {
             animate="visible"
             variants={staggerContainer}
           >
+            {/* Logo */}
+            <motion.div variants={fadeInUp} className="mb-8">
+              <div className="w-24 h-24 md:w-28 md:h-28 mx-auto relative">
+                <Image
+                  src="/logo.png"
+                  alt="Kartix Vale Emblem"
+                  fill
+                  className="object-contain drop-shadow-[0_0_20px_rgba(201,168,76,0.3)]"
+                  priority
+                />
+              </div>
+            </motion.div>
+
             <motion.p variants={fadeInUp} className="text-gold/80 tracking-[0.3em] uppercase text-xs md:text-sm mb-6 font-medium">
               Dark Romance Author
             </motion.p>
@@ -65,7 +91,7 @@ export default function HomePage() {
               <a href="#featured-book">
                 <Button
                   size="lg"
-                  className="bg-blood-light hover:bg-blood text-white font-semibold px-8 h-12 text-base transition-all duration-300 hover:shadow-[0_0_30px_rgba(220,20,60,0.4)] hover:scale-105"
+                  className="bg-blood-light hover:bg-blood text-white font-semibold px-8 h-12 text-base transition-all duration-300 hover:shadow-[0_0_30px_rgba(220,20,60,0.5)] hover:scale-105"
                   data-track="explore-darkness"
                 >
                   <BookOpen className="h-5 w-5 mr-2" />
@@ -97,7 +123,7 @@ export default function HomePage() {
       </section>
 
       {/* ===== FEATURED BOOK SECTION ===== */}
-      <section id="featured-book" className="py-16 md:py-24 bg-gradient-dark">
+      <section id="featured-book" className="py-16 md:py-24 bg-gradient-dark relative">
         <div className="max-w-6xl mx-auto px-4">
           <motion.div
             initial="hidden"
@@ -129,6 +155,17 @@ export default function HomePage() {
           </motion.div>
         </div>
       </section>
+
+      {/* ===== SECTION DIVIDER IMAGE ===== */}
+      <div className="relative h-48 md:h-64 overflow-hidden">
+        <Image
+          src="/section-divider.png"
+          alt="Dark forest path"
+          fill
+          className="object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-transparent to-[#0a0a0a]" />
+      </div>
 
       {/* ===== MORE BOOKS SECTION ===== */}
       <section className="py-16 md:py-24 bg-[#0d0d0d]">
@@ -223,11 +260,18 @@ export default function HomePage() {
               variants={fadeInUp}
               className="flex flex-col md:flex-row items-center gap-8 md:gap-12"
             >
-              {/* Mysterious silhouette */}
+              {/* Mysterious emblem with logo */}
               <div className="flex-shrink-0">
-                <div className="w-40 h-40 md:w-48 md:h-48 rounded-full bg-gradient-to-br from-midnight via-blood/20 to-midnight flex items-center justify-center border border-border relative overflow-hidden">
+                <div className="w-40 h-40 md:w-48 md:h-48 rounded-full bg-gradient-to-br from-midnight via-blood/20 to-midnight flex items-center justify-center border border-gold/20 relative overflow-hidden shadow-[0_0_40px_rgba(139,0,0,0.2)]">
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-                  <span className="text-6xl md:text-7xl">🪶</span>
+                  <div className="relative w-24 h-24 md:w-28 md:h-28">
+                    <Image
+                      src="/logo.png"
+                      alt="Kartix Vale"
+                      fill
+                      className="object-contain opacity-70"
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -291,7 +335,7 @@ export default function HomePage() {
                 <motion.div
                   key={genre.title}
                   variants={fadeInUp}
-                  className="card-dark rounded-xl p-5 text-center group hover:border-blood/30 hover:shadow-[0_0_20px_rgba(139,0,0,0.1)] transition-all duration-300"
+                  className="card-dark rounded-xl p-5 text-center group hover:border-blood/30 hover:shadow-[0_0_20px_rgba(139,0,0,0.15)] transition-all duration-300"
                 >
                   <div className="text-3xl mb-2 group-hover:scale-110 transition-transform duration-300">
                     {genre.icon}
@@ -307,11 +351,18 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ===== EMAIL CAPTURE SECTION ===== */}
-      <section id="email-capture" className="py-16 md:py-24 bg-gradient-dark relative overflow-hidden">
-        {/* Background decoration */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blood/5 rounded-full blur-3xl" />
+      {/* ===== EMAIL CAPTURE SECTION WITH BACKGROUND ===== */}
+      <section id="email-capture" className="relative py-16 md:py-24 overflow-hidden">
+        {/* Background image */}
+        <div className="absolute inset-0">
+          <Image
+            src="/newsletter-bg.png"
+            alt="Dark letter and candle"
+            fill
+            className="object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-black/70" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0d0d0d] via-transparent to-[#0a0a0a]" />
         </div>
 
         <div className="max-w-xl mx-auto px-4 relative z-10">
@@ -364,7 +415,7 @@ export default function HomePage() {
                 rel="noopener noreferrer"
                 data-track="buy-amazon-cta"
               >
-                <Button className="bg-blood-light hover:bg-blood text-white font-semibold px-10 h-14 text-lg transition-all duration-300 hover:shadow-[0_0_40px_rgba(220,20,60,0.4)] hover:scale-105">
+                <Button className="bg-blood-light hover:bg-blood text-white font-semibold px-10 h-14 text-lg transition-all duration-300 hover:shadow-[0_0_40px_rgba(220,20,60,0.5)] hover:scale-105">
                   <BookOpen className="h-5 w-5 mr-2" />
                   Read Now — $2.99 on Amazon
                 </Button>
@@ -378,6 +429,15 @@ export default function HomePage() {
       <footer className="bg-[#050505] border-t border-border py-10 mt-auto">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center">
+            {/* Logo in footer */}
+            <div className="w-16 h-16 mx-auto mb-4 relative">
+              <Image
+                src="/logo.png"
+                alt="Kartix Vale"
+                fill
+                className="object-contain opacity-50"
+              />
+            </div>
             <p className="font-serif text-lg text-foreground/60 italic mb-4">
               &ldquo;Love was never meant to be safe&rdquo;
             </p>
@@ -394,7 +454,7 @@ export default function HomePage() {
               </a>
             </nav>
             <p className="text-xs text-muted-foreground/50">
-              © 2025 Kartix Vale. All rights reserved.
+              &copy; 2025 Kartix Vale. All rights reserved.
             </p>
             <p className="text-xs text-muted-foreground/40 mt-1">
               All books available on Amazon
