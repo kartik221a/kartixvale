@@ -55,16 +55,11 @@ export default function HomePage() {
             variants={staggerContainer}
           >
             {/* Logo */}
-            <motion.div variants={fadeInUp} className="mb-8">
-              <div className="w-24 h-24 md:w-28 md:h-28 mx-auto relative">
-                <Image
-                  src="/logo.png"
-                  alt="Kartix Vale Emblem"
-                  fill
-                  className="object-contain drop-shadow-[0_0_20px_rgba(201,168,76,0.3)]"
-                  priority
-                />
-              </div>
+            <motion.div variants={fadeInUp} className="mb-6">
+              <h2 className="logo-text text-3xl md:text-4xl uppercase">
+                Kartix
+              </h2>
+              <div className="w-12 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent mx-auto mt-2" />
             </motion.div>
 
             <motion.p variants={fadeInUp} className="text-gold/80 tracking-[0.3em] uppercase text-xs md:text-sm mb-6 font-medium">
@@ -260,18 +255,13 @@ export default function HomePage() {
               variants={fadeInUp}
               className="flex flex-col md:flex-row items-center gap-8 md:gap-12"
             >
-              {/* Mysterious emblem with logo */}
+              {/* Mysterious emblem with text logo */}
               <div className="flex-shrink-0">
                 <div className="w-40 h-40 md:w-48 md:h-48 rounded-full bg-gradient-to-br from-midnight via-blood/20 to-midnight flex items-center justify-center border border-gold/20 relative overflow-hidden shadow-[0_0_40px_rgba(139,0,0,0.2)]">
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-                  <div className="relative w-24 h-24 md:w-28 md:h-28">
-                    <Image
-                      src="/logo.png"
-                      alt="Kartix Vale"
-                      fill
-                      className="object-contain opacity-70"
-                    />
-                  </div>
+                  <span className="relative logo-text text-3xl md:text-4xl uppercase">
+                    Kartix
+                  </span>
                 </div>
               </div>
 
@@ -430,13 +420,10 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center">
             {/* Logo in footer */}
-            <div className="w-16 h-16 mx-auto mb-4 relative">
-              <Image
-                src="/logo.png"
-                alt="Kartix Vale"
-                fill
-                className="object-contain opacity-50"
-              />
+            <div className="mb-4">
+              <span className="logo-text text-xl uppercase">
+                Kartix
+              </span>
             </div>
             <p className="font-serif text-lg text-foreground/60 italic mb-4">
               &ldquo;Love was never meant to be safe&rdquo;
