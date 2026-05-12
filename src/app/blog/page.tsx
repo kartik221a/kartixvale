@@ -134,28 +134,28 @@ export default function BlogPage() {
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
             >
               {blogPosts.map((post) => (
-                <motion.div key={post.slug} variants={fadeInUp}>
-                  <Link href={`/blog/${post.slug}`} className="block group">
-                    <article className="card-dark rounded-xl p-6 h-full flex flex-col hover:border-blood/30 hover:shadow-[0_0_25px_rgba(139,0,0,0.15)] transition-all duration-300 group-hover:scale-[1.02]">
+                <motion.div key={post.slug} variants={fadeInUp} className="flex">
+                  <Link href={`/blog/${post.slug}`} className="block group w-full">
+                    <article className="card-dark rounded-xl p-6 flex flex-col hover:border-blood/30 hover:shadow-[0_0_25px_rgba(139,0,0,0.15)] transition-all duration-300 group-hover:scale-[1.02] h-full">
                       {/* Category Badge */}
-                      <div className="mb-4">
+                      <div className="mb-4 min-h-[28px] flex items-center">
                         <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium uppercase tracking-wider ${post.categoryColor}`}>
                           {post.category}
                         </span>
                       </div>
 
-                      {/* Title */}
-                      <h3 className="font-serif text-xl md:text-2xl text-foreground mb-3 group-hover:text-gold transition-colors duration-300 line-clamp-3">
+                      {/* Title — fixed height for 2 lines */}
+                      <h3 className="font-serif text-xl md:text-2xl text-foreground mb-3 group-hover:text-gold transition-colors duration-300 line-clamp-2 min-h-[3.5rem]">
                         {post.title}
                       </h3>
 
-                      {/* Excerpt */}
-                      <p className="text-muted-foreground text-sm leading-relaxed mb-4 flex-grow line-clamp-3">
+                      {/* Excerpt — fixed height for 3 lines */}
+                      <p className="text-muted-foreground text-sm leading-relaxed mb-4 flex-grow line-clamp-3 min-h-[4.5rem]">
                         {post.excerpt}
                       </p>
 
                       {/* Meta: Date + Read Time */}
-                      <div className="flex items-center gap-4 text-xs text-muted-foreground/70 pt-4 border-t border-border/50">
+                      <div className="flex items-center gap-4 text-xs text-muted-foreground/70 pt-4 border-t border-border/50 min-h-[32px]">
                         <span className="flex items-center gap-1.5">
                           <Calendar className="h-3.5 w-3.5" />
                           {formatDate(post.date)}
@@ -167,7 +167,7 @@ export default function BlogPage() {
                       </div>
 
                       {/* Read More Arrow */}
-                      <div className="mt-3 flex items-center gap-2 text-blood-light text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div className="mt-3 flex items-center gap-2 text-blood-light text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 min-h-[20px]">
                         Read article
                         <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
                       </div>
