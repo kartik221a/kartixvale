@@ -1,10 +1,15 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Allow: /
+Allow: /books
+Allow: /about
+Allow: /blog
+Allow: /blog/
+Crawl-delay: 1
 
-Sitemap: https://kartixvale.com/sitemap.xml
-
-# Disallow admin routes
-User-agent: *
+# Disallow admin and API routes
 Disallow: /admin
 Disallow: /api/
+
+# Sitemap
+Sitemap: https://kartixvale.com/sitemap.xml

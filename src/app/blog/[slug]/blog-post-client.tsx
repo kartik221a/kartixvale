@@ -4,8 +4,8 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { Navbar } from "@/components/layout/navbar";
 import { Button } from "@/components/ui/button";
-import { BlogPost } from "@/lib/blog-data";
-import { ArrowLeft, BookOpen, Calendar, Clock } from "lucide-react";
+import { blogPosts, BlogPost } from "@/lib/blog-data";
+import { ArrowLeft, BookOpen, Calendar, Clock, ArrowRight } from "lucide-react";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -34,6 +34,11 @@ interface BlogPostClientProps {
 }
 
 export default function BlogPostClient({ post }: BlogPostClientProps) {
+  // Get related posts (excluding current, max 3)
+  const relatedPosts = blogPosts
+    .filter((p) => p.slug !== post.slug)
+    .slice(0, 3);
+
   return (
     <main className="min-h-screen flex flex-col">
       <Navbar />
@@ -114,46 +119,62 @@ export default function BlogPostClient({ post }: BlogPostClientProps) {
         </div>
       </section>
 
-      {/* ===== READ NEXT CTA ===== */}
+      {/* ===== RELATED ARTICLES ===== */}
       <section className="py-16 md:py-20 bg-section-alt relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-blood/5 rounded-full blur-3xl" />
         </div>
 
-        <div className="max-w-2xl mx-auto px-4 text-center relative z-10">
+        <div className="max-w-4xl mx-auto px-4 relative z-10">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             variants={staggerContainer}
           >
-            <motion.div variants={fadeInUp}>
-              <BookOpen className="h-10 w-10 text-gold mx-auto mb-6" />
+            <motion.div variants={fadeInUp} className="text-center mb-10">
+              <p className="text-gold/80 tracking-[0.3em] uppercase text-xs md:text-sm mb-3">
+                Keep Reading
+              </p>
+              <h2 className="font-serif text-2xl md:text-3xl text-foreground">
+                Related Articles
+              </h2>
+              <div className="divider-gold w-24 mx-auto mt-4" />
             </motion.div>
-            <motion.h2
-              variants={fadeInUp}
-              className="font-serif text-3xl md:text-4xl text-foreground mb-4"
+
+            <motion.div
+              variants={staggerContainer}
+              className="grid grid-cols-1 md:grid-cols-3 gap-5"
             >
-              Read Next
-            </motion.h2>
-            <motion.p
-              variants={fadeInUp}
-              className="text-muted-foreground text-base md:text-lg mb-8 max-w-lg mx-auto"
-            >
-              Step from words into worlds. Explore Kartix Vale&apos;s complete collection of dark romance novels.
-            </motion.p>
-            <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              {relatedPosts.map((related) => (
+                <motion.div key={related.slug} variants={fadeInUp} className="flex">
+                  <Link href={`/blog/${related.slug}`} className="block group w-full">
+                    <article className="card-dark rounded-xl p-5 flex flex-col h-full hover:border-blood/30 hover:shadow-[0_0_25px_rgba(139,0,0,0.15)] transition-all duration-300">
+                      <span className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-medium uppercase tracking-wider ${related.categoryColor} mb-3 w-fit`}>
+                        {related.category}
+                      </span>
+                      <h3 className="font-serif text-base text-foreground mb-2 group-hover:text-gold transition-colors duration-300 line-clamp-2 leading-snug">
+                        {related.title}
+                      </h3>
+                      <p className="text-muted-foreground text-xs leading-relaxed mb-3 flex-grow line-clamp-2">
+                        {related.excerpt}
+                      </p>
+                      <div className="flex items-center gap-2 text-blood-light text-xs font-medium group-hover:gap-3 transition-all duration-300">
+                        Read article
+                        <ArrowRight className="h-3 w-3" />
+                      </div>
+                    </article>
+                  </Link>
+                </motion.div>
+              ))}
+            </motion.div>
+
+            {/* Internal link to books page */}
+            <motion.div variants={fadeInUp} className="text-center mt-10">
               <Link href="/books">
                 <Button className="bg-blood-light hover:bg-blood text-white font-semibold px-8 h-12 text-base transition-all duration-300 hover:shadow-[0_0_30px_rgba(220,20,60,0.5)] hover:scale-105">
-                  Browse the Collection
-                </Button>
-              </Link>
-              <Link href="/blog">
-                <Button
-                  variant="outline"
-                  className="border-gold/30 text-gold hover:bg-gold/10 hover:border-gold/50 transition-all duration-300"
-                >
-                  More Articles
+                  <BookOpen className="h-5 w-5 mr-2" />
+                  Browse All Books
                 </Button>
               </Link>
             </motion.div>

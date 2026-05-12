@@ -37,6 +37,9 @@ export const metadata: Metadata = {
   authors: [{ name: "Kartix Vale" }],
   creator: "Kartix Vale",
   publisher: "Kartix Vale",
+  alternates: {
+    canonical: siteUrl,
+  },
   icons: {
     icon: "/favicon-source.png",
   },
