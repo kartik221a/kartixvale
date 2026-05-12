@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const siteUrl = "https://kartixvale.com";
+const siteUrl = "https://kartixvale.vercel.app";
 
 export const metadata: Metadata = {
   title: "Kartix Vale — Dark Romance Author | Love Was Never Meant to Be Safe",

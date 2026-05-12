@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { getBlogPost, getAllBlogSlugs } from "@/lib/blog-data";
 import BlogPostClient from "./blog-post-client";
 
-const baseUrl = "https://kartixvale.com";
+const baseUrl = "https://kartixvale.vercel.app";
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;

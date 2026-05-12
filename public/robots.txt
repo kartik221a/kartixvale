@@ -12,4 +12,4 @@ Disallow: /admin
 Disallow: /api/
 
 # Sitemap
-Sitemap: https://kartixvale.com/sitemap.xml
+Sitemap: https://kartixvale.vercel.app/sitemap.xml

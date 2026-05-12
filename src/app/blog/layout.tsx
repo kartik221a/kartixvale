@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 
-const baseUrl = "https://kartixvale.com";
+const baseUrl = "https://kartixvale.vercel.app";
 
 export const metadata: Metadata = {
   title: "Blog — The Dark Library | Kartix Vale",
