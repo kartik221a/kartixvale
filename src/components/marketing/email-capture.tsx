@@ -83,7 +83,7 @@ export function EmailCapture({
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="bg-black/50 border-border text-foreground placeholder:text-muted-foreground focus:border-blood-light focus:ring-blood-light/30 h-11 flex-1"
+          className="bg-surface border-border text-foreground placeholder:text-muted-foreground focus:border-blood-light focus:ring-blood-light/30 h-11 flex-1"
         />
         <Button
           type="submit"
@@ -109,7 +109,7 @@ export function EmailCapture({
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="bg-black/50 border-border text-foreground placeholder:text-muted-foreground focus:border-blood-light focus:ring-blood-light/30 h-11"
+          className="bg-surface border-border text-foreground placeholder:text-muted-foreground focus:border-blood-light focus:ring-blood-light/30 h-11"
         />
         <Button
           type="submit"
@@ -151,7 +151,7 @@ export function EmailCapture({
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="bg-black/50 border-border text-foreground placeholder:text-muted-foreground focus:border-blood-light focus:ring-blood-light/30 h-11"
+          className="bg-surface border-border text-foreground placeholder:text-muted-foreground focus:border-blood-light focus:ring-blood-light/30 h-11"
         />
         <Button
           type="submit"

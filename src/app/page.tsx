@@ -314,7 +314,7 @@ export default function HomePage() {
       </section>
 
       {/* ===== BENEATH THE VEIL SERIES PREVIEW ===== */}
-      <section className="py-16 md:py-24 bg-[#0d0d0d] relative overflow-hidden">
+      <section className="py-16 md:py-24 bg-section-alt relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blood/5 rounded-full blur-3xl" />
         </div>
@@ -381,7 +381,7 @@ export default function HomePage() {
           fill
           className="object-cover object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-transparent to-[#0d0d0d]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-section-alt" />
       </div>
 
       {/* ===== ABOUT THE AUTHOR SECTION ===== */}
@@ -496,7 +496,7 @@ export default function HomePage() {
       </section>
 
       {/* ===== GENRE HIGHLIGHT SECTION ===== */}
-      <section className="py-16 md:py-24 bg-[#0d0d0d] relative overflow-hidden">
+      <section className="py-16 md:py-24 bg-section-alt relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-midnight/5 rounded-full blur-3xl" />
         </div>
@@ -532,7 +532,7 @@ export default function HomePage() {
                   >
                     <div className="flex items-center gap-3 mb-3">
                       <div
-                        className={`p-2 rounded-lg bg-white/5 ${genre.color} group-hover:scale-110 transition-transform duration-300`}
+                        className={`p-2 rounded-lg bg-muted/50 ${genre.color} group-hover:scale-110 transition-transform duration-300`}
                       >
                         <Icon className="h-5 w-5" />
                       </div>
@@ -656,7 +656,7 @@ export default function HomePage() {
       </section>
 
       {/* ===== CTA SECTION ===== */}
-      <section className="py-16 md:py-24 bg-[#0d0d0d] relative overflow-hidden">
+      <section className="py-16 md:py-24 bg-section-alt relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-blood/5 rounded-full blur-3xl" />
         </div>
@@ -728,7 +728,7 @@ export default function HomePage() {
       </section>
 
       {/* ===== FOOTER ===== */}
-      <footer className="bg-[#050505] border-t border-border py-10 mt-auto">
+      <footer className="bg-section-footer border-t border-border py-10 mt-auto">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center">
             <div className="mb-4">

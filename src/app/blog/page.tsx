@@ -181,7 +181,7 @@ export default function BlogPage() {
       </section>
 
       {/* ===== CTA SECTION ===== */}
-      <section className="py-16 md:py-20 bg-[#0d0d0d] relative overflow-hidden">
+      <section className="py-16 md:py-20 bg-section-alt relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[400px] bg-gold/3 rounded-full blur-3xl" />
         </div>
@@ -220,7 +220,7 @@ export default function BlogPage() {
       </section>
 
       {/* ===== FOOTER ===== */}
-      <footer className="bg-[#050505] border-t border-border py-10 mt-auto">
+      <footer className="bg-section-footer border-t border-border py-10 mt-auto">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center">
             <div className="mb-4">

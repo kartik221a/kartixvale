@@ -75,7 +75,7 @@ export function BookModal({ isOpen, onClose, book }: BookModalProps) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.92, y: 30 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="relative z-10 w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-gold/20 bg-[#111111] shadow-2xl shadow-black/60"
+            className="relative z-10 w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-gold/20 bg-surface shadow-2xl shadow-black/60"
           >
             {/* Close Button */}
             <button
@@ -125,7 +125,7 @@ export function BookModal({ isOpen, onClose, book }: BookModalProps) {
                     </Badge>
                   )}
                   {book.series && (
-                    <Badge className="bg-white/5 text-muted-foreground border-white/10 text-[10px] tracking-wider uppercase">
+                    <Badge className="bg-muted/50 text-muted-foreground border-border text-[10px] tracking-wider uppercase">
                       {book.series}
                     </Badge>
                   )}

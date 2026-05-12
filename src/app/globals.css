@@ -45,14 +45,68 @@
   --color-gold-dim: var(--gold-dim);
   --color-midnight: var(--midnight);
   --color-midnight-light: var(--midnight-light);
+  /* Theme-aware section colors */
+  --color-section-alt: var(--section-alt);
+  --color-section-footer: var(--section-footer);
+  --color-surface: var(--surface);
+  --color-overlay: var(--overlay);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+/* ===== LIGHT MODE (default) ===== */
 :root {
   --radius: 0.625rem;
+  --background: #faf6f0;
+  --foreground: #1a0a1e;
+  --card: #f0e8dc;
+  --card-foreground: #1a0a1e;
+  --popover: #f0e8dc;
+  --popover-foreground: #1a0a1e;
+  --primary: #8B0000;
+  --primary-foreground: #ffffff;
+  --secondary: #f0e8dc;
+  --secondary-foreground: #1a0a1e;
+  --muted: #e8ddd0;
+  --muted-foreground: #7a6b5d;
+  --accent: #e8ddd0;
+  --accent-foreground: #1a0a1e;
+  --destructive: #8B0000;
+  --border: #d4c5b3;
+  --input: #d4c5b3;
+  --ring: #8B0000;
+  --chart-1: #8B0000;
+  --chart-2: #C9A84C;
+  --chart-3: #4A1D8E;
+  --chart-4: #8B0000;
+  --chart-5: #2D1B4E;
+  --sidebar: #faf6f0;
+  --sidebar-foreground: #1a0a1e;
+  --sidebar-primary: #8B0000;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #e8ddd0;
+  --sidebar-accent-foreground: #1a0a1e;
+  --sidebar-border: #d4c5b3;
+  --sidebar-ring: #8B0000;
+
+  --blood: #8B0000;
+  --blood-light: #DC143C;
+  --gold: #C9A84C;
+  --gold-dim: #8B7535;
+  --midnight: #2D1B4E;
+  --midnight-light: #4A1D8E;
+
+  /* Theme-aware section colors - Light */
+  --section-alt: #f0e8dc;
+  --section-footer: #e8ddd0;
+  --surface: #f0e8dc;
+  --overlay: rgba(250, 246, 240, 0.9);
+}
+
+/* ===== DARK MODE ===== */
+.dark {
   --background: #0a0a0a;
   --foreground: #e8e4e0;
   --card: #111111;
@@ -91,6 +145,12 @@
   --gold-dim: #8B7535;
   --midnight: #2D1B4E;
   --midnight-light: #4A1D8E;
+
+  /* Theme-aware section colors - Dark */
+  --section-alt: #0d0d0d;
+  --section-footer: #050505;
+  --surface: #111111;
+  --overlay: rgba(10, 10, 10, 0.9);
 }
 
 @layer base {
@@ -125,24 +185,24 @@
     filter: drop-shadow(0 0 12px rgba(201, 168, 76, 0.3));
   }
   .bg-gradient-dark {
-    background: linear-gradient(180deg, #0a0a0a 0%, #111111 50%, #0a0a0a 100%);
+    background: linear-gradient(180deg, var(--background) 0%, var(--card) 50%, var(--background) 100%);
   }
   .bg-gradient-blood {
     background: linear-gradient(135deg, #8B0000 0%, #2D1B4E 100%);
   }
   .bg-gradient-midnight {
-    background: linear-gradient(135deg, #2D1B4E 0%, #0a0a0a 100%);
+    background: linear-gradient(135deg, #2D1B4E 0%, var(--background) 100%);
   }
   .hero-gradient {
-    background: 
+    background:
       radial-gradient(ellipse at 20% 50%, rgba(139, 0, 0, 0.15) 0%, transparent 50%),
       radial-gradient(ellipse at 80% 50%, rgba(45, 27, 78, 0.2) 0%, transparent 50%),
       radial-gradient(ellipse at 50% 0%, rgba(201, 168, 76, 0.05) 0%, transparent 50%),
-      linear-gradient(180deg, #0a0a0a 0%, #111111 100%);
+      linear-gradient(180deg, var(--background) 0%, var(--card) 100%);
   }
   .card-dark {
-    background: linear-gradient(145deg, #111111 0%, #0d0d0d 100%);
-    border: 1px solid #222222;
+    background: var(--surface);
+    border: 1px solid var(--border);
   }
   .divider-gold {
     background: linear-gradient(90deg, transparent, #C9A84C, transparent);
@@ -174,7 +234,8 @@
     line-height: 1.3;
   }
   .prose-dark p {
-    color: rgba(232, 228, 224, 0.8);
+    color: var(--foreground);
+    opacity: 0.8;
     line-height: 1.75;
     margin-bottom: 1rem;
   }
@@ -216,11 +277,14 @@
 }
 
 /* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
+.dark ::-webkit-scrollbar-track {
+  background: #0a0a0a;
 }
 ::-webkit-scrollbar-track {
-  background: #0a0a0a;
+  background: var(--background);
+}
+::-webkit-scrollbar {
+  width: 6px;
 }
 ::-webkit-scrollbar-thumb {
   background: #333;

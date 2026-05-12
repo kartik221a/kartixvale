@@ -3,8 +3,9 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Sun, Moon } from "lucide-react";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -16,7 +17,13 @@ const navLinks = [
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
+  const { theme, setTheme } = useTheme();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,11 +38,15 @@ export function Navbar() {
     setIsMobileOpen(false);
   }, []);
 
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isScrolled
-          ? "bg-[#0a0a0a]/90 backdrop-blur-md border-b border-border/50 shadow-lg shadow-black/30"
+          ? "bg-overlay backdrop-blur-md border-b border-border/50 shadow-lg shadow-black/10 dark:shadow-black/30"
           : "bg-transparent"
       }`}
     >
@@ -72,16 +83,60 @@ export function Navbar() {
               </Link>
             );
           })}
+
+          {/* Theme Toggle */}
+          {mounted && (
+            <button
+              onClick={toggleTheme}
+              className="relative w-9 h-9 flex items-center justify-center rounded-full border border-border/50 text-muted-foreground hover:text-blood-light hover:border-blood/30 transition-all duration-300 hover:scale-110"
+              aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                {theme === "dark" ? (
+                  <motion.div
+                    key="sun"
+                    initial={{ rotate: -90, opacity: 0, scale: 0.5 }}
+                    animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                    exit={{ rotate: 90, opacity: 0, scale: 0.5 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Sun className="h-4 w-4" />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="moon"
+                    initial={{ rotate: 90, opacity: 0, scale: 0.5 }}
+                    animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                    exit={{ rotate: -90, opacity: 0, scale: 0.5 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Moon className="h-4 w-4" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </button>
+          )}
         </div>
 
-        {/* Mobile Hamburger */}
-        <button
-          className="md:hidden flex items-center justify-center w-10 h-10 text-muted-foreground hover:text-blood-light transition-colors"
-          onClick={() => setIsMobileOpen(!isMobileOpen)}
-          aria-label={isMobileOpen ? "Close menu" : "Open menu"}
-        >
-          {isMobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        {/* Mobile: Theme Toggle + Hamburger */}
+        <div className="md:hidden flex items-center gap-2">
+          {mounted && (
+            <button
+              onClick={toggleTheme}
+              className="w-9 h-9 flex items-center justify-center rounded-full border border-border/50 text-muted-foreground hover:text-blood-light hover:border-blood/30 transition-all duration-300"
+              aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+            >
+              {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </button>
+          )}
+          <button
+            className="w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-blood-light transition-colors"
+            onClick={() => setIsMobileOpen(!isMobileOpen)}
+            aria-label={isMobileOpen ? "Close menu" : "Open menu"}
+          >
+            {isMobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </nav>
 
       {/* Mobile Menu */}
@@ -92,7 +147,7 @@ export function Navbar() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="md:hidden overflow-hidden bg-[#0a0a0a]/95 backdrop-blur-md border-b border-border/50"
+            className="md:hidden overflow-hidden bg-overlay backdrop-blur-md border-b border-border/50"
           >
             <div className="px-4 py-4 space-y-1">
               {navLinks.map((link) => {
@@ -105,7 +160,7 @@ export function Navbar() {
                     className={`block py-3 px-4 rounded-lg text-sm font-medium tracking-wider uppercase transition-all duration-200 ${
                       isActive
                         ? "text-blood-light bg-blood/10"
-                        : "text-muted-foreground hover:text-blood-light hover:bg-white/5"
+                        : "text-muted-foreground hover:text-blood-light hover:bg-white/5 dark:hover:bg-white/5"
                     }`}
                   >
                     {link.label}
