@@ -231,34 +231,54 @@ export default function BooksPage() {
                 <motion.div
                   key={book.title}
                   variants={fadeInUp}
-                  className="cursor-pointer group"
-                  onClick={() => openBookModal(book)}
+                  className="flex flex-col items-center"
                 >
-                  <DecayCard
-                    width={260}
-                    height={390}
-                    image={book.coverUrl}
-                    baseFrequency={0.015}
-                    numOctaves={5}
-                    seed={4}
-                    maxDisplacement={300}
-                    movementBound={30}
+                  {/* DecayCard - cover only, no overlay */}
+                  <div
+                    className="cursor-pointer group"
+                    onClick={() => openBookModal(book)}
                   >
-                    <div className="text-white text-left">
-                      <div className="text-lg leading-tight mb-1" style={{ fontSize: "1.1rem", lineHeight: "1.3" }}>
-                        {book.title.length > 35 ? book.title.substring(0, 35) + "…" : book.title}
-                      </div>
-                      <div className="text-sm text-white/70">{book.genre}</div>
-                      <div className="flex items-center gap-2 mt-2">
-                        <span className="text-sm text-blood-light font-semibold">{book.price}</span>
-                        {book.kindleUnlimited && (
-                          <Badge className="bg-gold/20 text-gold border-gold/30 text-[9px] uppercase tracking-wider">
-                            KU
-                          </Badge>
-                        )}
-                      </div>
+                    <DecayCard
+                      width={220}
+                      height={330}
+                      image={book.coverUrl}
+                      baseFrequency={0.015}
+                      numOctaves={5}
+                      seed={4}
+                      maxDisplacement={300}
+                      movementBound={30}
+                    />
+                  </div>
+                  {/* Title + Buy below the card */}
+                  <div className="mt-3 w-[220px] text-center">
+                    <h3
+                      className="font-serif text-sm text-foreground leading-tight line-clamp-2 mb-2 cursor-pointer hover:text-gold transition-colors duration-200"
+                      onClick={() => openBookModal(book)}
+                    >
+                      {book.title}
+                    </h3>
+                    <div className="flex items-center justify-center gap-2 mb-2">
+                      {book.kindleUnlimited && (
+                        <Badge className="bg-gold/15 text-gold border-gold/30 text-[9px] uppercase tracking-wider">
+                          KU
+                        </Badge>
+                      )}
+                      <Badge className="bg-blood/20 text-blood-light border-blood/30 text-[9px] uppercase tracking-wider">
+                        {book.genre}
+                      </Badge>
                     </div>
-                  </DecayCard>
+                    <a
+                      href={book.amazonUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <Button className="w-full bg-blood-light hover:bg-blood text-white font-semibold transition-all duration-300 hover:shadow-[0_0_20px_rgba(220,20,60,0.3)] text-xs h-9">
+                        <ExternalLink className="h-3 w-3 mr-1" />
+                        Buy — {book.price}
+                      </Button>
+                    </a>
+                  </div>
                 </motion.div>
               ))}
             </motion.div>
