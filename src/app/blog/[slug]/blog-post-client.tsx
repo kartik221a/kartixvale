@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { Navbar } from "@/components/layout/navbar";
 import { Button } from "@/components/ui/button";
-import { blogPosts, BlogPost } from "@/lib/blog-data";
+import { blogPosts, BlogPost, getPublishedPosts } from "@/lib/blog-data";
 import { BlogBuyCTA, BlogMultiBookCTA } from "@/components/blog/blog-buy-cta";
 import { ArrowLeft, BookOpen, Calendar, Clock, ArrowRight } from "lucide-react";
 
@@ -38,6 +38,13 @@ const BLOG_CTA_CONFIG: Record<string, Array<{ afterHeading: string; component: J
   "enemies-to-lovers-dark-romance": [],
   "beneath-the-veil-reading-order": [],
   "slow-burn-romance-why-the-wait": [],
+  "best-enemies-to-lovers-dark-romance-books": [],
+  "best-mafia-romance-books": [],
+  "what-is-mafia-romance": [],
+  "best-bully-romance-books": [],
+  "dark-romance-content-warnings": [],
+  "best-dark-romance-kindle-unlimited": [],
+  "best-stalker-romance-books": [],
 };
 
 interface BlogPostClientProps {
@@ -45,7 +52,7 @@ interface BlogPostClientProps {
 }
 
 export default function BlogPostClient({ post }: BlogPostClientProps) {
-  const relatedPosts = blogPosts
+  const relatedPosts = getPublishedPosts()
     .filter((p) => p.slug !== post.slug)
     .slice(0, 3);
 
@@ -321,6 +328,81 @@ function injectCTAs(slug: string, content: string): string {
       {
         afterH2Index: 4, // After "The Touch-Starved Trope"
         html: buildSecondaryCTA("the-gotham-reapers-bride", "Slow burn gothic romance"),
+      },
+    ],
+    "best-enemies-to-lovers-dark-romance-books": [
+      {
+        afterH2Index: 3,
+        html: buildPrimaryCTA("thorns-of-the-fae-thorne", "The #1 slow burn enemies to lovers"),
+      },
+      {
+        afterH2Index: 6,
+        html: buildSecondaryCTA("a-bargain-in-shadows", "Enemies to lovers, gothic style"),
+      },
+    ],
+    "best-mafia-romance-books": [
+      {
+        afterH2Index: 3,
+        html: buildPrimaryCTA("the-gotham-reapers-bride", "Dark romance with dangerous secrets"),
+      },
+      {
+        afterH2Index: 6,
+        html: buildSecondaryCTA("a-bargain-in-shadows", "Marriage of convenience goes dark"),
+      },
+    ],
+    "what-is-mafia-romance": [
+      {
+        afterH2Index: 2,
+        html: buildPrimaryCTA("the-gotham-reapers-bride", "A gothic take on mafia romance"),
+      },
+      {
+        afterH2Index: 4,
+        html: buildMultiBookCTA(
+          ["the-gotham-reapers-bride", "a-bargain-in-shadows"],
+          "Start Your Dark Romance Journey"
+        ),
+      },
+    ],
+    "best-bully-romance-books": [
+      {
+        afterH2Index: 3,
+        html: buildPrimaryCTA("thorns-of-the-fae-thorne", "Dark romance with reluctant bonds"),
+      },
+      {
+        afterH2Index: 6,
+        html: buildSecondaryCTA("the-gotham-reapers-bride", "Dark romance at its most intense"),
+      },
+    ],
+    "dark-romance-content-warnings": [
+      {
+        afterH2Index: 3,
+        html: buildMultiBookCTA(
+          ["thorns-of-the-fae-thorne", "the-gotham-reapers-bride", "a-bargain-in-shadows"],
+          "Dark Romance With Clear Content Warnings"
+        ),
+      },
+    ],
+    "best-dark-romance-kindle-unlimited": [
+      {
+        afterH2Index: 2,
+        html: buildPrimaryCTA("thorns-of-the-fae-thorne", "Free on Kindle Unlimited"),
+      },
+      {
+        afterH2Index: 5,
+        html: buildMultiBookCTA(
+          ["thorns-of-the-fae-thorne", "the-gotham-reapers-bride", "a-bargain-in-shadows"],
+          "All on Kindle Unlimited"
+        ),
+      },
+    ],
+    "best-stalker-romance-books": [
+      {
+        afterH2Index: 3,
+        html: buildPrimaryCTA("thorns-of-the-fae-thorne", "Obsessive devotion at its darkest"),
+      },
+      {
+        afterH2Index: 6,
+        html: buildSecondaryCTA("the-gotham-reapers-bride", "A watcher in the shadows"),
       },
     ],
   };

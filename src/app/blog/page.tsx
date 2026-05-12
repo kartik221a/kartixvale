@@ -7,7 +7,7 @@ import { Navbar } from "@/components/layout/navbar";
 import Particles from "@/components/reactbits/Particles";
 import GlitchText from "@/components/reactbits/GlitchText";
 import { Button } from "@/components/ui/button";
-import { blogPosts } from "@/lib/blog-data";
+import { getPublishedPosts } from "@/lib/blog-data";
 import { BookOpen, Clock, ArrowRight, Calendar } from "lucide-react";
 
 const fadeInUp = {
@@ -133,7 +133,7 @@ export default function BlogPage() {
               variants={staggerContainer}
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
             >
-              {blogPosts.map((post) => (
+              {getPublishedPosts().map((post) => (
                 <motion.div key={post.slug} variants={fadeInUp} className="flex">
                   <Link href={`/blog/${post.slug}`} className="block group w-full">
                     <article className="card-dark rounded-xl p-6 flex flex-col hover:border-blood/30 hover:shadow-[0_0_25px_rgba(139,0,0,0.15)] transition-all duration-300 group-hover:scale-[1.02] h-full">
