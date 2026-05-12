@@ -164,16 +164,17 @@ export const blogPosts: BlogPost[] = [
 <p><strong>Tropes:</strong> Arranged marriage, fae prince, slow burn, hidden identity, court politics</p>
 <p>Katria swore she'd never fall in love — but when her hand in marriage is sold to a fae prince, she finds herself in a glittering, treacherous fae court with a husband who is far more than he seems. This standalone in the Married to Magic series delivers a swoon-worthy slow burn with courtly intrigue, hidden identities, and a fae prince whose secrets could destroy them both. A fan favorite for its whimsical world-building and emotionally satisfying romance.</p>
 
-<h2>12. House of Earth and Blood — Sarah J. Maas</h2>
-<p><strong>Tropes:</strong> Half-fae heroine, enemies to lovers, murder mystery, slow burn, urban fae fantasy</p>
-<p>Half-Fae Bryce Quinlan's life is shattered when her best friend is murdered by a demon. To find the killer, she's forced to partner with Hunt Athalar, an enslaved Fallen angel assassin. Set in a gritty modern fantasy city where fae, angels, shifters, and vampires coexist, this adult fantasy romance weaves a murder investigation with a slow-burn, high-stakes love story. Bryce's half-fae identity and the intricate fae power structures are central to the plot, making this a must-read for dark fae romance fans who want something darker and more mature.</p>
+<h2>12. A Ruin of Roses — K.F. Breene</h2>
+<p><strong>Tropes:</strong> Fae courts, why choose, captive romance, dark magic, morally grey love interests</p>
+<p>When a human woman is stolen away to the Delicate Court — a fae realm where beauty is a weapon and cruelty is an art form — she expects to be killed. Instead, she finds herself the obsession of three dangerously powerful fae males, each with their own reasons for wanting to keep her. K.F. Breene's Delicate Court series is dark fae romance that doesn't hold back: the court politics are lethal, the love interests are morally questionable at best, and the heroine must learn to navigate a world where survival means playing a game she doesn't understand. Steamy, intense, and impossible to put down.</p>
 
 <h2>13. Quicksilver — Callie Hart</h2>
 <p><strong>Tropes:</strong> Enemies to lovers, fae courts, alchemy, touch-her-and-die, morally grey hero, forced proximity</p>
 <p>In a world of warring fae courts and ancient alchemy, a human woman finds herself bound to a deadly fae lord with a reputation for cruelty. Their explosive enemies-to-lovers dynamic drives this dark and spicy romantasy, packed with courtly intrigue, centuries-long conflicts, and a tension that leaps off the page. A newer entry that quickly became a BookTok favorite for its sharp banter and high-stakes fae politics.</p>
 
-<h2>14. The Folk of the Air Series — Holly Black</h2>
-<p>Continuing Jude and Cardan's story through <em>The Wicked King</em> and <em>The Queen of Nothing</em>, this trilogy is essential dark fae romance. The political machinations escalate beautifully across all three books — from a mortal girl fighting for survival in a court that despises her, to a queen who has learned to wield cruelty as deftly as any fae lord. The final book delivers a payoff that makes the entire journey worth it, and Cardan's evolution from cruel prince to devoted king remains one of the most satisfying character arcs in the genre.</p>
+<h2>14. To Bleed a Crystal Bloom — Sarah A. Parker</h2>
+<p><strong>Tropes:</strong> Dark fae romance, stalker hero, obsession, morally grey MMC, forced proximity</p>
+<p>She was never supposed to see the fae. But when she does, one of them sees her back — and he has no intention of looking away. Sarah A. Parker's dark fae romance is obsession distilled into prose: a hero who watches from the shadows, a heroine who refuses to be prey, and a pull between them that neither can resist. The fae world here is beautifully cruel, the tension is suffocating, and the romance walks the razor edge between terrifying and tender. A must-read for anyone who loves their fae love interests possessive, dangerous, and utterly devoted.</p>
 
 <h2>15. These Twisted Bonds — Lexi Ryan</h2>
 <p><strong>Tropes:</strong> Rival fae courts, love triangle, hidden identity, betrayal, dark fae politics</p>
