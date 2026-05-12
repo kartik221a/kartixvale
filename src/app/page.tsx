@@ -185,7 +185,7 @@ export default function HomePage() {
               variants={staggerContainer}
               className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6"
             >
-              {/* Real book */}
+              {/* All books */}
               <motion.div variants={fadeInUp}>
                 <BookCard
                   title="Thorns of the Fae Thorne: A Slow Burn Dark Fae Romance"
@@ -195,29 +195,66 @@ export default function HomePage() {
                   amazonUrl="https://www.amazon.com/dp/B0H1BTKZ4M"
                 />
               </motion.div>
-
-              {/* Coming Soon placeholders */}
               <motion.div variants={fadeInUp}>
                 <BookCard
-                  title="Title to be revealed"
-                  coverUrl="/coming-soon-cover.svg"
-                  genre="Paranormal Romance"
-                  comingSoon
-                />
-              </motion.div>
-              <motion.div variants={fadeInUp}>
-                <BookCard
-                  title="Title to be revealed"
-                  coverUrl="/coming-soon-cover.svg"
+                  title="The Gotham Reaper's Bride: A Dark Gothic Romance of Murder and Marriage"
+                  coverUrl="https://m.media-amazon.com/images/I/61+jamW5fJL._SL1499_.jpg"
                   genre="Gothic Romance"
-                  comingSoon
+                  price="$2.99"
+                  amazonUrl="https://www.amazon.com/dp/B0GZZN42ZH"
                 />
               </motion.div>
               <motion.div variants={fadeInUp}>
                 <BookCard
+                  title="Behind the Veil: A Dark Gothic Paranormal Romance"
+                  coverUrl="https://m.media-amazon.com/images/I/61C5PJYM7tL._SL1499_.jpg"
+                  genre="Paranormal Romance"
+                  price="$5.99"
+                  amazonUrl="https://www.amazon.com/dp/B0GZ72XX4W"
+                />
+              </motion.div>
+              <motion.div variants={fadeInUp}>
+                <BookCard
+                  title="A Crown of Ashes: Beneath the Veil — Book Three"
+                  coverUrl="https://m.media-amazon.com/images/I/71LQrdTVsgL._SL1499_.jpg"
+                  genre="Dark Fantasy Thriller"
+                  price="$5.99"
+                  amazonUrl="https://www.amazon.com/dp/B0GY9H2W2R"
+                />
+              </motion.div>
+              <motion.div variants={fadeInUp}>
+                <BookCard
+                  title="The Unholy Reverie: A Supernatural Psychological Thriller"
+                  coverUrl="https://m.media-amazon.com/images/I/71tfd6o7v-L._SL1499_.jpg"
+                  genre="Supernatural Thriller"
+                  price="$5.99"
+                  amazonUrl="https://www.amazon.com/dp/B0GX7BLW1N"
+                />
+              </motion.div>
+              <motion.div variants={fadeInUp}>
+                <BookCard
+                  title="The Crown of Ash and Tides: A Dark Epic Fantasy"
+                  coverUrl="https://m.media-amazon.com/images/I/81oKnxJvFJL._SL1500_.jpg"
+                  genre="Dark Epic Fantasy"
+                  price="$5.99"
+                  amazonUrl="https://www.amazon.com/dp/B0GSN8SKYB"
+                />
+              </motion.div>
+              <motion.div variants={fadeInUp}>
+                <BookCard
+                  title="A Bargain in Shadows: A Gothic Victorian Dark Romance"
+                  coverUrl="https://m.media-amazon.com/images/I/610eFf4cJYL._SL1499_.jpg"
+                  genre="Gothic Romance"
+                  price="$5.99"
+                  amazonUrl="https://www.amazon.com/dp/B0GWZQ8QDM"
+                />
+              </motion.div>
+              {/* Coming Soon placeholder */}
+              <motion.div variants={fadeInUp}>
+                <BookCard
                   title="Title to be revealed"
                   coverUrl="/coming-soon-cover.svg"
-                  genre="Fantasy Romance"
+                  genre="Coming Soon"
                   comingSoon
                 />
               </motion.div>
