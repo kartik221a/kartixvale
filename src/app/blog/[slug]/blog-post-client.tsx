@@ -445,7 +445,7 @@ function buildPrimaryCTA(bookSlug: string, context: string): string {
         ${book.ku ? '<span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[rgba(201,168,76,0.15)] text-[#C9A84C] border border-[rgba(201,168,76,0.3)]">KU</span>' : ''}
       </div>
       <div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-3">
-        <a href="${book.amazon}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1.5 px-6 h-10 text-sm font-semibold text-white bg-[#dc143c] hover:bg-[#8B0000] rounded-md transition-all duration-300 hover:shadow-[0_0_25px_rgba(220,20,60,0.4)] hover:scale-105 no-underline">
+        <a href="${book.amazon}" target="_blank" rel="noopener noreferrer" style="background-color:#DC143C;color:#ffffff" onmouseenter="this.style.backgroundColor='#8B0000';this.style.color='#ffffff'" onmouseleave="this.style.backgroundColor='#DC143C';this.style.color='#ffffff'" class="inline-flex items-center justify-center gap-1.5 px-6 h-10 text-sm font-semibold rounded-md transition-all duration-300 hover:shadow-[0_0_25px_rgba(220,20,60,0.4)] hover:scale-105 no-underline">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
           Buy on Amazon — ${book.price}
         </a>
@@ -511,7 +511,7 @@ function buildSecondaryCTA(bookSlug: string, context: string): string {
       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
       Free
     </a>` : ''}
-    <a href="${book.amazon}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1 px-4 h-8 text-xs font-semibold text-white bg-[#dc143c] hover:bg-[#8B0000] rounded transition-all duration-300 no-underline">
+    <a href="${book.amazon}" target="_blank" rel="noopener noreferrer" style="background-color:#DC143C;color:#ffffff" onmouseenter="this.style.backgroundColor='#8B0000';this.style.color='#ffffff'" onmouseleave="this.style.backgroundColor='#DC143C';this.style.color='#ffffff'" class="inline-flex items-center justify-center gap-1 px-4 h-8 text-xs font-semibold rounded transition-all duration-300 no-underline">
       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
       Buy
     </a>
@@ -581,7 +581,7 @@ function buildMultiBookCTA(bookSlugs: string[], context: string): string {
           ${book.ku ? '<span class="inline-block px-1.5 py-0 rounded-full text-[8px] font-bold uppercase tracking-wider bg-[rgba(201,168,76,0.15)] text-[#C9A84C] border border-[rgba(201,168,76,0.2)]">KU</span>' : ''}
         </div>
         <div class="flex items-center gap-2">
-          <a href="${book.amazon}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1 px-3 h-7 text-[10px] font-semibold text-white bg-[#dc143c] hover:bg-[#8B0000] rounded transition-all duration-300 no-underline">
+          <a href="${book.amazon}" target="_blank" rel="noopener noreferrer" style="background-color:#DC143C;color:#ffffff" onmouseenter="this.style.backgroundColor='#8B0000';this.style.color='#ffffff'" onmouseleave="this.style.backgroundColor='#DC143C';this.style.color='#ffffff'" class="inline-flex items-center justify-center gap-1 px-3 h-7 text-[10px] font-semibold rounded transition-all duration-300 no-underline">
             <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
             ${book.price}
           </a>
