@@ -14,6 +14,7 @@ interface BookCardProps {
   comingSoon?: boolean;
   featured?: boolean;
   description?: string;
+  onBookClick?: () => void;
 }
 
 export function BookCard({
@@ -25,13 +26,17 @@ export function BookCard({
   comingSoon = false,
   featured = false,
   description,
+  onBookClick,
 }: BookCardProps) {
   if (featured) {
     return (
       <article className="card-dark rounded-xl overflow-hidden">
         <div className="flex flex-col md:flex-row gap-6 md:gap-8 p-6 md:p-8">
-          {/* Book Cover */}
-          <div className="flex-shrink-0 flex justify-center">
+          {/* Book Cover - clickable */}
+          <div
+            className="flex-shrink-0 flex justify-center cursor-pointer"
+            onClick={onBookClick}
+          >
             <div className="relative w-48 md:w-64 aspect-[2/3] rounded-lg overflow-hidden shadow-2xl shadow-black/50 group">
               <Image
                 src={coverUrl}
@@ -49,7 +54,10 @@ export function BookCard({
             <Badge className="bg-blood/20 text-blood-light border-blood/30 w-fit mb-3 text-xs tracking-wider uppercase">
               {genre}
             </Badge>
-            <h3 className="font-serif text-2xl md:text-3xl lg:text-4xl text-foreground mb-3 leading-tight">
+            <h3
+              className="font-serif text-2xl md:text-3xl lg:text-4xl text-foreground mb-3 leading-tight cursor-pointer hover:text-gold transition-colors duration-200"
+              onClick={onBookClick}
+            >
               {title}
             </h3>
             {description && (
@@ -99,8 +107,11 @@ export function BookCard({
   // Standard card - vertical grid card
   return (
     <article className="card-dark rounded-xl overflow-hidden group transition-all duration-300 hover:border-blood/30 hover:shadow-[0_0_30px_rgba(139,0,0,0.15)]">
-      {/* Book Cover */}
-      <div className="relative aspect-[2/3] overflow-hidden">
+      {/* Book Cover - clickable */}
+      <div
+        className="relative aspect-[2/3] overflow-hidden cursor-pointer"
+        onClick={comingSoon ? undefined : onBookClick}
+      >
         <Image
           src={coverUrl}
           alt={title}
@@ -119,11 +130,22 @@ export function BookCard({
         <Badge className="absolute top-2 left-2 bg-blood/80 text-white border-none text-[10px] md:text-xs tracking-wider uppercase">
           {genre}
         </Badge>
+        {/* Hover hint - only for non-coming-soon */}
+        {!comingSoon && (
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/30">
+            <span className="text-white/80 text-xs font-medium tracking-wider uppercase bg-black/40 px-3 py-1.5 rounded-full border border-white/10">
+              View Details
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Card Content */}
       <div className="p-2.5 md:p-4">
-        <h3 className="font-serif text-xs md:text-base text-foreground mb-2 leading-tight line-clamp-2">
+        <h3
+          className={`font-serif text-xs md:text-base text-foreground mb-2 leading-tight line-clamp-2 ${!comingSoon ? "cursor-pointer hover:text-gold transition-colors duration-200" : ""}`}
+          onClick={comingSoon ? undefined : onBookClick}
+        >
           {title}
         </h3>
         {comingSoon ? (
@@ -140,6 +162,7 @@ export function BookCard({
             rel="noopener noreferrer"
             data-track={`buy-amazon-${title.slice(0, 20)}`}
             className="block"
+            onClick={(e) => e.stopPropagation()}
           >
             <Button className="w-full bg-blood-light hover:bg-blood text-white font-semibold transition-all duration-300 hover:shadow-[0_0_20px_rgba(220,20,60,0.3)] text-xs md:text-sm">
               <ExternalLink className="h-3 w-3 mr-1" />
