@@ -10,6 +10,7 @@ import { Menu, X, Sun, Moon } from "lucide-react";
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/books", label: "Books" },
+  { href: "/free-reads", label: "Free Reads" },
   { href: "/blog", label: "Blog" },
   { href: "/about", label: "About" },
 ];

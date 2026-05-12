@@ -300,6 +300,7 @@ export default function HomePage() {
                 genre={booksData[0].genre}
                 price={booksData[0].price}
                 amazonUrl={booksData[0].amazonUrl}
+                freeReadSlug={booksData[0].freeReadSlug}
                 featured
                 description={
                   booksData[0].description[0] +
@@ -353,6 +354,7 @@ export default function HomePage() {
                     genre={book.genre}
                     price={book.price}
                     amazonUrl={book.amazonUrl}
+                    freeReadSlug={book.freeReadSlug}
                     onBookClick={() => openBookModal(book)}
                   />
                 </motion.div>
@@ -591,6 +593,7 @@ export default function HomePage() {
                     genre={book.genre}
                     price={book.price}
                     amazonUrl={book.amazonUrl}
+                    freeReadSlug={book.freeReadSlug}
                     onBookClick={() => openBookModal(book)}
                   />
                 </motion.div>

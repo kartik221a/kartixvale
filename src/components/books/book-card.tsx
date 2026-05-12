@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Star, ExternalLink } from "lucide-react";
+import { Star, ExternalLink, BookOpen } from "lucide-react";
 
 interface BookCardProps {
   title: string;
@@ -14,6 +15,7 @@ interface BookCardProps {
   comingSoon?: boolean;
   featured?: boolean;
   description?: string;
+  freeReadSlug?: string;
   onBookClick?: () => void;
 }
 
@@ -26,6 +28,7 @@ export function BookCard({
   comingSoon = false,
   featured = false,
   description,
+  freeReadSlug,
   onBookClick,
 }: BookCardProps) {
   if (featured) {
@@ -97,6 +100,17 @@ export function BookCard({
                   </Button>
                 </a>
               )}
+              {freeReadSlug && (
+                <Link href={`/free-reads/${freeReadSlug}`}>
+                  <Button
+                    variant="outline"
+                    className="border-gold/30 text-gold hover:bg-gold/10 hover:border-gold/50 transition-all duration-300 h-12"
+                  >
+                    <BookOpen className="h-4 w-4 mr-2" />
+                    Read Free Chapters
+                  </Button>
+                </Link>
+              )}
             </div>
           </div>
         </div>
@@ -156,19 +170,35 @@ export function BookCard({
             Coming Soon
           </Button>
         ) : (
-          <a
-            href={amazonUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-track={`buy-amazon-${title.slice(0, 20)}`}
-            className="block"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <Button className="w-full bg-blood-light hover:bg-blood text-white font-semibold transition-all duration-300 hover:shadow-[0_0_20px_rgba(220,20,60,0.3)] text-xs md:text-sm">
-              <ExternalLink className="h-3 w-3 mr-1" />
-              Buy — {price}
-            </Button>
-          </a>
+          <div className="flex flex-col gap-1.5">
+            <a
+              href={amazonUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-track={`buy-amazon-${title.slice(0, 20)}`}
+              className="block"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Button className="w-full bg-blood-light hover:bg-blood text-white font-semibold transition-all duration-300 hover:shadow-[0_0_20px_rgba(220,20,60,0.3)] text-xs md:text-sm">
+                <ExternalLink className="h-3 w-3 mr-1" />
+                Buy — {price}
+              </Button>
+            </a>
+            {freeReadSlug && (
+              <Link
+                href={`/free-reads/${freeReadSlug}`}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <Button
+                  variant="ghost"
+                  className="w-full text-gold/70 hover:text-gold hover:bg-gold/10 text-[10px] md:text-xs h-7 md:h-8"
+                >
+                  <BookOpen className="h-3 w-3 mr-1" />
+                  Read Free
+                </Button>
+              </Link>
+            )}
+          </div>
         )}
       </div>
     </article>

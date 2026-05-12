@@ -175,6 +175,7 @@ export default function BooksPage() {
                     genre={book.genre}
                     price={book.price}
                     amazonUrl={book.amazonUrl}
+                    freeReadSlug={book.freeReadSlug}
                     onBookClick={() => openBookModal(book)}
                   />
                 </motion.div>
@@ -317,6 +318,7 @@ export default function BooksPage() {
                     genre={book.genre}
                     price={book.price}
                     amazonUrl={book.amazonUrl}
+                    freeReadSlug={book.freeReadSlug}
                     onBookClick={() => openBookModal(book)}
                   />
                 </motion.div>

@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
 import { blogPosts } from "@/lib/blog-data";
+import { freeReadBooks } from "@/lib/free-reads-data";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://kartixvale.vercel.app";
@@ -30,6 +31,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.9,
     },
+    {
+      url: `${baseUrl}/free-reads`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
   ];
 
   // Blog post pages
@@ -40,5 +47,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  return [...staticPages, ...blogPages];
+  // Free read pages
+  const freeReadPages: MetadataRoute.Sitemap = freeReadBooks.map((book) => ({
+    url: `${baseUrl}/free-reads/${book.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  }));
+
+  return [...staticPages, ...blogPages, ...freeReadPages];
 }
