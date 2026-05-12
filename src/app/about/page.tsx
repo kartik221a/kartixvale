@@ -374,6 +374,9 @@ export default function AboutPage() {
               <Link href="/about" className="text-sm text-muted-foreground hover:text-blood-light transition-colors">
                 About
               </Link>
+              <Link href="/blog" className="text-sm text-muted-foreground hover:text-blood-light transition-colors">
+                Blog
+              </Link>
             </nav>
             <p className="text-xs text-muted-foreground/50">
               &copy; 2025 Kartix Vale. All rights reserved.
