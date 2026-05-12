@@ -91,12 +91,13 @@ export default function AboutPage() {
             </motion.p>
 
             {/* GlitchText name - subtle glitch on hover only */}
-            <motion.div variants={fadeInUp}>
+            <motion.div variants={fadeInUp} className="w-full overflow-visible">
               <GlitchText
                 speed={0.5}
                 enableShadows
                 enableOnHover
-                className="logo-text text-5xl sm:text-6xl md:text-7xl lg:text-8xl uppercase"
+                className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl uppercase"
+                style={{ letterSpacing: '0.15em', background: 'linear-gradient(135deg, #C9A84C 0%, #D4AF37 40%, #B8860B 60%, #C9A84C 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', filter: 'drop-shadow(0 0 12px rgba(201, 168, 76, 0.3))' }}
               >
                 Kartix Vale
               </GlitchText>
@@ -151,13 +152,13 @@ export default function AboutPage() {
             >
               {/* Mysterious emblem */}
               <div className="flex-shrink-0">
-                <div className="w-40 h-40 md:w-52 md:h-52 rounded-full bg-gradient-to-br from-midnight via-blood/20 to-midnight flex items-center justify-center border border-gold/20 relative overflow-hidden shadow-[0_0_50px_rgba(139,0,0,0.25)]">
+                <div className="w-48 h-48 md:w-60 md:h-60 rounded-full bg-gradient-to-br from-midnight via-blood/20 to-midnight flex items-center justify-center border border-gold/20 relative overflow-hidden shadow-[0_0_50px_rgba(139,0,0,0.25)]">
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <Skull className="h-16 w-16 md:h-20 md:w-20 text-gold/30" />
+                    <Skull className="h-10 w-10 md:h-12 md:w-12 text-gold/20" />
                   </div>
-                  <span className="relative logo-text text-2xl md:text-3xl uppercase">
-                    KV
+                  <span className="relative logo-text text-lg md:text-2xl uppercase text-center leading-tight">
+                    Kartix<br/>Vale
                   </span>
                 </div>
               </div>

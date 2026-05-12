@@ -7,6 +7,7 @@ interface GlitchTextProps {
   enableShadows?: boolean;
   enableOnHover?: boolean;
   className?: string;
+  style?: CSSProperties;
 }
 
 interface CustomCSSProperties extends CSSProperties {
@@ -21,13 +22,15 @@ const GlitchText: FC<GlitchTextProps> = ({
   speed = 0.5,
   enableShadows = true,
   enableOnHover = false,
-  className = ''
+  className = '',
+  style
 }) => {
   const inlineStyles: CustomCSSProperties = {
     '--after-duration': `${speed * 3}s`,
     '--before-duration': `${speed * 2}s`,
     '--after-shadow': enableShadows ? '-5px 0 red' : 'none',
-    '--before-shadow': enableShadows ? '5px 0 cyan' : 'none'
+    '--before-shadow': enableShadows ? '5px 0 cyan' : 'none',
+    ...style
   };
 
   const hoverClass = enableOnHover ? 'enable-on-hover' : '';
