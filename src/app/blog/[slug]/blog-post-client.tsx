@@ -276,14 +276,11 @@ function injectCTAs(slug: string, content: string): string {
       },
       {
         afterH2Index: 5, // After more entries
-        html: buildSecondaryCTA("a-bargain-in-shadows", "Start the Beneath the Veil series"),
+        html: buildSecondaryCTA("thorns-of-the-fae-thorne", "Experience the devastating slow burn"),
       },
       {
         afterH2Index: 8, // Near the end
-        html: buildMultiBookCTA(
-          ["thorns-of-the-fae-thorne", "a-bargain-in-shadows", "the-gotham-reapers-bride"],
-          "Your Next Read Awaits"
-        ),
+        html: buildSecondaryCTA("thorns-of-the-fae-thorne", "Ready for Thorns of the Fae Thorne?"),
       },
     ],
     "enemies-to-lovers-dark-romance": [

@@ -124,61 +124,64 @@ export const blogPosts: BlogPost[] = [
 <p><strong>The Hook:</strong> A human woman falls through the veil by accident and is involuntarily bonded to a shadow-wielding immortal who hasn't been touched willingly in two hundred years.</p>
 <p>This is slow burn done right. The bond between Seren and Kaelen isn't a love story — not yet. It's a demolition. Five stages of dismantling the walls two broken people have built to survive. Kaelen speaks fewer than two hundred words in the entire book, and his silence isn't mystery — it's the logical endpoint of a life that taught him every word he gave away was used against him. The first physical contact lasts three seconds. It is devastating. A complete standalone with an earned ending that makes every page of the slow burn worth it.</p>
 
-<h2>2. A Bargain in Shadows — Kartix Vale</h2>
-<p><strong>Tropes:</strong> Marriage of convenience, enemies to lovers, haunted manor, slow burn</p>
-<p><strong>The Hook:</strong> She married a monster hunter. The monster was always her.</p>
-<p>The first book in the Beneath the Veil series is gothic dark romance at its finest — a ruined medium, a reclusive earl with a dead first wife, and a Victorian manor where candles flicker without draft and shadows move against the light. The marriage of convenience setup gives way to something far more dangerous as Seraphina discovers the supernatural power stirring inside her. The tension between the leads is electric, and the gothic atmosphere is so thick you can taste the fog.</p>
+<h2>2. A Court of Thorns and Roses — Sarah J. Maas</h2>
+<p><strong>Tropes:</strong> Enemies to lovers, fae courts, Beauty and the Beast retelling, fated mates</p>
+<p>The book that put modern fae romance on the map. Feyre's journey from mortal huntress to fae court player defined a generation of dark fantasy romance. While the first book leans more into the fairy tale retelling, the series deepens into morally grey territory as the courts reveal their true nature and the devastating love triangle between Feyre, Tamlin, and Rhysand reshapes everything she thought she knew about love, power, and survival. Essential reading for anyone entering the genre — the series only gets darker and more addictive from here.</p>
 
-<h2>3. A Court of Thorns and Roses — Sarah J. Maas</h2>
-<p><strong>Tropes:</strong> Enemies to lovers, fae courts, Beauty and the Beast retelling</p>
-<p>The book that put modern fae romance on the map. Feyre's journey from mortal huntress to fae court player defined a generation of dark fantasy romance. While the first book is more fantasy romance than dark romance, the series deepens into morally grey territory as the courts reveal their true nature. Essential reading for anyone entering the genre.</p>
+<h2>3. The Cruel Prince — Holly Black</h2>
+<p><strong>Tropes:</strong> Enemies to lovers, fae politics, mortal in a fae world, revenge, slow burn</p>
+<p>Jude was raised in the High Court of Faerie after her parents were murdered, and she'll do anything to prove she belongs — including outwitting the cruellest prince in the court. Holly Black's fae world is gorgeous and vicious, and the rivalry between Jude and Cardan is one of the most iconic enemies-to-lovers arcs in the entire genre. Cardan remains one of dark fae romance's most beloved morally grey love interests — cruel, beautiful, and hiding depths that only Jude can reach.</p>
 
-<h2>4. The Serpent and the Wings of Night — Carissa Broadbent</h2>
-<p><strong>Tropes:</strong> Vampire tournament, enemies to lovers, fae politics, slow burn</p>
-<p>Oraya, adopted human daughter of a vampire king, enters a deadly tournament where the only way to survive is to ally with the most dangerous competitor — a fae warrior whose motives are as sharp as his blades. The tournament framework creates constant life-or-death stakes, and the romance that develops between competitors who should be killing each other is riveting.</p>
+<h2>4. Gild — Raven Kennedy</h2>
+<p><strong>Tropes:</strong> King Midas retelling, captive romance, dark court politics, abuse recovery</p>
+<p>A dark retelling of the King Midas myth that is far more disturbing and far more compelling than the original. Auren is gilded — literally covered in gold — and treated as King Midas's most prized possession, kept in a cage and paraded as a trophy. When Midas's kingdom falls and she's captured by a rival fae king, Auren begins to realize that the gilded cage she thought was protection was always a prison. The exploration of captivity, ownership, and the slow awakening of self-worth is handled with remarkable nuance for a story this dark.</p>
 
-<h2>5. The Bridge Kingdom — Danielle L. Jensen</h2>
-<p><strong>Tropes:</strong> Marriage of convenience, enemies to lovers, political intrigue, betrayal</p>
-<p>Lara trained her whole life to be a weapon, then is sent to marry the king of an enemy nation. Her mission: destroy his kingdom from within. But the more she learns about her husband and his people, the more she questions everything she was raised to believe. A masterclass in how to write a marriage of convenience where the stakes are genuinely life and death.</p>
+<h2>5. These Hollow Vows — Lexi Ryan</h2>
+<p><strong>Tropes:</strong> Two rival faerie courts, love triangle, hidden identity, fae bargains, morally grey princes</p>
+<p>Brie hates the Fae — until her sister is sold into fae servitude and Brie must enter the treacherous Unseelie and Seelie courts to win her back. Caught between two dangerously seductive faerie princes with their own hidden agendas, Brie must navigate deadly fae bargains, court intrigue, and her own growing feelings. Marketed as "Cruel Prince meets ACOTAR," it delivers courtly deception, shifting loyalties, and a love triangle where no one is what they seem.</p>
 
-<h2>6. The Cruel Prince — Holly Black</h2>
-<p><strong>Tropes:</strong> Enemies to lovers, fae politics, mortal in a fae world, revenge</p>
-<p>Jude was raised in the High Court of Faerie after her parents were murdered, and she'll do anything to prove she belongs — including outwitting the cruellest prince in the court. Holly Black's fae world is gorgeous and vicious, and Jude's determination to survive in a world designed to destroy her makes for compulsive reading.</p>
+<h2>6. A Deal with the Elf King — Elise Kova</h2>
+<p><strong>Tropes:</strong> Hades and Persephone retelling, arranged marriage, enemies to lovers, fae/elf king, slow burn</p>
+<p>Every one hundred years, the Elf King takes a bride from the human village of Luellea — and it's considered a death sentence. When Luessa is chosen, she expects cruelty but instead finds herself married to an enigmatic and powerful fae king in a glittering, dangerous court. Inspired by the myth of Hades and Persephone with Beauty and the Beast undertones, this standalone delivers a satisfying slow-burn romance with a fae king who is far more than the monster the legends describe.</p>
 
-<h2>7. From Blood and Ash — Jennifer L. Armentrout</h2>
-<p><strong>Tropes:</strong> Bodyguard romance, hidden identity, slow burn, fae world</p>
-<p>Poppy is the Maiden — chosen from birth for a mysterious destiny she's never been allowed to understand. Hawke is the guard assigned to protect her. The slow burn between them is maddening in the best way, and the world-building reveals layer after layer of deception about what the Maiden actually is and what the gods really want.</p>
+<h2>7. Zodiac Academy — Caroline Peckham & Susanne Valenti</h2>
+<p><strong>Tropes:</strong> Fae academy, bullies to lovers, twin protagonists, dark magic, hidden royalty</p>
+<p>If you want dark fae romance at its most intense and unapologetic, this series delivers. Twin sisters Tory and Darcy Vega discover they're fae heirs to a magical throne and are thrown into Aurora Academy, a brutal school for the fae elite. The four Heirs of the Zodiac make it their mission to break the sisters — but the Vegas bite back. Dark, twisted, and compulsively readable, this series goes to places most fae romance won't dare.</p>
 
-<h2>8. Behind the Veil — Kartix Vale</h2>
-<p><strong>Tropes:</strong> Identity transformation, gothic atmosphere, devastating series finale</p>
-<p>The conclusion to the Beneath the Veil series is devastating in the most beautiful way. Seraphina's coherence has fallen to fifty-seven percent and is still dropping. The man who has stood between her and the darkness is watching her disappear one percentage point at a time, learning that love doesn't always mean protection. It's not a happy ending — it's an earned one.</p>
+<h2>8. Bonded by Thorns — Elizabeth Helen</h2>
+<p><strong>Tropes:</strong> Beauty and the Beast retelling, cursed fae princes, fae realm, forced proximity, why choose</p>
+<p>Bookworm Rosy is accidentally imprisoned in a fae realm by four cursed princes who transform into beasts each night. To win her freedom, she must break their curse — by bonding with each of them. Described as "ACOTAR meets Beauty and the Beast," this steamy fantasy features a richly built fae world, four distinct and possessive fae princes, and a heroine who must navigate magical trials and her growing feelings for all of them.</p>
 
-<h2>9-10. The Folk of the Air Series — Holly Black</h2>
-<p>Continuing Jude and Cardan's story through <em>The Wicked King</em> and <em>The Queen of Nothing</em>, this trilogy is essential dark fae romance. Cardan remains one of the genre's most beloved morally grey love interests — cruel, beautiful, and hiding depths that only Jude can reach. The political machinations escalate beautifully, and the final book delivers a payoff that makes the entire journey worth it.</p>
+<h2>9. The Iron King — Julie Kagawa</h2>
+<p><strong>Tropes:</strong> Forbidden love, Summer/Winter fae courts, half-fae heroine, quest, love triangle</p>
+<p>Sixteen-year-old Meghan Chase discovers she's the daughter of a powerful faery king when her half-brother is stolen into the Nevernever. To rescue him, she must navigate the dangerous courts of Summer, Winter, and the deadly new Iron Fey. Caught between the icy Winter prince Ash and the mischievous Puck, Meghan's journey through the brutal faerie realm is a foundational dark fae adventure that influenced the entire subgenre.</p>
 
-<h2>11. Zodiac Academy — Caroline Peckham & Susanne Valenti</h2>
-<p><strong>Tropes:</strong> Fae academy, bullies to lovers, twin protagonists, dark magic</p>
-<p>If you want dark fae romance at its most intense and unapologetic, this series delivers. Twin sisters discover they're fae heirs and are thrown into an academy where the existing heirs don't appreciate the competition. Dark, twisted, and compulsively readable — this series goes to places most fae romance won't dare.</p>
+<h2>10. Wicked Lovely — Melissa Marr</h2>
+<p><strong>Tropes:</strong> Urban fae, hidden fae courts, forbidden love, Seelie/Unseelie politics, stalker love interest</p>
+<p>Aislinn can see faeries — a dangerous secret she's kept her entire life. When the terrifying Summer Court Keenan decides she's his next queen, Aislinn is pulled into the violent, seductive world of fae court politics whether she wants it or not. A pioneering dark fae romance that brought faerie lore into the modern world, featuring morally ambiguous fae, a stalker-ish fae king, and a mortal girl caught between the Seelie and Unseelie courts.</p>
 
-<h2>12. A Crown of Ashes — Kartix Vale</h2>
-<p><strong>Tropes:</strong> Identity sacrifice, institutional conspiracy, dark fantasy thriller</p>
-<p>The third Beneath the Veil book shifts into thriller territory as Seraphina sacrifices pieces of herself to suppress the nodes keeping reality intact. She began at eighty percent coherence. She will end at fifty-seven. The question of whether the person who remains after the losing is still the person who began will haunt you long after the last page.</p>
+<h2>11. A Dance with the Fae Prince — Elise Kova</h2>
+<p><strong>Tropes:</strong> Arranged marriage, fae prince, slow burn, hidden identity, court politics</p>
+<p>Katria swore she'd never fall in love — but when her hand in marriage is sold to a fae prince, she finds herself in a glittering, treacherous fae court with a husband who is far more than he seems. This standalone in the Married to Magic series delivers a swoon-worthy slow burn with courtly intrigue, hidden identities, and a fae prince whose secrets could destroy them both. A fan favorite for its whimsical world-building and emotionally satisfying romance.</p>
 
-<h2>13. Gild — Raven Kennedy</h2>
-<p><strong>Tropes:</strong> Mythological retelling, captive romance, dark court politics</p>
-<p>A dark retelling of the King Midas myth that is far more disturbing and far more compelling than the original. Auren is gilded — literally covered in gold — and treated as King Midas's most prized possession. The exploration of captivity, ownership, and the slow awakening of self-worth is handled with remarkable nuance for a story this dark.</p>
+<h2>12. House of Earth and Blood — Sarah J. Maas</h2>
+<p><strong>Tropes:</strong> Half-fae heroine, enemies to lovers, murder mystery, slow burn, urban fae fantasy</p>
+<p>Half-Fae Bryce Quinlan's life is shattered when her best friend is murdered by a demon. To find the killer, she's forced to partner with Hunt Athalar, an enslaved Fallen angel assassin. Set in a gritty modern fantasy city where fae, angels, shifters, and vampires coexist, this adult fantasy romance weaves a murder investigation with a slow-burn, high-stakes love story. Bryce's half-fae identity and the intricate fae power structures are central to the plot, making this a must-read for dark fae romance fans who want something darker and more mature.</p>
 
-<h2>14. The Unholy Reverie — Kartix Vale</h2>
-<p><strong>Tropes:</strong> Psychological thriller, supernatural conspiracy, fractured reality</p>
-<p>Book two of Beneath the Veil shifts the lens to London and a conspiracy that's not trying to destroy reality — it's trying to replace it. Seraphina's coherence is slipping, and the most terrifying thing isn't the dissonance pulling her toward the Veil. It's the growing certainty that some part of her <em>wants</em> to see what lies on the other side. Mind-bending supernatural suspense.</p>
+<h2>13. Quicksilver — Callie Hart</h2>
+<p><strong>Tropes:</strong> Enemies to lovers, fae courts, alchemy, touch-her-and-die, morally grey hero, forced proximity</p>
+<p>In a world of warring fae courts and ancient alchemy, a human woman finds herself bound to a deadly fae lord with a reputation for cruelty. Their explosive enemies-to-lovers dynamic drives this dark and spicy romantasy, packed with courtly intrigue, centuries-long conflicts, and a tension that leaps off the page. A newer entry that quickly became a BookTok favorite for its sharp banter and high-stakes fae politics.</p>
 
-<h2>15. Fourth Wing — Rebecca Yarros</h2>
-<p><strong>Tropes:</strong> Dragon rider academy, enemies to lovers, war college</p>
-<p>The phenomenon that reignited the fantasy romance genre. Violet was supposed to enter the scribe quadrant — instead she's thrown into the riders' quadrant where the deadly odds are designed to thin the herd. The enemies-to-lovers dynamic with Xaden is fire, and the dragon bonds add a layer of fae-like connection that dark romance readers will appreciate.</p>
+<h2>14. The Folk of the Air Series — Holly Black</h2>
+<p>Continuing Jude and Cardan's story through <em>The Wicked King</em> and <em>The Queen of Nothing</em>, this trilogy is essential dark fae romance. The political machinations escalate beautifully across all three books — from a mortal girl fighting for survival in a court that despises her, to a queen who has learned to wield cruelty as deftly as any fae lord. The final book delivers a payoff that makes the entire journey worth it, and Cardan's evolution from cruel prince to devoted king remains one of the most satisfying character arcs in the genre.</p>
+
+<h2>15. These Twisted Bonds — Lexi Ryan</h2>
+<p><strong>Tropes:</strong> Rival fae courts, love triangle, hidden identity, betrayal, dark fae politics</p>
+<p>The sequel to These Hollow Vows deepens the darkness considerably. Brie is trapped between two faerie courts and two princes who are not what they seem, and the revelations about the true nature of fae bargains will make your stomach drop. The romantic tension is dialed up, the betrayals cut deeper, and the fae politics become genuinely dangerous. If you loved the first book, this one delivers on every promise it made.</p>
 
 <h2>How to Choose Your Next Read</h2>
 
-<p>If you want <strong>slow burn at its most devastating</strong>, start with <em>Thorns of the Fae Thorne</em>. If you want <strong>gothic atmosphere and mystery</strong>, pick up <em>A Bargain in Shadows</em>. If you want <strong>epic world-building</strong>, reach for <em>A Court of Thorns and Roses</em>. And if you want <strong>the most intense, unapologetic dark fae experience available</strong>, the entire Beneath the Veil series awaits.</p>
+<p>If you want <strong>slow burn at its most devastating</strong>, start with <em>Thorns of the Fae Thorne</em>. If you want <strong>epic world-building and genre-defining fae courts</strong>, reach for <em>A Court of Thorns and Roses</em>. If you want <strong>fae politics and a wicked love interest</strong>, pick up <em>The Cruel Prince</em>. And if you want <strong>dark fae romance at its most intense and unapologetic</strong>, <em>Zodiac Academy</em> is waiting.</p>
 
 <p>The fae courts are always accepting new visitors. Just remember: the veil is thinner than you think, and once you step through, there's no guarantee you'll come back the same.</p>
     `,
