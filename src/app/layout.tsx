@@ -44,6 +44,9 @@ export const metadata: Metadata = {
     icon: "/favicon-source.png",
   },
   metadataBase: new URL(siteUrl),
+  verification: {
+    google: "8_AvBXfoYigKNYt5tLT2mivRQlwKfCP992a7xUgsD6Y",
+  },
   openGraph: {
     title: "Kartix Vale — Dark Romance Author",
     description:
