@@ -163,11 +163,11 @@
   html {
     scroll-behavior: smooth;
   }
-  /* Force white text on blood/gold variant buttons */
-  [data-variant="blood"] {
-    color: #ffffff !important;
-  }
-  [data-variant="blood"]:hover {
+  /* Force white text on blood variant buttons — triple guarantee */
+  [data-variant="blood"],
+  [data-variant="blood"]:hover,
+  button.bg-blood-light,
+  a.bg-blood-light {
     color: #ffffff !important;
   }
 }

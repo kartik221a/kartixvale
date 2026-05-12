@@ -52,17 +52,15 @@ function Button({
   }) {
   const Comp = asChild ? Slot : "button"
 
-  // Force white text on blood variant buttons — inline style overrides everything
-  const forcedStyle = variant === "blood"
-    ? { color: "#ffffff", ...style }
-    : style
-
   return (
     <Comp
       data-slot="button"
-      data-variant={variant}
+      data-variant={variant || "default"}
       className={cn(buttonVariants({ variant, size, className }))}
-      style={forcedStyle}
+      style={{
+        ...(variant === "blood" ? { color: "#ffffff" } : {}),
+        ...style,
+      }}
       {...props}
     />
   )
