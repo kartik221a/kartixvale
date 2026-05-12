@@ -21,7 +21,7 @@ const buttonVariants = cva(
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
         blood:
-          "bg-blood-light !text-white shadow-xs hover:bg-blood hover:shadow-[0_0_20px_rgba(220,20,60,0.3)]",
+          "bg-blood-light text-white shadow-xs hover:bg-blood hover:text-white hover:shadow-[0_0_20px_rgba(220,20,60,0.3)]",
         gold:
           "border border-gold/30 text-gold hover:bg-gold/10 hover:border-gold/50",
       },
@@ -44,6 +44,7 @@ function Button({
   variant,
   size,
   asChild = false,
+  style,
   ...props
 }: React.ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
@@ -51,10 +52,17 @@ function Button({
   }) {
   const Comp = asChild ? Slot : "button"
 
+  // Force white text on blood variant buttons — inline style overrides everything
+  const forcedStyle = variant === "blood"
+    ? { color: "#ffffff", ...style }
+    : style
+
   return (
     <Comp
       data-slot="button"
+      data-variant={variant}
       className={cn(buttonVariants({ variant, size, className }))}
+      style={forcedStyle}
       {...props}
     />
   )

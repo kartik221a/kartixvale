@@ -163,11 +163,11 @@
   html {
     scroll-behavior: smooth;
   }
-  /* Force white text on blood variant buttons - override any inherited color */
-  [data-slot="button"].bg-blood-light {
+  /* Force white text on blood/gold variant buttons */
+  [data-variant="blood"] {
     color: #ffffff !important;
   }
-  [data-slot="button"]:hover.bg-blood {
+  [data-variant="blood"]:hover {
     color: #ffffff !important;
   }
 }
