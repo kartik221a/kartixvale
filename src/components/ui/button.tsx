@@ -21,7 +21,7 @@ const buttonVariants = cva(
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
         blood:
-          "bg-blood-light text-white shadow-xs hover:bg-blood hover:text-white hover:shadow-[0_0_20px_rgba(220,20,60,0.3)]",
+          "shadow-xs hover:shadow-[0_0_20px_rgba(220,20,60,0.3)]",
         gold:
           "border border-gold/30 text-gold hover:bg-gold/10 hover:border-gold/50",
       },
@@ -52,15 +52,48 @@ function Button({
   }) {
   const Comp = asChild ? Slot : "button"
 
+  // Blood variant: use ONLY inline styles — bypass Tailwind entirely
+  // This guarantees white text on red background regardless of CSS conflicts
+  if (variant === "blood") {
+    const bloodStyle: React.CSSProperties = {
+      backgroundColor: "#DC143C",
+      color: "#ffffff",
+      ...style,
+    }
+
+    const handleMouseEnter = (e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => {
+      const el = e.currentTarget as HTMLElement
+      el.style.backgroundColor = "#8B0000"
+      el.style.color = "#ffffff"
+      props.onMouseEnter?.(e as any)
+    }
+
+    const handleMouseLeave = (e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => {
+      const el = e.currentTarget as HTMLElement
+      el.style.backgroundColor = "#DC143C"
+      el.style.color = "#ffffff"
+      props.onMouseEnter?.(e as any)
+    }
+
+    return (
+      <Comp
+        data-slot="button"
+        data-variant="blood"
+        className={cn(buttonVariants({ variant, size, className }))}
+        style={bloodStyle}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        {...props}
+      />
+    )
+  }
+
   return (
     <Comp
       data-slot="button"
       data-variant={variant || "default"}
       className={cn(buttonVariants({ variant, size, className }))}
-      style={{
-        ...(variant === "blood" ? { color: "#ffffff" } : {}),
-        ...style,
-      }}
+      style={style}
       {...props}
     />
   )
