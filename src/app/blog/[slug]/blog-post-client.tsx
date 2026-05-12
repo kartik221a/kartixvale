@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Navbar } from "@/components/layout/navbar";
 import { Button } from "@/components/ui/button";
 import { blogPosts, BlogPost } from "@/lib/blog-data";
+import { BlogBuyCTA, BlogMultiBookCTA } from "@/components/blog/blog-buy-cta";
 import { ArrowLeft, BookOpen, Calendar, Clock, ArrowRight } from "lucide-react";
 
 const fadeInUp = {
@@ -29,15 +30,27 @@ function formatDate(dateStr: string): string {
   });
 }
 
+// CTA injection positions per blog slug
+// Each blog gets different CTAs at strategic points in the content
+const BLOG_CTA_CONFIG: Record<string, Array<{ afterHeading: string; component: JSX.Element }>> = {
+  "what-is-dark-romance": [],
+  "best-dark-fae-romance-books": [],
+  "enemies-to-lovers-dark-romance": [],
+  "beneath-the-veil-reading-order": [],
+  "slow-burn-romance-why-the-wait": [],
+};
+
 interface BlogPostClientProps {
   post: BlogPost;
 }
 
 export default function BlogPostClient({ post }: BlogPostClientProps) {
-  // Get related posts (excluding current, max 3)
   const relatedPosts = blogPosts
     .filter((p) => p.slug !== post.slug)
     .slice(0, 3);
+
+  // Inject CTAs into blog content at strategic positions
+  const contentWithCTAs = injectCTAs(post.slug, post.content);
 
   return (
     <main className="min-h-screen flex flex-col">
@@ -113,9 +126,23 @@ export default function BlogPostClient({ post }: BlogPostClientProps) {
             <motion.article
               variants={fadeInUp}
               className="prose-dark"
-              dangerouslySetInnerHTML={{ __html: post.content }}
+              dangerouslySetInnerHTML={{ __html: contentWithCTAs }}
             />
           </motion.div>
+        </div>
+      </section>
+
+      {/* ===== BOTTOM CTA: BIG BUY SECTION ===== */}
+      <section className="py-16 md:py-20 relative overflow-hidden" style={{ backgroundColor: "rgba(139, 0, 0, 0.06)" }}>
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-blood/8 rounded-full blur-3xl" />
+        </div>
+        <div className="max-w-3xl mx-auto px-4 relative z-10">
+          <BlogBuyCTA
+            variant="primary"
+            bookSlug="the-gotham-reapers-bride"
+            context="Ready to experience dark romance?"
+          />
         </div>
       </section>
 
@@ -200,6 +227,9 @@ export default function BlogPostClient({ post }: BlogPostClientProps) {
               <Link href="/books" className="text-sm text-muted-foreground hover:text-blood-light transition-colors">
                 Books
               </Link>
+              <Link href="/free-reads" className="text-sm text-muted-foreground hover:text-blood-light transition-colors">
+                Free Reads
+              </Link>
               <Link href="/blog" className="text-sm text-muted-foreground hover:text-blood-light transition-colors">
                 Blog
               </Link>
@@ -218,4 +248,362 @@ export default function BlogPostClient({ post }: BlogPostClientProps) {
       </footer>
     </main>
   );
+}
+
+// ===== CTA INJECTION ENGINE =====
+// Injects HTML-based CTAs directly into blog content at strategic positions
+
+function injectCTAs(slug: string, content: string): string {
+  // Different CTA strategies for different blog posts
+  const ctaStrategies: Record<string, Array<{ afterH2Index: number; html: string }>> = {
+    "what-is-dark-romance": [
+      {
+        afterH2Index: 2, // After "Why Readers Love Dark Romance"
+        html: buildPrimaryCTA("the-gotham-reapers-bride", "Ready to experience dark romance?"),
+      },
+      {
+        afterH2Index: 3, // After "Where to Start"
+        html: buildMultiBookCTA(
+          ["the-gotham-reapers-bride", "a-bargain-in-shadows", "thorns-of-the-fae-thorne"],
+          "Start Reading Now"
+        ),
+      },
+    ],
+    "best-dark-fae-romance-books": [
+      {
+        afterH2Index: 2, // After a few book entries
+        html: buildPrimaryCTA("thorns-of-the-fae-thorne", "The #1 slow burn dark fae romance"),
+      },
+      {
+        afterH2Index: 5, // After more entries
+        html: buildSecondaryCTA("a-bargain-in-shadows", "Start the Beneath the Veil series"),
+      },
+      {
+        afterH2Index: 8, // Near the end
+        html: buildMultiBookCTA(
+          ["thorns-of-the-fae-thorne", "a-bargain-in-shadows", "the-gotham-reapers-bride"],
+          "Your Next Read Awaits"
+        ),
+      },
+    ],
+    "enemies-to-lovers-dark-romance": [
+      {
+        afterH2Index: 2, // After "What Dark Romance Adds"
+        html: buildPrimaryCTA("the-gotham-reapers-bride", "Enemies to lovers at its darkest"),
+      },
+      {
+        afterH2Index: 4, // After "Books That Nail It"
+        html: buildMultiBookCTA(
+          ["thorns-of-the-fae-thorne", "a-bargain-in-shadows"],
+          "Feel the Enmity Burn"
+        ),
+      },
+    ],
+    "beneath-the-veil-reading-order": [
+      {
+        afterH2Index: 2, // After "Book One"
+        html: buildSecondaryCTA("a-bargain-in-shadows", "Start the series now"),
+      },
+      {
+        afterH2Index: 4, // After "Book Three"
+        html: buildSecondaryCTA("a-crown-of-ashes", "Continue the journey"),
+      },
+      {
+        afterH2Index: 6, // After "Can You Read Them As Standalones?"
+        html: buildMultiBookCTA(
+          ["a-bargain-in-shadows", "the-unholy-reverie", "a-crown-of-ashes"],
+          "Begin the Descent"
+        ),
+      },
+    ],
+    "slow-burn-romance-why-the-wait": [
+      {
+        afterH2Index: 2, // After "Why Dark Romance Slow Burns Hit Harder"
+        html: buildPrimaryCTA("thorns-of-the-fae-thorne", "The ultimate slow burn awaits"),
+      },
+      {
+        afterH2Index: 4, // After "The Touch-Starved Trope"
+        html: buildSecondaryCTA("the-gotham-reapers-bride", "Slow burn gothic romance"),
+      },
+    ],
+  };
+
+  const strategy = ctaStrategies[slug];
+  if (!strategy || strategy.length === 0) {
+    // Default: add a primary CTA after the 2nd h2
+    return injectAfterH2(content, [
+      { afterH2Index: 2, html: buildPrimaryCTA("the-gotham-reapers-bride", "Ready for the full experience?") },
+    ]);
+  }
+
+  return injectAfterH2(content, strategy);
+}
+
+// Inject HTML blocks after specific <h2> occurrences in content
+function injectAfterH2(content: string, injections: Array<{ afterH2Index: number; html: string }>): string {
+  // Find all <h2> positions
+  const h2Positions: number[] = [];
+  let searchPos = 0;
+  while (true) {
+    const pos = content.indexOf("<h2>", searchPos);
+    if (pos === -1) break;
+    h2Positions.push(pos);
+    searchPos = pos + 4;
+  }
+
+  if (h2Positions.length === 0) return content;
+
+  // Find the </h2> after each <h2>, then find the next </p> after that to inject after the paragraph
+  const injectPoints: Array<{ position: number; html: string }> = [];
+
+  for (const injection of injections) {
+    const h2Idx = injection.afterH2Index - 1; // Convert to 0-based
+    if (h2Idx >= 0 && h2Idx < h2Positions.length) {
+      // Find the closing </h2>
+      const h2Close = content.indexOf("</h2>", h2Positions[h2Idx]);
+      if (h2Close !== -1) {
+        // Find the end of the next paragraph after the h2
+        const nextParaClose = content.indexOf("</p>", h2Close);
+        if (nextParaClose !== -1) {
+          injectPoints.push({
+            position: nextParaClose + 4, // After </p>
+            html: injection.html,
+          });
+        }
+      }
+    }
+  }
+
+  // Sort by position descending so we inject from the end (positions don't shift)
+  injectPoints.sort((a, b) => b.position - a.position);
+
+  let result = content;
+  for (const point of injectPoints) {
+    result = result.slice(0, point.position) + "\n" + point.html + "\n" + result.slice(point.position);
+  }
+
+  return result;
+}
+
+// ===== CTA HTML BUILDERS =====
+// These generate HTML that gets injected into blog content directly
+// This avoids React component rendering issues with dangerouslySetInnerHTML
+
+function buildPrimaryCTA(bookSlug: string, context: string): string {
+  const SLUG_MAP: Record<string, { title: string; cover: string; price: string; amazon: string; genre: string; ku: boolean; freeSlug?: string }> = {
+    "thorns-of-the-fae-thorne": {
+      title: "Thorns of the Fae Thorne",
+      cover: "https://m.media-amazon.com/images/I/61kY61LNZ-L._SY522_.jpg",
+      price: "$2.99",
+      amazon: "https://www.amazon.com/dp/B0H1BTKZ4M",
+      genre: "Dark Fae Romance",
+      ku: true,
+      freeSlug: undefined, // No free read yet
+    },
+    "the-gotham-reapers-bride": {
+      title: "The Gotham Reaper\u2019s Bride",
+      cover: "https://m.media-amazon.com/images/I/61+jamW5fJL._SL1499_.jpg",
+      price: "$2.99",
+      amazon: "https://www.amazon.com/dp/B0GZZN42ZH",
+      genre: "Gothic Romance",
+      ku: true,
+      freeSlug: "the-gotham-reapers-bride",
+    },
+    "a-bargain-in-shadows": {
+      title: "A Bargain in Shadows",
+      cover: "https://m.media-amazon.com/images/I/610eFf4cJYL._SL1499_.jpg",
+      price: "$5.99",
+      amazon: "https://www.amazon.com/dp/B0GWZQ8QDM",
+      genre: "Gothic Romance",
+      ku: true,
+      freeSlug: undefined,
+    },
+    "a-crown-of-ashes": {
+      title: "A Crown of Ashes",
+      cover: "https://m.media-amazon.com/images/I/71LQrdTVsgL._SL1499_.jpg",
+      price: "$5.99",
+      amazon: "https://www.amazon.com/dp/B0GY9H2W2R",
+      genre: "Dark Fantasy Thriller",
+      ku: true,
+      freeSlug: undefined,
+    },
+  };
+
+  const book = SLUG_MAP[bookSlug];
+  if (!book) return "";
+
+  return `
+<div class="not-prose my-8 rounded-xl border border-[rgba(139,0,0,0.25)] overflow-hidden" style="background-color:rgba(139,0,0,0.06)">
+  <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 p-5 md:p-6">
+    <div class="flex-shrink-0 w-20 sm:w-24 self-center">
+      <div class="aspect-[2/3] rounded-md overflow-hidden shadow-lg">
+        <img src="${book.cover}" alt="${book.title}" class="w-full h-full object-cover" />
+      </div>
+    </div>
+    <div class="flex-grow flex flex-col justify-center text-center sm:text-left">
+      <p class="text-[#C9A84C] text-xs uppercase tracking-wider mb-2 font-medium">${context}</p>
+      <h4 class="font-serif text-lg md:text-xl text-foreground mb-1 leading-snug">${book.title}</h4>
+      <div class="flex items-center gap-2 justify-center sm:justify-start mb-3">
+        <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-medium uppercase tracking-wider bg-[rgba(139,0,0,0.2)] text-[#dc143c] border border-[rgba(139,0,0,0.3)]">${book.genre}</span>
+        ${book.ku ? '<span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[rgba(201,168,76,0.15)] text-[#C9A84C] border border-[rgba(201,168,76,0.3)]">KU</span>' : ''}
+      </div>
+      <div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-3">
+        <a href="${book.amazon}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1.5 px-6 h-10 text-sm font-semibold text-white bg-[#dc143c] hover:bg-[#8B0000] rounded-md transition-all duration-300 hover:shadow-[0_0_25px_rgba(220,20,60,0.4)] hover:scale-105 no-underline">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+          Buy on Amazon — ${book.price}
+        </a>
+        ${book.freeSlug ? `<a href="/free-reads/${book.freeSlug}" class="inline-flex items-center justify-center gap-1.5 px-5 h-10 text-sm border border-[rgba(201,168,76,0.3)] text-[#C9A84C] hover:bg-[rgba(201,168,76,0.1)] rounded-md transition-all duration-300 no-underline">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          Read Free
+        </a>` : ''}
+      </div>
+    </div>
+  </div>
+</div>`;
+}
+
+function buildSecondaryCTA(bookSlug: string, context: string): string {
+  const SLUG_MAP: Record<string, { title: string; cover: string; price: string; amazon: string; ku: boolean; freeSlug?: string }> = {
+    "thorns-of-the-fae-thorne": {
+      title: "Thorns of the Fae Thorne",
+      cover: "https://m.media-amazon.com/images/I/61kY61LNZ-L._SY522_.jpg",
+      price: "$2.99",
+      amazon: "https://www.amazon.com/dp/B0H1BTKZ4M",
+      ku: true,
+    },
+    "the-gotham-reapers-bride": {
+      title: "The Gotham Reaper\u2019s Bride",
+      cover: "https://m.media-amazon.com/images/I/61+jamW5fJL._SL1499_.jpg",
+      price: "$2.99",
+      amazon: "https://www.amazon.com/dp/B0GZZN42ZH",
+      ku: true,
+      freeSlug: "the-gotham-reapers-bride",
+    },
+    "a-bargain-in-shadows": {
+      title: "A Bargain in Shadows",
+      cover: "https://m.media-amazon.com/images/I/610eFf4cJYL._SL1499_.jpg",
+      price: "$5.99",
+      amazon: "https://www.amazon.com/dp/B0GWZQ8QDM",
+      ku: true,
+    },
+    "a-crown-of-ashes": {
+      title: "A Crown of Ashes",
+      cover: "https://m.media-amazon.com/images/I/71LQrdTVsgL._SL1499_.jpg",
+      price: "$5.99",
+      amazon: "https://www.amazon.com/dp/B0GY9H2W2R",
+      ku: true,
+    },
+  };
+
+  const book = SLUG_MAP[bookSlug];
+  if (!book) return "";
+
+  return `
+<div class="not-prose my-6 flex items-center gap-4 p-4 rounded-lg border border-[rgba(201,168,76,0.15)]" style="background-color:rgba(201,168,76,0.04)">
+  <div class="flex-shrink-0 w-10">
+    <div class="aspect-[2/3] rounded overflow-hidden shadow-md">
+      <img src="${book.cover}" alt="${book.title}" class="w-full h-full object-cover" />
+    </div>
+  </div>
+  <div class="flex-grow min-w-0">
+    <p class="text-foreground text-sm font-medium leading-snug">${context}</p>
+    <p class="text-muted-foreground text-xs">${book.price} on Amazon${book.ku ? " \u00B7 Kindle Unlimited" : ""}</p>
+  </div>
+  <div class="flex-shrink-0 flex items-center gap-2">
+    ${book.freeSlug ? `<a href="/free-reads/${book.freeSlug}" class="inline-flex items-center justify-center gap-1 px-2 h-8 text-xs text-[#C9A84C]/70 hover:text-[#C9A84C] rounded transition-colors no-underline">
+      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      Free
+    </a>` : ''}
+    <a href="${book.amazon}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1 px-4 h-8 text-xs font-semibold text-white bg-[#dc143c] hover:bg-[#8B0000] rounded transition-all duration-300 no-underline">
+      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+      Buy
+    </a>
+  </div>
+</div>`;
+}
+
+function buildMultiBookCTA(bookSlugs: string[], context: string): string {
+  const SLUG_MAP: Record<string, { title: string; cover: string; price: string; amazon: string; genre: string; ku: boolean; freeSlug?: string }> = {
+    "thorns-of-the-fae-thorne": {
+      title: "Thorns of the Fae Thorne",
+      cover: "https://m.media-amazon.com/images/I/61kY61LNZ-L._SY522_.jpg",
+      price: "$2.99",
+      amazon: "https://www.amazon.com/dp/B0H1BTKZ4M",
+      genre: "Dark Fae Romance",
+      ku: true,
+    },
+    "the-gotham-reapers-bride": {
+      title: "The Gotham Reaper\u2019s Bride",
+      cover: "https://m.media-amazon.com/images/I/61+jamW5fJL._SL1499_.jpg",
+      price: "$2.99",
+      amazon: "https://www.amazon.com/dp/B0GZZN42ZH",
+      genre: "Gothic Romance",
+      ku: true,
+      freeSlug: "the-gotham-reapers-bride",
+    },
+    "a-bargain-in-shadows": {
+      title: "A Bargain in Shadows",
+      cover: "https://m.media-amazon.com/images/I/610eFf4cJYL._SL1499_.jpg",
+      price: "$5.99",
+      amazon: "https://www.amazon.com/dp/B0GWZQ8QDM",
+      genre: "Gothic Romance",
+      ku: true,
+    },
+    "a-crown-of-ashes": {
+      title: "A Crown of Ashes",
+      cover: "https://m.media-amazon.com/images/I/71LQrdTVsgL._SL1499_.jpg",
+      price: "$5.99",
+      amazon: "https://www.amazon.com/dp/B0GY9H2W2R",
+      genre: "Dark Fantasy Thriller",
+      ku: true,
+    },
+    "the-unholy-reverie": {
+      title: "The Unholy Reverie",
+      cover: "https://m.media-amazon.com/images/I/71tfd6o7v-L._SL1499_.jpg",
+      price: "$5.99",
+      amazon: "https://www.amazon.com/dp/B0GX7BLW1N",
+      genre: "Supernatural Thriller",
+      ku: true,
+    },
+  };
+
+  const books = bookSlugs.map(s => SLUG_MAP[s]).filter(Boolean);
+  if (books.length === 0) return "";
+
+  const bookCards = books.map(book => `
+    <div class="flex gap-3 p-3 rounded-lg bg-black/20 border border-[rgba(255,255,255,0.05)]">
+      <div class="flex-shrink-0 w-14">
+        <div class="aspect-[2/3] rounded overflow-hidden shadow-md">
+          <img src="${book.cover}" alt="${book.title}" class="w-full h-full object-cover" />
+        </div>
+      </div>
+      <div class="flex-grow min-w-0 flex flex-col justify-center">
+        <h5 class="font-serif text-sm text-foreground leading-snug line-clamp-2 mb-1">${book.title}</h5>
+        <div class="flex items-center gap-1.5 mb-2">
+          <span class="inline-block px-1.5 py-0 rounded-full text-[8px] font-medium uppercase tracking-wider bg-[rgba(139,0,0,0.15)] text-[#dc143c] border border-[rgba(139,0,0,0.2)]">${book.genre}</span>
+          ${book.ku ? '<span class="inline-block px-1.5 py-0 rounded-full text-[8px] font-bold uppercase tracking-wider bg-[rgba(201,168,76,0.15)] text-[#C9A84C] border border-[rgba(201,168,76,0.2)]">KU</span>' : ''}
+        </div>
+        <div class="flex items-center gap-2">
+          <a href="${book.amazon}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1 px-3 h-7 text-[10px] font-semibold text-white bg-[#dc143c] hover:bg-[#8B0000] rounded transition-all duration-300 no-underline">
+            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+            ${book.price}
+          </a>
+          ${book.freeSlug ? `<a href="/free-reads/${book.freeSlug}" class="inline-flex items-center justify-center gap-0.5 px-2 h-7 text-[10px] text-[#C9A84C]/60 hover:text-[#C9A84C] rounded transition-colors no-underline">
+            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            Free
+          </a>` : ''}
+        </div>
+      </div>
+    </div>
+  `).join("");
+
+  return `
+<div class="not-prose my-8 rounded-xl border border-[rgba(139,0,0,0.2)] overflow-hidden" style="background-color:rgba(139,0,0,0.04)">
+  <div class="p-5 md:p-6">
+    <p class="text-[#C9A84C] text-xs uppercase tracking-wider mb-4 font-medium text-center">${context}</p>
+    <div class="grid gap-4 ${books.length === 1 ? 'grid-cols-1 max-w-sm mx-auto' : books.length === 2 ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1 sm:grid-cols-3'}">
+      ${bookCards}
+    </div>
+  </div>
+</div>`;
 }
