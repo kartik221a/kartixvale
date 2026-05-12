@@ -223,8 +223,9 @@ export default function HomePage() {
             >
               <a href="#featured-book">
                 <Button
+                  variant="blood"
                   size="lg"
-                  className="bg-blood-light hover:bg-blood text-white font-semibold px-8 h-12 text-base transition-all duration-300 hover:shadow-[0_0_30px_rgba(220,20,60,0.5)] hover:scale-105"
+                  className="font-semibold px-8 h-12 text-base transition-all duration-300 hover:shadow-[0_0_30px_rgba(220,20,60,0.5)] hover:scale-105"
                   data-track="explore-darkness"
                 >
                   <BookOpen className="h-5 w-5 mr-2" />
@@ -233,8 +234,8 @@ export default function HomePage() {
               </a>
               <Link href="/books">
                 <Button
-                  variant="outline"
-                  className="border-gold/30 text-gold hover:bg-gold/10 hover:border-gold/50 transition-all duration-300"
+                  variant="gold"
+                  className="transition-all duration-300"
                 >
                   View All Books
                 </Button>
@@ -364,8 +365,8 @@ export default function HomePage() {
             <motion.div variants={fadeInUp} className="text-center">
               <Link href="/books">
                 <Button
-                  variant="outline"
-                  className="border-gold/30 text-gold hover:bg-gold/10 hover:border-gold/50 transition-all duration-300"
+                  variant="gold"
+                  className="transition-all duration-300"
                 >
                   View Full Collection
                 </Button>
@@ -484,8 +485,8 @@ export default function HomePage() {
                   </Link>
                   <a href="#email-capture">
                     <Button
-                      variant="outline"
-                      className="border-gold/30 text-gold hover:bg-gold/10 hover:border-gold/50 transition-all duration-300"
+                      variant="gold"
+                      className="transition-all duration-300"
                     >
                       Subscribe for Updates
                     </Button>
@@ -712,15 +713,15 @@ export default function HomePage() {
                 rel="noopener noreferrer"
                 data-track="buy-amazon-cta"
               >
-                <Button className="bg-blood-light hover:bg-blood text-white font-semibold px-10 h-14 text-lg transition-all duration-300 hover:shadow-[0_0_40px_rgba(220,20,60,0.5)] hover:scale-105">
+                <Button variant="blood" className="font-semibold px-10 h-14 text-lg transition-all duration-300 hover:shadow-[0_0_40px_rgba(220,20,60,0.5)] hover:scale-105">
                   <ExternalLink className="h-5 w-5 mr-2" />
                   Start the Series — $5.99
                 </Button>
               </a>
               <Link href="/books">
                 <Button
-                  variant="outline"
-                  className="border-gold/30 text-gold hover:bg-gold/10 hover:border-gold/50 transition-all duration-300"
+                  variant="gold"
+                  className="transition-all duration-300"
                 >
                   View All Books
                 </Button>

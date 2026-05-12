@@ -344,7 +344,7 @@ export default function AboutPage() {
             </motion.p>
             <motion.div variants={fadeInUp}>
               <Link href="/#email-capture">
-                <Button className="bg-blood-light hover:bg-blood text-white font-semibold px-8 h-12 text-base transition-all duration-300 hover:shadow-[0_0_30px_rgba(220,20,60,0.5)] hover:scale-105">
+                <Button variant="blood" className="font-semibold px-8 h-12 text-base transition-all duration-300 hover:shadow-[0_0_30px_rgba(220,20,60,0.5)] hover:scale-105">
                   Subscribe for Updates
                 </Button>
               </Link>

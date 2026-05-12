@@ -78,7 +78,7 @@ export function BlogBuyCTA({ variant = "primary", bookSlug, context }: BlogBuyCT
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <Button className="bg-blood-light hover:bg-blood text-white font-semibold px-6 h-10 text-sm transition-all duration-300 hover:shadow-[0_0_25px_rgba(220,20,60,0.4)] hover:scale-105">
+                  <Button variant="blood" className="font-semibold px-6 h-10 text-sm transition-all duration-300 hover:shadow-[0_0_25px_rgba(220,20,60,0.4)] hover:scale-105">
                     <ExternalLink className="h-3.5 w-3.5 mr-1.5" />
                     Buy on Amazon — {book.price}
                   </Button>
@@ -87,8 +87,8 @@ export function BlogBuyCTA({ variant = "primary", bookSlug, context }: BlogBuyCT
               {book.freeReadSlug && (
                 <Link href={`/free-reads/${book.freeReadSlug}`}>
                   <Button
-                    variant="outline"
-                    className="border-gold/30 text-gold hover:bg-gold/10 hover:border-gold/50 transition-all duration-300 h-10 text-sm"
+                    variant="gold"
+                    className="transition-all duration-300 h-10 text-sm"
                   >
                     <BookOpen className="h-3.5 w-3.5 mr-1.5" />
                     Read Free
@@ -137,7 +137,7 @@ export function BlogBuyCTA({ variant = "primary", bookSlug, context }: BlogBuyCT
           )}
           {book.amazonUrl && (
             <a href={book.amazonUrl} target="_blank" rel="noopener noreferrer">
-              <Button className="bg-blood-light hover:bg-blood text-white font-semibold h-8 px-4 text-xs transition-all duration-300 hover:shadow-[0_0_20px_rgba(220,20,60,0.3)]">
+              <Button variant="blood" className="font-semibold h-8 px-4 text-xs transition-all duration-300 hover:shadow-[0_0_20px_rgba(220,20,60,0.3)]">
                 <ExternalLink className="h-3 w-3 mr-1" />
                 Buy
               </Button>
@@ -214,7 +214,7 @@ export function BlogMultiBookCTA({ bookSlugs, context }: { bookSlugs: string[]; 
                 <div className="flex items-center gap-2">
                   {book.amazonUrl && (
                     <a href={book.amazonUrl} target="_blank" rel="noopener noreferrer">
-                      <Button className="bg-blood-light hover:bg-blood text-white font-semibold h-7 px-3 text-[10px] transition-all duration-300">
+                      <Button variant="blood" className="font-semibold h-7 px-3 text-[10px] transition-all duration-300">
                         <ExternalLink className="h-2.5 w-2.5 mr-1" />
                         {book.price}
                       </Button>

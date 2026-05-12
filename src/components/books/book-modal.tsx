@@ -137,7 +137,7 @@ export function BookModal({ isOpen, onClose, book }: BookModalProps) {
                     rel="noopener noreferrer"
                     className="block"
                   >
-                    <Button className="bg-blood-light hover:bg-blood text-white font-semibold px-6 h-11 text-sm transition-all duration-300 hover:shadow-[0_0_30px_rgba(220,20,60,0.4)] hover:scale-105 w-full sm:w-auto">
+                    <Button variant="blood" className="font-semibold px-6 h-11 text-sm transition-all duration-300 hover:shadow-[0_0_30px_rgba(220,20,60,0.4)] hover:scale-105 w-full sm:w-auto">
                       <ExternalLink className="h-4 w-4 mr-2" />
                       Read Now — {book.price}
                     </Button>
@@ -217,7 +217,7 @@ export function BookModal({ isOpen, onClose, book }: BookModalProps) {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <Button className="bg-blood-light hover:bg-blood text-white font-semibold px-6 h-10 text-sm transition-all duration-300 hover:shadow-[0_0_30px_rgba(220,20,60,0.4)] hover:scale-105">
+                    <Button variant="blood" className="font-semibold px-6 h-10 text-sm transition-all duration-300 hover:shadow-[0_0_30px_rgba(220,20,60,0.4)] hover:scale-105">
                       <ExternalLink className="h-4 w-4 mr-2" />
                       Get It on Amazon
                     </Button>

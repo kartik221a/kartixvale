@@ -274,7 +274,7 @@ export default function BooksPage() {
                       rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      <Button className="w-full bg-blood-light hover:bg-blood text-white font-semibold transition-all duration-300 hover:shadow-[0_0_20px_rgba(220,20,60,0.3)] text-xs h-9">
+                      <Button variant="blood" className="w-full font-semibold transition-all duration-300 hover:shadow-[0_0_20px_rgba(220,20,60,0.3)] text-xs h-9">
                         <ExternalLink className="h-3 w-3 mr-1" />
                         Buy — {book.price}
                       </Button>
@@ -361,15 +361,15 @@ export default function BooksPage() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Button className="bg-blood-light hover:bg-blood text-white font-semibold px-8 h-12 text-base transition-all duration-300 hover:shadow-[0_0_30px_rgba(220,20,60,0.4)] hover:scale-105">
+                <Button variant="blood" className="font-semibold px-8 h-12 text-base transition-all duration-300 hover:shadow-[0_0_30px_rgba(220,20,60,0.4)] hover:scale-105">
                   <ExternalLink className="h-4 w-4 mr-2" />
                   Start the Series — $5.99
                 </Button>
               </a>
               <Link href="/">
                 <Button
-                  variant="outline"
-                  className="border-gold/30 text-gold hover:bg-gold/10 hover:border-gold/50 transition-all duration-300"
+                  variant="gold"
+                  className="transition-all duration-300"
                 >
                   Back to Home
                 </Button>

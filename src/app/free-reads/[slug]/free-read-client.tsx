@@ -321,7 +321,7 @@ export default function FreeReadClient({ book }: FreeReadClientProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        <Button className="bg-blood-light hover:bg-blood text-white font-semibold px-8 h-12 text-base transition-all duration-300 hover:shadow-[0_0_30px_rgba(220,20,60,0.5)] hover:scale-105">
+                        <Button variant="blood" className="font-semibold px-8 h-12 text-base transition-all duration-300 hover:shadow-[0_0_30px_rgba(220,20,60,0.5)] hover:scale-105">
                           <ExternalLink className="h-4 w-4 mr-2" />
                           Continue on Amazon — {book.price}
                         </Button>
@@ -410,7 +410,7 @@ export default function FreeReadClient({ book }: FreeReadClientProps) {
                   rel="noopener noreferrer"
                   className="flex-shrink-0"
                 >
-                  <Button className="bg-blood-light hover:bg-blood text-white font-semibold px-6 h-10 text-sm transition-all duration-300 hover:shadow-[0_0_25px_rgba(220,20,60,0.4)] hover:scale-105 whitespace-nowrap">
+                  <Button variant="blood" className="font-semibold px-6 h-10 text-sm transition-all duration-300 hover:shadow-[0_0_25px_rgba(220,20,60,0.4)] hover:scale-105 whitespace-nowrap">
                     <ExternalLink className="h-3.5 w-3.5 mr-1.5" />
                     Get Full Book
                   </Button>
@@ -474,7 +474,8 @@ export default function FreeReadClient({ book }: FreeReadClientProps) {
                       <Button
                         type="submit"
                         disabled={emailSubmitting}
-                        className="w-full bg-blood-light hover:bg-blood text-white font-semibold h-12 text-base transition-all duration-300 hover:shadow-[0_0_30px_rgba(220,20,60,0.5)]"
+                        variant="blood"
+                        className="w-full font-semibold h-12 text-base transition-all duration-300 hover:shadow-[0_0_30px_rgba(220,20,60,0.5)]"
                       >
                         {emailSubmitting ? (
                           "Unlocking..."
@@ -566,7 +567,7 @@ export default function FreeReadClient({ book }: FreeReadClientProps) {
                       rel="noopener noreferrer"
                       className="block"
                     >
-                      <Button className="w-full bg-blood-light hover:bg-blood text-white font-semibold h-12 text-base transition-all duration-300 hover:shadow-[0_0_30px_rgba(220,20,60,0.5)] hover:scale-105">
+                      <Button variant="blood" className="w-full font-semibold h-12 text-base transition-all duration-300 hover:shadow-[0_0_30px_rgba(220,20,60,0.5)] hover:scale-105">
                         <ExternalLink className="h-4 w-4 mr-2" />
                         Get the Full Book — {book.price}
                       </Button>

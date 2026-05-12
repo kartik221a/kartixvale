@@ -90,7 +90,8 @@ export function EmailCapture({
         <Button
           type="submit"
           disabled={loading}
-          className="bg-blood-light hover:bg-blood text-white font-semibold px-6 h-11 transition-all duration-300 hover:shadow-[0_0_20px_rgba(220,20,60,0.3)]"
+          variant="blood"
+          className="font-semibold px-6 h-11 transition-all duration-300"
         >
           {loading ? (
             <Loader2 className="h-4 w-4 animate-spin" />
@@ -116,7 +117,8 @@ export function EmailCapture({
         <Button
           type="submit"
           disabled={loading}
-          className="bg-blood-light hover:bg-blood text-white font-semibold px-6 h-11 whitespace-nowrap transition-all duration-300 hover:shadow-[0_0_20px_rgba(220,20,60,0.3)]"
+          variant="blood"
+          className="font-semibold px-6 h-11 whitespace-nowrap transition-all duration-300 hover:shadow-[0_0_20px_rgba(220,20,60,0.3)]"
         >
           {loading ? (
             <Loader2 className="h-4 w-4 animate-spin" />
@@ -158,7 +160,8 @@ export function EmailCapture({
         <Button
           type="submit"
           disabled={loading}
-          className="bg-blood-light hover:bg-blood text-white font-semibold px-6 h-11 whitespace-nowrap transition-all duration-300 hover:shadow-[0_0_20px_rgba(220,20,60,0.3)]"
+          variant="blood"
+          className="font-semibold px-6 h-11 whitespace-nowrap transition-all duration-300 hover:shadow-[0_0_20px_rgba(220,20,60,0.3)]"
         >
           {loading ? (
             <Loader2 className="h-4 w-4 animate-spin" />

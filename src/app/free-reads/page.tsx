@@ -268,15 +268,15 @@ export default function FreeReadsPage() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Button className="bg-blood-light hover:bg-blood text-white font-semibold px-8 h-12 text-base transition-all duration-300 hover:shadow-[0_0_30px_rgba(220,20,60,0.5)] hover:scale-105">
+                <Button variant="blood" className="font-semibold px-8 h-12 text-base transition-all duration-300 hover:shadow-[0_0_30px_rgba(220,20,60,0.5)] hover:scale-105">
                   <ExternalLink className="h-4 w-4 mr-2" />
                   Browse on Amazon
                 </Button>
               </a>
               <Link href="/books">
                 <Button
-                  variant="outline"
-                  className="border-gold/30 text-gold hover:bg-gold/10 hover:border-gold/50 transition-all duration-300"
+                  variant="gold"
+                  className="transition-all duration-300"
                 >
                   View Book Details
                 </Button>

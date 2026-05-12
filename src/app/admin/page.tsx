@@ -155,7 +155,8 @@ export default function AdminPage() {
               <Button
                 type="submit"
                 disabled={loading || !password}
-                className="w-full bg-blood-light hover:bg-blood text-white"
+                variant="blood"
+                className="w-full"
               >
                 {loading ? "Verifying..." : "Login"}
               </Button>
@@ -300,7 +301,8 @@ export default function AdminPage() {
             <CardContent className="space-y-4">
               <Button
                 onClick={handleExportCSV}
-                className="w-full bg-blood-light hover:bg-blood text-white"
+                variant="blood"
+                className="w-full"
               >
                 <Download className="h-4 w-4 mr-2" />
                 Export Emails as CSV

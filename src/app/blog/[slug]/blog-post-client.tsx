@@ -199,7 +199,7 @@ export default function BlogPostClient({ post }: BlogPostClientProps) {
             {/* Internal link to books page */}
             <motion.div variants={fadeInUp} className="text-center mt-10">
               <Link href="/books">
-                <Button className="bg-blood-light hover:bg-blood text-white font-semibold px-8 h-12 text-base transition-all duration-300 hover:shadow-[0_0_30px_rgba(220,20,60,0.5)] hover:scale-105">
+                <Button variant="blood" className="font-semibold px-8 h-12 text-base transition-all duration-300 hover:shadow-[0_0_30px_rgba(220,20,60,0.5)] hover:scale-105">
                   <BookOpen className="h-5 w-5 mr-2" />
                   Browse All Books
                 </Button>
