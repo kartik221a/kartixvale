@@ -60,10 +60,11 @@ export default function FreeReadClient({ book }: FreeReadClientProps) {
 
   // Check if user already submitted email (localStorage)
   useEffect(() => {
-    const hasEmail = localStorage.getItem("kv_email_submitted");
-    if (hasEmail) {
+    const storedEmail = localStorage.getItem("kv_email");
+    if (storedEmail) {
       setEmailGatePassed(true);
       setEmailSubmitted(true);
+      setEmail(storedEmail);
     }
   }, []);
 
@@ -111,10 +112,11 @@ export default function FreeReadClient({ book }: FreeReadClientProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, source: "free-read-gate" }),
       });
+      // Both 200 (already subscribed) and 201 (new subscriber) are success
       if (res.ok) {
         setEmailSubmitted(true);
         setEmailGatePassed(true);
-        localStorage.setItem("kv_email_submitted", "true");
+        localStorage.setItem("kv_email", email.trim().toLowerCase());
         // Close gate after a moment
         setTimeout(() => {
           setEmailGateOpen(false);
@@ -124,7 +126,8 @@ export default function FreeReadClient({ book }: FreeReadClientProps) {
     } catch {
       // Still let them through even if API fails
       setEmailGatePassed(true);
-      localStorage.setItem("kv_email_submitted", "true");
+      setEmailSubmitted(true);
+      localStorage.setItem("kv_email", email.trim().toLowerCase());
       setTimeout(() => {
         setEmailGateOpen(false);
         setCurrentChapter(EMAIL_GATE_CHAPTER + 1);
@@ -150,7 +153,7 @@ export default function FreeReadClient({ book }: FreeReadClientProps) {
     }
     setEmailSubmitted(true);
     setEmailGatePassed(true);
-    localStorage.setItem("kv_email_submitted", "true");
+    localStorage.setItem("kv_email", email.trim().toLowerCase());
     setEmailSubmitting(false);
     setExitPopupOpen(false);
   };

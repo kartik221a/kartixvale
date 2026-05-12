@@ -23,7 +23,8 @@ export async function POST(request: NextRequest) {
 
     const cleanEmail = email.trim().toLowerCase();
 
-    // Check for duplicates
+    // Check for duplicates — if already subscribed, still return success
+    // so the client can unlock content for returning users
     const existing = await turso.execute({
       sql: "SELECT id FROM Subscriber WHERE email = ?",
       args: [cleanEmail],
@@ -31,8 +32,8 @@ export async function POST(request: NextRequest) {
 
     if (existing.rows.length > 0) {
       return NextResponse.json(
-        { error: "This email is already subscribed" },
-        { status: 409 }
+        { message: "Already subscribed", alreadySubscribed: true },
+        { status: 200 }
       );
     }
 
@@ -42,7 +43,7 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json(
-      { message: "Successfully subscribed!" },
+      { message: "Successfully subscribed!", alreadySubscribed: false },
       { status: 201 }
     );
   } catch (error) {

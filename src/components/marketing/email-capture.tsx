@@ -41,6 +41,8 @@ export function EmailCapture({
       }
 
       setSuccess(true);
+      // Store email so free reads auto-unlocks without re-entry
+      localStorage.setItem("kv_email", email.trim().toLowerCase());
       setEmail("");
 
       // Track signup
