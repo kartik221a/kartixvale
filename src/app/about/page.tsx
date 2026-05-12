@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { Navbar } from "@/components/navbar";
+import { Navbar } from "@/components/layout/navbar";
 import GlitchText from "@/components/reactbits/GlitchText";
 import Particles from "@/components/reactbits/Particles";
 import { Button } from "@/components/ui/button";

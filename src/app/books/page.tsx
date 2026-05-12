@@ -4,9 +4,9 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { BookCard } from "@/components/book-card";
-import { BookModal } from "@/components/book-modal";
-import { Navbar } from "@/components/navbar";
+import { BookCard } from "@/components/books/book-card";
+import { BookModal } from "@/components/books/book-modal";
+import { Navbar } from "@/components/layout/navbar";
 import Particles from "@/components/reactbits/Particles";
 import DecayCard from "@/components/reactbits/DecayCard";
 import { booksData, beneathTheVeilSeries, standaloneNovels, type BookData } from "@/lib/books-data";
@@ -187,7 +187,7 @@ export default function BooksPage() {
       {/* ===== SECTION DIVIDER ===== */}
       <div className="relative h-32 md:h-48 overflow-hidden">
         <Image
-          src="/section-divider.png"
+          src="/images/ornate-divider.png"
           alt="Dark atmospheric divider"
           fill
           className="object-cover object-center"

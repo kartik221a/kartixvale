@@ -50,5 +50,19 @@ test
 prompt
 
 server.log
+
 # Skills directory
 /skills/
+
+# Junk / temp files
+/upload/
+/db/
+/examples/
+/mini-services/
+/agent-ctx/
+/prisma/
+book-*.json
+book-data*.json
+generate-descriptions.js
+Caddyfile
+favicon-source.png

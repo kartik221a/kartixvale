@@ -4,11 +4,11 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { BookCard } from "@/components/book-card";
-import { EmailCapture } from "@/components/email-capture";
-import { FaqSection } from "@/components/faq-section";
-import { BookModal } from "@/components/book-modal";
-import { Navbar } from "@/components/navbar";
+import { BookCard } from "@/components/books/book-card";
+import { EmailCapture } from "@/components/marketing/email-capture";
+import { FaqSection } from "@/components/marketing/faq-section";
+import { BookModal } from "@/components/books/book-modal";
+import { Navbar } from "@/components/layout/navbar";
 import GlitchText from "@/components/reactbits/GlitchText";
 import Particles from "@/components/reactbits/Particles";
 import { Button } from "@/components/ui/button";
@@ -131,7 +131,7 @@ export default function HomePage() {
         {/* Background image */}
         <div className="absolute inset-0">
           <Image
-            src="/images/hero-bg-new.png"
+            src="/images/hero-bg.png"
             alt="Dark romantic atmosphere"
             fill
             className="object-cover object-center"
@@ -608,7 +608,7 @@ export default function HomePage() {
         {/* Background image */}
         <div className="absolute inset-0">
           <Image
-            src="/images/newsletter-bg-new.png"
+            src="/images/newsletter-bg.png"
             alt="Dark atmospheric background"
             fill
             className="object-cover object-center"
