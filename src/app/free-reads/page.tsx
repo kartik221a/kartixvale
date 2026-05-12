@@ -8,7 +8,7 @@ import Particles from "@/components/reactbits/Particles";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { freeReadBooks } from "@/lib/free-reads-data";
-import { BookOpen, ExternalLink, ArrowRight } from "lucide-react";
+import { BookOpen, ExternalLink, ArrowRight, Clock } from "lucide-react";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -110,11 +110,17 @@ export default function FreeReadsPage() {
               <div className="divider-gold w-24 mx-auto mt-4" />
             </motion.div>
 
+            {/* Available Now */}
+            {freeReadBooks.filter(b => !b.comingSoon).length > 0 && (
+              <motion.div variants={fadeInUp} className="text-center mb-8">
+                <p className="text-blood-light text-xs uppercase tracking-wider mb-1">Available Now</p>
+              </motion.div>
+            )}
             <motion.div
               variants={staggerContainer}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12"
             >
-              {freeReadBooks.map((book) => (
+              {freeReadBooks.filter(b => !b.comingSoon).map((book) => (
                 <motion.div key={book.slug} variants={fadeInUp} className="flex">
                   <Link href={`/free-reads/${book.slug}`} className="block group w-full">
                     <article className="card-dark rounded-xl overflow-hidden flex flex-col h-full hover:border-blood/30 hover:shadow-[0_0_25px_rgba(139,0,0,0.15)] transition-all duration-300 group-hover:scale-[1.02]">
@@ -144,22 +150,15 @@ export default function FreeReadsPage() {
 
                       {/* Content */}
                       <div className="p-5 flex flex-col flex-grow">
-                        {/* Genre */}
                         <span className="text-blood-light text-xs uppercase tracking-wider mb-2">
                           {book.genre}
                         </span>
-
-                        {/* Title */}
                         <h3 className="font-serif text-lg text-foreground mb-2 group-hover:text-gold transition-colors duration-300 line-clamp-2 leading-snug">
                           {book.title}
                         </h3>
-
-                        {/* Hook */}
                         <p className="text-muted-foreground text-sm leading-relaxed mb-4 flex-grow line-clamp-3 italic">
                           &ldquo;{book.hook}&rdquo;
                         </p>
-
-                        {/* Read Now CTA */}
                         <div className="flex items-center gap-2 text-blood-light text-sm font-medium group-hover:gap-3 transition-all duration-300">
                           <BookOpen className="h-4 w-4" />
                           Read Free Chapters
@@ -171,6 +170,66 @@ export default function FreeReadsPage() {
                 </motion.div>
               ))}
             </motion.div>
+
+            {/* Coming Soon */}
+            {freeReadBooks.filter(b => b.comingSoon).length > 0 && (
+              <>
+                <motion.div variants={fadeInUp} className="text-center mb-8">
+                  <p className="text-gold/60 text-xs uppercase tracking-wider mb-1">Coming Soon</p>
+                </motion.div>
+                <motion.div
+                  variants={staggerContainer}
+                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                >
+                  {freeReadBooks.filter(b => b.comingSoon).map((book) => (
+                    <motion.div key={book.slug} variants={fadeInUp} className="flex">
+                      <article className="card-dark rounded-xl overflow-hidden flex flex-col h-full opacity-60 hover:opacity-80 transition-all duration-300">
+                        {/* Cover Image */}
+                        <div className="relative w-full aspect-[2/3] max-h-[280px] overflow-hidden">
+                          <img
+                            src={book.coverUrl}
+                            alt={book.title}
+                            className="w-full h-full object-cover grayscale-[30%]"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                          {/* Coming Soon badge */}
+                          <div className="absolute top-3 right-3">
+                            <Badge className="bg-gold/60 text-black border-gold/40 text-xs uppercase tracking-wider">
+                              <Clock className="h-3 w-3 mr-1" />
+                              Coming Soon
+                            </Badge>
+                          </div>
+                          {book.kindleUnlimited && (
+                            <div className="absolute top-3 left-3">
+                              <Badge className="bg-gold/80 text-black border-gold/50 text-[9px] uppercase tracking-wider font-bold">
+                                KU
+                              </Badge>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Content */}
+                        <div className="p-5 flex flex-col flex-grow">
+                          <span className="text-blood-light/60 text-xs uppercase tracking-wider mb-2">
+                            {book.genre}
+                          </span>
+                          <h3 className="font-serif text-lg text-foreground/80 mb-2 line-clamp-2 leading-snug">
+                            {book.title}
+                          </h3>
+                          <p className="text-muted-foreground/60 text-sm leading-relaxed mb-4 flex-grow line-clamp-3 italic">
+                            &ldquo;{book.hook}&rdquo;
+                          </p>
+                          <div className="flex items-center gap-2 text-gold/50 text-sm font-medium">
+                            <Clock className="h-4 w-4" />
+                            Free chapters coming soon
+                          </div>
+                        </div>
+                      </article>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              </>
+            )}
           </motion.div>
         </div>
       </section>

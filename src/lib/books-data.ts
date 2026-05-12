@@ -43,7 +43,7 @@ export const booksData: BookData[] = [
       "Cursed bonds, shadow magic, and ancient secrets",
       "Standalone with a complete, earned ending",
     ],
-    freeReadSlug: "thorns-of-the-fae-thorne",
+    // freeReadSlug: will be added when book file is provided
     contentWarning: "Themes of trauma, institutional abuse, emotional manipulation, and forced bonding. No on-page explicit sexual content.",
   },
   {
@@ -99,7 +99,7 @@ export const booksData: BookData[] = [
       "Complete resolution of the Veil storyline",
       "Not a happy ending — an earned one",
     ],
-    freeReadSlug: "behind-the-veil",
+    // freeReadSlug: will be added when book file is provided
     contentWarning: "Explicit sexual content, graphic violence, themes of grief, trauma, identity dissolution, possessive relationships, moral ambiguity, and body horror. 18+",
   },
   {
@@ -126,7 +126,7 @@ export const booksData: BookData[] = [
       "Institutional conspiracy and political intrigue",
       "Explores identity, sacrifice, and what remains after loss",
     ],
-    freeReadSlug: "a-crown-of-ashes",
+    // freeReadSlug: will be added when book file is provided
     contentWarning: "Graphic violence, themes of grief, trauma, identity erosion, possessive relationships, moral ambiguity, and institutional betrayal. 18+",
   },
   {
@@ -154,7 +154,7 @@ export const booksData: BookData[] = [
       "Slow-burn continuation of the Beneath the Veil series",
       "Can be read as a standalone",
     ],
-    freeReadSlug: "the-unholy-reverie",
+    // freeReadSlug: will be added when book file is provided
     contentWarning: "Explicit sexual content, graphic violence, themes of psychological manipulation, paranoia, conspiracy, moral ambiguity, and body horror. 18+",
   },
   {
@@ -183,7 +183,7 @@ export const booksData: BookData[] = [
       "Ancient gods, leviathan remains, and memory magic",
       "Standalone novel with a complete story",
     ],
-    freeReadSlug: "crown-of-ash-and-tides",
+    // freeReadSlug: will be added when book file is provided
     contentWarning: "Violence, themes of exploitation, body horror, political manipulation, and moral ambiguity. 18+",
   },
   {
@@ -212,7 +212,7 @@ export const booksData: BookData[] = [
       "Lies, obsession, and forbidden power",
       "First book in the Beneath the Veil series",
     ],
-    freeReadSlug: "a-bargain-in-shadows",
+    // freeReadSlug: will be added when book file is provided
     contentWarning: "Explicit sexual content, graphic violence, themes of deception, possessive relationships, moral ambiguity, and supernatural horror. 18+",
   },
 ];

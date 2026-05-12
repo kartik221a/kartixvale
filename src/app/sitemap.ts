@@ -47,13 +47,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  // Free read pages
-  const freeReadPages: MetadataRoute.Sitemap = freeReadBooks.map((book) => ({
-    url: `${baseUrl}/free-reads/${book.slug}`,
-    lastModified: new Date(),
-    changeFrequency: "monthly" as const,
-    priority: 0.8,
-  }));
+  // Free read pages (only books with actual content, not coming soon)
+  const freeReadPages: MetadataRoute.Sitemap = freeReadBooks
+    .filter((book) => !book.comingSoon)
+    .map((book) => ({
+      url: `${baseUrl}/free-reads/${book.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    }));
 
   return [...staticPages, ...blogPages, ...freeReadPages];
 }
