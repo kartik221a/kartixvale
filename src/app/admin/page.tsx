@@ -199,7 +199,7 @@ export default function AdminPage() {
               <CardContent className="p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <Eye className="h-4 w-4 text-blood-light" />
-                  <span className="text-xs text-muted-foreground">Page Views</span>
+                  <span className="text-xs text-muted-foreground">Page Views-</span>
                 </div>
                 <p className="text-2xl font-bold text-foreground">
                   {data.summary.totalPageViews}
