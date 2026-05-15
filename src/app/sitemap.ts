@@ -2,10 +2,26 @@ import { MetadataRoute } from "next";
 import { getAllBlogSlugs } from "@/lib/blog-service";
 import { freeReadBooks } from "@/lib/free-reads-data";
 
+// Fallback blog slugs - used if database is unreachable
+const FALLBACK_BLOG_SLUGS = [
+  "what-is-dark-romance",
+  "best-dark-fae-romance-books",
+  "enemies-to-lovers-dark-romance",
+  "beneath-the-veil-reading-order",
+  "slow-burn-romance-why-the-wait",
+  "best-enemies-to-lovers-dark-romance-books",
+  "best-mafia-romance-books",
+  "what-is-mafia-romance",
+  "best-bully-romance-books",
+  "dark-romance-content-warnings",
+  "best-dark-romance-kindle-unlimited",
+  "best-stalker-romance-books",
+];
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://kartixvale.vercel.app";
 
-  // Static pages
+  // Static pages - always available
   const staticPages: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
@@ -39,8 +55,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  // Blog post pages - fetch slugs from database
-  const blogSlugs = await getAllBlogSlugs();
+  // Blog post pages - try database first, fall back to hardcoded list
+  let blogSlugs: string[];
+  try {
+    blogSlugs = await getAllBlogSlugs();
+    if (!blogSlugs || blogSlugs.length === 0) {
+      blogSlugs = FALLBACK_BLOG_SLUGS;
+    }
+  } catch {
+    console.error("Sitemap: Failed to fetch blog slugs from DB, using fallback");
+    blogSlugs = FALLBACK_BLOG_SLUGS;
+  }
+
   const blogPages: MetadataRoute.Sitemap = blogSlugs.map((slug) => ({
     url: `${baseUrl}/blog/${slug}`,
     lastModified: new Date(),
