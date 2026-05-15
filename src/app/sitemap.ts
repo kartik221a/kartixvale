@@ -26,6 +26,21 @@ const FALLBACK_BLOG_SLUGS = [
   "dark-romance-political-conspiracies",
   "grief-trauma-dark-romance",
   "best-standalone-dark-romance-books",
+  "what-is-gothic-romance",
+  "best-possessive-mmc-romance-books",
+  "morally-grey-mmc-why-we-fall-for-the-villain",
+  "best-fated-mates-romance-books",
+  "dark-fae-romance-complete-guide",
+  "what-is-paranormal-romance",
+  "best-marriage-of-convenience-dark-romance",
+  "best-dark-fairy-tale-retellings",
+  "best-captive-romance-books",
+  "best-gothic-romance-haunted-houses",
+  "dark-romance-vs-dark-fantasy",
+  "gothic-romance-vs-dark-romance",
+  "dark-romance-starter-pack",
+  "why-dark-romance-is-popular-psychology",
+  "dark-romance-tropes-complete-guide",
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
