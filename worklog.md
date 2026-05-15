@@ -1,36 +1,51 @@
+# Kartix Vale Project Worklog
+
 ---
 Task ID: 1
 Agent: Main Agent
-Task: Deploy Hey Kartik website to GitHub for Vercel auto-deploy
+Task: Remove all analytics from the website (user uses Google Search Console)
 
 Work Log:
-- Verified GitHub token and confirmed username: kartik221a
-- Created new GitHub repo: kartik221a/hey-kartik
-- Pushed Next.js website code to GitHub main branch
-- Guided user to connect Vercel for auto-deployment
+- Deleted `src/components/layout/analytics-tracker.tsx`
+- Deleted `src/app/api/analytics/route.ts`
+- Deleted `src/app/api/admin/analytics/route.ts`
+- Updated `src/app/layout.tsx` - removed AnalyticsTracker import and component
+- Updated `src/components/marketing/email-capture.tsx` - removed analytics tracking call
+- Rewrote `src/app/admin/page.tsx` - removed all analytics cards, chart, events table; kept subscribers and contact messages
+- Created `src/app/api/admin/dashboard/route.ts` - new simplified API endpoint (subscribers + messages only)
+- Removed `recharts` from package.json dependencies
 
 Stage Summary:
-- GitHub repo created: https://github.com/kartik221a/hey-kartik
-- Code pushed successfully to main branch
-- Awaiting user to connect Vercel for final deployment
+- All analytics code removed from the website
+- Admin dashboard simplified to show only subscribers and contact messages
+- New `/api/admin/dashboard` endpoint replaces the old analytics endpoint
+
 ---
-Task ID: 1
+Task ID: 2
 Agent: Main Agent
-Task: Fix blood variant buttons showing invisible text (red on red)
+Task: Migrate blogs from hardcoded TypeScript to Turso database with Markdown format
 
 Work Log:
-- Investigated button text visibility issue reported by user
-- Verified CSS classes and HTML output are correct (text-white is present)
-- Playwright tests showed correct rendering in automated browser
-- VLM analysis of user screenshots showed red text on red background
-- Root cause: CSS specificity/caching issue where text-white class was being overridden
-- Applied two fixes for maximum robustness:
-  1. Changed blood variant from `text-white` to `!text-white` (adds !important)
-  2. Added CSS fallback rule in globals.css: `[data-slot="button"].bg-blood-light { color: #ffffff !important; }`
-- Committed and pushed to trigger Vercel deployment
-- Verified deployed site shows `!text-white` class and white text color
+- Created `src/lib/blog-service.ts` - async functions for blog CRUD using Turso database
+  - getPublishedPosts(), getBlogPost(slug), getAllBlogSlugs()
+  - renderMarkdownToHtml() using `marked` library
+  - createBlogPost(), updateBlogPost(), deleteBlogPost()
+- Installed `marked` package for markdown-to-HTML rendering
+- Converted all 12 blog posts from HTML to Markdown using Python `markdownify`
+- Created `scripts/blog-data.json` - all 12 blog posts in Markdown format
+- Created `scripts/seed-blogs.mjs` - database seed script that creates `blogs` table and inserts data
+- Updated `src/lib/blog-data.ts` - now re-exports from blog-service.ts (thin wrapper)
+- Updated `src/app/blog/page.tsx` - now a server component that fetches from database
+- Created `src/app/blog/blog-list-client.tsx` - client component for blog list rendering
+- Updated `src/app/blog/[slug]/page.tsx` - async fetch from database, renders markdown to HTML
+- Updated `src/app/blog/[slug]/blog-post-client.tsx` - receives relatedPosts as prop from server
+- Updated `src/app/sitemap.ts` - fetches blog slugs from database
+- Added `seed:blogs` script to package.json
 
 Stage Summary:
-- Blood variant buttons now use `!important` to force white text
-- CSS fallback rule ensures white text regardless of any override
-- Deployed to production via Vercel
+- All blog content now stored in Turso `blogs` table as Markdown
+- Blog pages use ISR (revalidate every hour) for database-driven content
+- Markdown rendered to HTML server-side using `marked`
+- CTA injection system preserved (works on rendered HTML)
+- To seed the database: `TURSO_DATABASE_URL=... TURSO_AUTH_TOKEN=... npm run seed:blogs`
+- `scripts/blog-data.json` contains all 12 posts in Markdown format (reference/backup)

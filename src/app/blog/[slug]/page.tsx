@@ -1,7 +1,9 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getBlogPost, getAllBlogSlugs } from "@/lib/blog-data";
+import { getBlogPost, getAllBlogSlugs, getPublishedPosts, renderMarkdownToHtml } from "@/lib/blog-service";
 import BlogPostClient from "./blog-post-client";
+
+export const revalidate = 3600; // Revalidate every hour
 
 const baseUrl = "https://kartixvale.vercel.app";
 
@@ -10,13 +12,13 @@ interface BlogPostPageProps {
 }
 
 export async function generateStaticParams() {
-  const slugs = getAllBlogSlugs();
+  const slugs = await getAllBlogSlugs();
   return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = getBlogPost(slug);
+  const post = await getBlogPost(slug);
 
   if (!post) {
     return {
@@ -77,13 +79,16 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
-  const post = getBlogPost(slug);
+  const post = await getBlogPost(slug);
 
   if (!post) {
     notFound();
   }
 
   const url = `${baseUrl}/blog/${post.slug}`;
+
+  // Render markdown content to HTML
+  const htmlContent = renderMarkdownToHtml(post.content);
 
   // JSON-LD structured data for Article
   const articleJsonLd = {
@@ -110,7 +115,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     },
     keywords: post.keywords.join(", "),
     genre: "Dark Romance",
-    wordCount: post.content.replace(/<[^>]*>/g, "").split(/\s+/).length,
+    wordCount: htmlContent.replace(/<[^>]*>/g, "").split(/\s+/).length,
   };
 
   // BreadcrumbList structured data
@@ -139,6 +144,13 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     ],
   };
 
+  // Pass the post with HTML content (rendered from markdown) to the client component
+  const postWithHtml = { ...post, content: htmlContent };
+
+  // Get related posts (excluding current, limit 3)
+  const allPosts = await getPublishedPosts();
+  const relatedPosts = allPosts.filter((p) => p.slug !== post.slug).slice(0, 3);
+
   return (
     <>
       <script
@@ -149,7 +161,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-      <BlogPostClient post={post} />
+      <BlogPostClient post={postWithHtml} relatedPosts={relatedPosts} />
     </>
   );
 }

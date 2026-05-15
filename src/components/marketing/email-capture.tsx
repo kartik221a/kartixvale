@@ -45,16 +45,7 @@ export function EmailCapture({
       localStorage.setItem("kv_email", email.trim().toLowerCase());
       setEmail("");
 
-      // Track signup
-      await fetch("/api/analytics", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          eventType: "email_signup",
-          page: window.location.pathname,
-          metadata: { source },
-        }),
-      });
+      // Signup tracked via Google Search Console
     } catch {
       setError("Network error. Please try again.");
     } finally {

@@ -1,8 +1,8 @@
 import { MetadataRoute } from "next";
-import { blogPosts } from "@/lib/blog-data";
+import { getAllBlogSlugs } from "@/lib/blog-service";
 import { freeReadBooks } from "@/lib/free-reads-data";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://kartixvale.vercel.app";
 
   // Static pages
@@ -39,10 +39,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  // Blog post pages
-  const blogPages: MetadataRoute.Sitemap = blogPosts.map((post) => ({
-    url: `${baseUrl}/blog/${post.slug}`,
-    lastModified: new Date(post.date),
+  // Blog post pages - fetch slugs from database
+  const blogSlugs = await getAllBlogSlugs();
+  const blogPages: MetadataRoute.Sitemap = blogSlugs.map((slug) => ({
+    url: `${baseUrl}/blog/${slug}`,
+    lastModified: new Date(),
     changeFrequency: "monthly" as const,
     priority: 0.8,
   }));

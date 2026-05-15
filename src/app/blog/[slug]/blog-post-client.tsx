@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { Navbar } from "@/components/layout/navbar";
 import { Button } from "@/components/ui/button";
-import { blogPosts, BlogPost, getPublishedPosts } from "@/lib/blog-data";
+import type { BlogPost } from "@/lib/blog-service";
 import { BlogBuyCTA, BlogMultiBookCTA } from "@/components/blog/blog-buy-cta";
 import { ArrowLeft, BookOpen, Calendar, Clock, ArrowRight } from "lucide-react";
 
@@ -49,12 +49,10 @@ const BLOG_CTA_CONFIG: Record<string, Array<{ afterHeading: string; component: J
 
 interface BlogPostClientProps {
   post: BlogPost;
+  relatedPosts: BlogPost[];
 }
 
-export default function BlogPostClient({ post }: BlogPostClientProps) {
-  const relatedPosts = getPublishedPosts()
-    .filter((p) => p.slug !== post.slug)
-    .slice(0, 3);
+export default function BlogPostClient({ post, relatedPosts }: BlogPostClientProps) {
 
   // Inject CTAs into blog content at strategic positions
   const contentWithCTAs = injectCTAs(post.slug, post.content);
