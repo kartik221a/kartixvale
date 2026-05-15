@@ -45,6 +45,16 @@ const BLOG_CTA_CONFIG: Record<string, Array<{ afterHeading: string; component: J
   "dark-romance-content-warnings": [],
   "best-dark-romance-kindle-unlimited": [],
   "best-stalker-romance-books": [],
+  "touch-starved-romance-books": [],
+  "fae-court-romance-books": [],
+  "forced-bond-romance-books": [],
+  "silent-mmc-romance-books": [],
+  "dark-fae-world-building": [],
+  "slow-burn-romance-earned-endings": [],
+  "enemies-to-lovers-fae-romance": [],
+  "dark-romance-political-conspiracies": [],
+  "grief-trauma-dark-romance": [],
+  "best-standalone-dark-romance-books": [],
 };
 
 interface BlogPostClientProps {
