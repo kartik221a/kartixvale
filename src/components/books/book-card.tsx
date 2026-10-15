@@ -111,13 +111,14 @@ export function BookCard({
             {book.subtitle}
           </p>
         )}
-        <div className="flex items-center justify-center gap-2 mt-2.5">
+        {/* Action row — Buy on top, icon buttons below */}
+        <div className="mt-2.5 space-y-1.5">
           <a
             href={book.amazonUrl}
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
-            className="flex-1"
+            className="block"
             aria-label={`Buy ${book.title} on Amazon`}
           >
             <Button
@@ -129,21 +130,23 @@ export function BookCard({
               {book.price ? `Buy · ${book.price}` : "Buy"}
             </Button>
           </a>
-          <Link
-            href={detailHref}
-            className="h-7 px-2.5 flex items-center justify-center rounded-sm border border-border text-muted-foreground hover:text-gold hover:border-gold/40 transition-colors focus-ring text-[10px] font-display tracking-[0.1em] uppercase"
-            aria-label={`View details for ${book.title}`}
-          >
-            Details
-          </Link>
-          <SaveButton
-            kind="book"
-            slug={bookToSlug(book.title)}
-            title={book.title}
-            href={detailHref}
-            variant="compact"
-          />
-          <CompareButton slug={bookToSlug(book.title)} title={book.title} variant="compact" />
+          <div className="flex items-center gap-1.5">
+            <Link
+              href={detailHref}
+              className="flex-1 h-6 flex items-center justify-center rounded-sm border border-border text-muted-foreground hover:text-gold hover:border-gold/40 transition-colors focus-ring text-[9px] font-display tracking-[0.1em] uppercase"
+              aria-label={`View details for ${book.title}`}
+            >
+              Details
+            </Link>
+            <SaveButton
+              kind="book"
+              slug={bookToSlug(book.title)}
+              title={book.title}
+              href={detailHref}
+              variant="compact"
+            />
+            <CompareButton slug={bookToSlug(book.title)} title={book.title} variant="compact" />
+          </div>
         </div>
       </div>
     </article>

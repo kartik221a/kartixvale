@@ -906,3 +906,105 @@ Unresolved issues / risks:
 - Could add 7th article in future round
 - Reading list is localStorage-only — could add user accounts for cross-device sync
 - Compare state resets on page navigation (module-level state, not persisted) — could add localStorage persistence
+
+---
+Task ID: round6-article7
+Agent: Article Writer Agent (Round 6)
+Task: Write the seventh blog article for Kartix Vale
+
+Work Log:
+- Read /home/z/my-project/kartixvale/worklog.md to understand the project context (6 existing articles, the design system, the book catalogue, and the established longform magazine voice)
+- Reviewed the existing articles (especially "fated-mates-dark-romance.md", "what-is-dark-romance.md", and "dark-romance-content-warnings.md") to internalize the magazine voice, the working-definition framing, the configuration-breakdown structure, the pull-quote block, and the "Continue into the books" recommendation pattern
+- Surveyed the 17-title Kartix Vale catalogue and noted it is unusually rich in gothic-adjacent books (A Bargain in Shadows, Behind the Veil, The Gotham Reaper's Bride, The Art of Vanishing are all explicit gothics), making Topic 1 (Dark Romance vs Gothic Romance) the choice with the most natural and genuine Kartix Vale book recommendations
+- Chose Topic 1 — "Dark Romance vs Gothic Romance: Where the Shadows Diverge" — as a Genre Comparison article, the angle most distinct from the six existing articles (none do genre comparison at depth; the "what-is-dark-romance" primer only briefly touches gothic as a neighboring genre)
+- Drafted the article in the established sophisticated voice: precise shared-ground and structural-divergence framing, ontological distinction between where the darkness lives, multi-part configuration breakdown, ethical specificity about the honest hybrid vs the decorative gothic, no euphemism, no marketing tone
+- Built the structure: intro → TOC with anchor links → 8 major sections (##) with 12 subsections (###) split between "Two genres, one shadow" (3 subsections: atmosphere, threshold, secret), "Where the shadows diverge" (3 subsections: where darkness lives, who danger is, what book wants from you), "The hybrid book" (2 subsections: how book earns both labels, honest vs decorative), and "Four configurations of the gothic dark romance" (4 subsections: haunted house as metaphor, marriage of convenience as captivity, secret history and inheritance, monster-lover of the manor) → 5 FAQ entries → "Continue into the books" CTA
+- Wrote original framings not present in articles 1-6: the shared shadow as love arriving into a house already furnished with damage; the load-bearing difference stated as gothic romance asks the romance to be one of the tests the house administers vs dark romance asks the romance to be the book's central act; the three structural questions (where darkness lives, who danger is, what book wants from you); the four hybrid configurations; the honest hybrid vs the decorative gothic; the genealogy of the contemporary dark romance absorbing gothic devices as lineage rather than theft; the distinct reading practices each genre rewards (unveiling vs sustained proximity vs both at once)
+- Referenced 7 Kartix Vale books where they genuinely fit the article's taxonomy: A Bargain in Shadows + The Art of Vanishing (marriage-of-convenience as captivity), Behind the Veil + The Gotham Reaper's Bride (secret history and inheritance), The Sickle Bearer's Vessel + The Bloom Beneath the Bone (monster-lover of the manor), Thorns of the Fae Thorne (haunted house as the relationship's metaphor) — all linked with verified Amazon ASINs
+- Iteratively trimmed prose from 3,776 → 3,498 words (within 2,500-3,500 target) via targeted reductions to redundant phrasing, restated closings, and meta-commentary, while preserving the article's argumentative structure
+- Verified final metrics: prose = 3,498 words (excl. frontmatter, FAQ, Continue); full body = 4,446 words incl. FAQ + Continue; metaDescription = 155 chars (within 150-160 range); keywords = 6 (within 3-7 range); H2 sections = 11; H3 subsections = 12; Amazon links = 7 (all verified ASINs against the 17-title catalogue); TOC anchors all match heading slugs
+- Confirmed no "in today's world" / "in a world" / "in today's society" / "in the modern world" clichés; no fabricated statistics, quotes from real people, or citations; no keyword stuffing
+- Saved article to /home/z/my-project/kartixvale/content/blog/dark-romance-vs-gothic-romance.md
+- Ran `bun run scripts/build-blog-data.mjs` — parsed all 7 markdown files (dark-romance-vs-gothic-romance: 4470 words) and wrote to scripts/blog-data.json
+- Ran `bun run scripts/seed-blogs.mjs -- --upsert` (with .env loaded) — upserted all 7 posts to Turso database (0 inserted, 7 upserted, 0 skipped)
+- Verified scripts/blog-data.json now contains 7 articles with the new "dark-romance-vs-gothic-romance" entry at the top (most recent date 2026-03-22)
+
+Stage Summary:
+- Seventh article published: "Dark Romance vs Gothic Romance: Where the Shadows Diverge" (slug: dark-romance-vs-gothic-romance, category: Genre Comparison, categoryColor: #4A1D2E)
+- Article path: /home/z/my-project/kartixvale/content/blog/dark-romance-vs-gothic-romance.md
+- Prose length: 3,498 words (within 2,500-3,500 target); total body 4,446 words incl. FAQ + Continue
+- Database updated: all 7 articles now in Turso blogs table (what-is-dark-romance, enemies-to-lovers-dark-romance, dark-romance-content-warnings, morally-grey-characters-dark-romance, fated-mates-dark-romance, slow-burn-dark-romance, dark-romance-vs-gothic-romance)
+- Catalogue span covered by book recommendations: Gothic Victorian marriage of convenience (A Bargain in Shadows), Victorian dark psychopathic (The Art of Vanishing), Gothic paranormal (Behind the Veil), Gothic romance + murder mystery (The Gotham Reaper's Bride), dark mythological villain worship (The Sickle Bearer's Vessel), dark romance of decay (The Bloom Beneath the Bone), slow burn dark fae (Thorns of the Fae Thorne)
+- Blog now spans seven articles across five editorial categories: Genre Guide (1), Trope Breakdown (3), Reader Resources (1), Character Study (1), Genre Comparison (1) — gives readers a robust exploration of the dark romance genre with the new genre-comparison article adding the genealogical and structural-difference dimension not covered in prior articles
+
+---
+Task ID: round6
+Agent: Web Dev Review Agent (Round 6)
+Task: 7th article, compare persistence, book card redesign
+
+Work Log:
+
+QA Testing:
+- All routes return 200: /, /books, /blog, /blog/dark-romance-vs-gothic-romance, /about, /books/[slug], /api/search-blogs
+- Lint passes with 0 errors
+- Search API returns 7 articles
+
+Seventh Blog Article (parallel subagent, Task ID: round6-article7):
+- Article: "Dark Romance vs Gothic Romance: Where the Shadows Diverge" at content/blog/dark-romance-vs-gothic-romance.md
+- 3,498 words + 5 FAQ entries + 7 book recommendations
+- Category: Genre Comparison (7th editorial angle — 5 categories now covered: Genre Guide, Trope Breakdown, Reader Resources, Character Study, Genre Comparison)
+- Article upserted to Turso DB (7 articles live)
+- Slug: dark-romance-vs-gothic-romance
+
+Compare State localStorage Persistence (IMPROVED):
+- Updated src/components/books/compare-modal.tsx to persist compare state to localStorage
+- Key: "kartixvale:compare-list"
+- loadFromStorage() helper with type-safe JSON parsing
+- saveToStorage() dispatches "kartixvale:compare-changed" custom event for cross-component sync
+- useCompare hook now:
+  * Loads from localStorage on mount (survives page navigation)
+  * Listens for "kartixvale:compare-changed" + "storage" events (cross-tab sync)
+  * Cleans up listeners on unmount
+- Compare state now survives:
+  * Page navigation (books page → book detail → back to books)
+  * Tab refresh (state restored from localStorage)
+  * Multi-tab browsing (storage event sync)
+
+Book Card Button Redesign (IMPROVED):
+- Redesigned the action button row on BookCard component
+- Before: 4 buttons in a single row (Buy, Details, Save, Compare) — too crowded
+- After: 2-row layout:
+  * Top: full-width Buy button (oxblood, prominent)
+  * Bottom: 3 smaller buttons in a row (Details | Save | Compare)
+    - Details: text label, flex-1 width
+    - Save: icon-only compact button
+    - Compare: icon-only compact button
+- VLM verified: "full-width red BUY button at top, smaller Details/Save/Compare below"
+- Cleaner visual hierarchy, easier touch targets, more usable
+
+Stage Summary:
+- 7 articles published (Genre Guide + 3 Trope Breakdowns + Reader Resources + Character Study + Genre Comparison)
+- Compare state now persists across page navigation via localStorage
+- Book card button row redesigned for better UX
+- All routes 200, lint passes
+- VLM verified: book card layout with Buy on top + icon row below
+
+Current Project Status:
+- Stable, feature-rich, polished
+- 7 published articles spanning 5 editorial categories
+- 17 verified books with detail pages
+- Site-wide search (Cmd+K)
+- Reading progress + sticky TOC on articles
+- Dynamic OG image generation per article
+- Save-for-later reading list with localStorage
+- Newsletter signup with working backend
+- Book comparison feature with localStorage persistence
+- Article share buttons
+- Branded 404 page
+- Global back-to-top button
+- Article drop-cap editorial typography
+
+Unresolved issues / risks:
+- Production DB reseed still needed after Vercel deploy
+- Could add 8th article in future round
+- Reading list is localStorage-only — could add user accounts for cross-device sync

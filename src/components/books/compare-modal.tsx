@@ -22,8 +22,34 @@ import { booksData, bookToSlug, type BookData } from "@/lib/books-data";
 // Module-level compare state + subscription pattern
 // Allows multiple components (book cards, modal, floating button)
 // to share the same compare selection without prop drilling.
+// State is persisted to localStorage so it survives page navigation.
 // ============================================================
-let compareState: string[] = [];
+const COMPARE_STORAGE_KEY = "kartixvale:compare-list";
+
+function loadFromStorage(): string[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = window.localStorage.getItem(COMPARE_STORAGE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    return parsed.filter((s) => typeof s === "string").slice(0, 3);
+  } catch {
+    return [];
+  }
+}
+
+function saveToStorage(slugs: string[]) {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(COMPARE_STORAGE_KEY, JSON.stringify(slugs));
+    window.dispatchEvent(new CustomEvent("kartixvale:compare-changed"));
+  } catch {
+    // Fail silently
+  }
+}
+
+let compareState: string[] = loadFromStorage();
 const compareListeners = new Set<(slugs: string[]) => void>();
 
 function notifyCompareListeners() {
@@ -33,6 +59,7 @@ function notifyCompareListeners() {
 
 function setCompareState(updater: (prev: string[]) => string[]) {
   compareState = updater(compareState);
+  saveToStorage(compareState);
   notifyCompareListeners();
 }
 
@@ -44,9 +71,22 @@ export function useCompare() {
 
   useEffect(() => {
     compareListeners.add(setSlugs);
-    setSlugs([...compareState]);
+    // Load from localStorage on mount (in case it changed in another tab)
+    setSlugs(loadFromStorage());
+    compareState = loadFromStorage();
+
+    // Listen for cross-component changes
+    const onStorageChange = () => {
+      compareState = loadFromStorage();
+      setSlugs([...compareState]);
+    };
+    window.addEventListener("kartixvale:compare-changed", onStorageChange);
+    window.addEventListener("storage", onStorageChange);
+
     return () => {
       compareListeners.delete(setSlugs);
+      window.removeEventListener("kartixvale:compare-changed", onStorageChange);
+      window.removeEventListener("storage", onStorageChange);
     };
   }, []);
 
