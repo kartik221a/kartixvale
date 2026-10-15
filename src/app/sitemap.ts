@@ -1,42 +1,49 @@
 import { MetadataRoute } from "next";
 import { getAllBlogSlugs } from "@/lib/blog-service";
-import { getAllBookSlugs } from "@/lib/books-data";
+import { getAllBookSlugs, bookSeries } from "@/lib/books-data";
 
 // Fallback blog slugs - used if database is unreachable
-const FALLBACK_BLOG_SLUGS = ["what-is-dark-romance", "enemies-to-lovers-dark-romance"];
+const FALLBACK_BLOG_SLUGS = [
+  "what-is-dark-romance",
+  "enemies-to-lovers-dark-romance",
+  "dark-romance-content-warnings",
+  "morally-grey-characters-dark-romance",
+  "fated-mates-dark-romance",
+  "slow-burn-dark-romance",
+  "dark-romance-vs-gothic-romance",
+  "marriage-of-convenience-dark-romance",
+  "forbidden-love-dark-romance",
+];
+
+function seriesToSlug(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+}
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://kartixvale.vercel.app";
 
-  // Static pages — Free Reads removed; no longer in sitemap
+  // Static pages
   const staticPages: MetadataRoute.Sitemap = [
-    {
-      url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}/books`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/about`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/blog`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
+    { url: baseUrl, lastModified: new Date(), changeFrequency: "weekly", priority: 1 },
+    { url: `${baseUrl}/books`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
+    { url: `${baseUrl}/about`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
+    { url: `${baseUrl}/blog`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
   ];
 
-  // Book detail pages — generated from verified catalogue
+  // Series landing pages
+  const seriesPages: MetadataRoute.Sitemap = bookSeries.map((s) => ({
+    url: `${baseUrl}/books/series/${seriesToSlug(s.name)}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  }));
+
+  // Book detail pages
   const bookPages: MetadataRoute.Sitemap = getAllBookSlugs().map((slug) => ({
     url: `${baseUrl}/books/${slug}`,
     lastModified: new Date(),
@@ -44,7 +51,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  // Blog post pages — try database first, fall back to hardcoded list
+  // Blog post pages
   let blogSlugs: string[];
   try {
     blogSlugs = await getAllBlogSlugs();
@@ -52,7 +59,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       blogSlugs = FALLBACK_BLOG_SLUGS;
     }
   } catch {
-    console.error("Sitemap: Failed to fetch blog slugs from DB, using fallback");
     blogSlugs = FALLBACK_BLOG_SLUGS;
   }
 
@@ -63,5 +69,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  return [...staticPages, ...bookPages, ...blogPages];
+  return [...staticPages, ...seriesPages, ...bookPages, ...blogPages];
 }

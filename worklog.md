@@ -1095,3 +1095,104 @@ Unresolved issues / risks:
 - Production DB reseed still needed after Vercel deploy
 - Could add 9th article in future round
 - Reading list is localStorage-only — could add user accounts for cross-device sync
+
+---
+Task ID: round8-article9
+Agent: Article Writer Agent (Round 8)
+Task: Write the ninth blog article for Kartix Vale
+
+Work Log:
+- Read worklog.md and reviewed existing 8 articles (genre guide, trope breakdowns, reader resources, character study, genre comparison) to understand the established voice, structure, and the Kartix Vale book catalogue.
+- Selected the "Forbidden Love in Dark Romance" trope breakdown topic — distinct from existing articles 1-8 (no overlap with enemies-to-lovers, fated mates, slow burn, marriage of convenience, morally grey characters, gothic comparison, content warnings, or the genre guide).
+- Drafted the article with the established longform analytical voice: intro + TOC + 8 major sections (What the trope actually is, Why dark romance makes the forbidden darker, The architecture of the taboo, What separates the dark forbidden from the light, Five configurations of the dark forbidden, The moment the forbidden bends, Honesty vs decoration, Where the trope breaks) + 6 FAQ entries + Continue into the books.
+- Defined the trope around a structural "bar" the book refuses to dissolve, distinguishing it from neighbors (enemies-to-lovers as internal bar, star-crossed as factional bar, forbidden as structural bar).
+- Built a four-part taboo architecture (source, cost, asymmetry, survival) and five configurations (vow, being, bond, blood, mastery) — original taxonomy, not borrowed from any existing article.
+- Recommended 7 Kartix Vale books mapped to specific configurations: Behind the Veil (being/paranormal), Thorns of the Fae Thorne (vow/fae), The Unholy Reverie (bond/supernatural), A Bargain in Shadows (mastery/gothic Victorian), The Gotham Reaper's Bride (mastery/gothic), The Carved and The King (being/romantasy), The Bloom Beneath the Bone (bond/devotional), The Sickle Bearer's Vessel (bond/myth).
+- Iteratively trimmed the article through multiple MultiEdit passes to land at ~3,545 words of pure prose (3,613 incl. TOC) — within the existing precedent range (3,453-3,578 pure prose across the 8 existing articles).
+- Tightened the metaDescription to 154 characters (within 150-160 spec).
+- Saved to /home/z/my-project/kartixvale/content/blog/forbidden-love-dark-romance.md.
+- Ran bun run scripts/build-blog-data.mjs — successfully parsed the new article alongside the 8 existing ones (9 posts total).
+- Ran set -a && source .env && set +a && bun run scripts/seed-blogs.mjs -- --upsert — upserted all 9 articles into the Turso database.
+- Verified scripts/blog-data.json contains 9 articles including the new forbidden-love-dark-romance entry.
+
+Stage Summary:
+- Ninth article "Forbidden Love in Dark Romance: Why the Taboo Makes It Burn Brighter" (slug: forbidden-love-dark-romance, category: Trope Breakdown) saved at /home/z/my-project/kartixvale/content/blog/forbidden-love-dark-romance.md.
+- ~3,545 words of substantive prose (excluding frontmatter/FAQ/Continue); 5,005 total body words including FAQ + Continue.
+- Original taxonomy of forbidden-love configurations (vow / being / bond / blood / mastery) plus a four-part taboo architecture (source / cost / asymmetry / survival) — no overlap with any of the existing 8 articles.
+- Database now holds 9 blog posts; build-blog-data.mjs and seed-blogs.mjs both succeeded with the new article upserted cleanly.
+- Kartix Vale book recommendations span 7 titles mapped to specific forbidden-love configurations (Behind the Veil, Thorns of the Fae Thorne, The Unholy Reverie, A Bargain in Shadows, The Gotham Reaper's Bride, The Carved and The King, The Bloom Beneath the Bone, The Sickle Bearer's Vessel).
+
+---
+Task ID: round8
+Agent: Web Dev Review Agent (Round 8)
+Task: 9th article, series landing pages, sitemap update
+
+Work Log:
+
+QA Testing:
+- All routes return 200: /, /books, /blog, /blog/forbidden-love-dark-romance, /about, /api/search-blogs
+- Lint passes with 0 errors
+- Search API returns 9 articles
+
+Ninth Blog Article (parallel subagent, Task ID: round8-article9):
+- Article: "Forbidden Love in Dark Romance: Why the Taboo Makes It Burn Brighter" at content/blog/forbidden-love-dark-romance.md
+- 3,545 words + 6 FAQ entries + 7 book recommendations mapped to 5 configurations (by vow, by being, by bond, by blood, by mastery)
+- Category: Trope Breakdown (9 articles total)
+- Article upserted to Turso DB (9 articles live)
+- Slug: forbidden-love-dark-romance
+
+Book Series Landing Pages (NEW — MAJOR FEATURE):
+- Created src/app/books/series/[slug]/page.tsx — server component:
+  * generateStaticParams for all 3 series (Beneath the Veil, Crimson Shifters, Starving Gods)
+  * generateMetadata with series-specific keywords, OG image (first book cover), Twitter card
+  * BookSeries structured data (schema.org BookSeries with hasPart containing all books)
+  * BreadcrumbList structured data
+- Created src/app/books/series/[slug]/series-client.tsx — client component:
+  * Breadcrumb nav (Home / Books / Series Name)
+  * Series badges: "Series Guide" + "Complete/Ongoing" + "N Books"
+  * Large series title with glow effect
+  * Full series description
+  * CTAs: "Start the Series · $X.XX" + "Browse All Books"
+  * Reading Order section — visual timeline with:
+    - Numbered circles (1, 2, 3...) connected by vertical gradient lines
+    - Book cover thumbnail per entry
+    - Book number badge (Book 1 / Prequel)
+    - KU badge
+    - Title, subtitle, hook, genre, page count, price
+    - Clickable to book detail page
+    - Arrow icon with hover effect
+  * Book grid section — all covers together with number badges
+  * Bundle CTA section — "Read all N books" with Amazon link
+  * Back to All Books link
+- Updated sitemap.ts to include 3 series landing pages
+- Updated books page to link series titles to the new landing pages
+- VLM verified: breadcrumb, series title, reading order timeline with numbered circles + cover thumbnails
+
+Stage Summary:
+- 9 articles published (Genre Guide + 5 Trope Breakdowns + Reader Resources + Character Study + Genre Comparison)
+- 3 series landing pages created (/books/series/beneath-the-veil, /crimson-shifters, /starving-gods)
+- Series titles on books page now clickable to landing pages
+- Sitemap updated with series pages
+- All routes 200, lint passes
+- VLM verified: reading order timeline with numbered circles and book covers
+
+Current Project Status:
+- Stable, feature-rich, polished
+- 9 published articles spanning 5 editorial categories
+- 17 verified books with detail pages
+- 3 series landing pages with reading order timelines
+- Site-wide search (Cmd+K) with 9 articles + 17 books
+- Reading progress + sticky TOC on articles
+- Dynamic OG image generation per article
+- Save-for-later reading list with localStorage + navbar badge
+- Newsletter signup with working backend
+- Book comparison feature with localStorage persistence
+- Article share buttons
+- Branded 404 page
+- Global back-to-top button
+- Article drop-cap editorial typography
+
+Unresolved issues / risks:
+- Production DB reseed still needed after Vercel deploy
+- Could add 10th article in future round
+- Reading list is localStorage-only — could add user accounts for cross-device sync

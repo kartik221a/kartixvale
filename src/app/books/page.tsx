@@ -391,7 +391,12 @@ export default function BooksPage() {
                       )}
                     </div>
                     <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl text-foreground leading-tight">
-                      {series.name}
+                      <Link
+                        href={`/books/series/${series.name.toLowerCase().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-").replace(/-+/g, "-")}`}
+                        className="hover:text-gold transition-colors"
+                      >
+                        {series.name}
+                      </Link>
                     </h2>
                     <div className="divider-gold w-24 mt-4" />
                     <p className="font-body text-base md:text-lg text-muted-foreground max-w-3xl mt-5 leading-relaxed">
