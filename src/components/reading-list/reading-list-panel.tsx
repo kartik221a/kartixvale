@@ -49,6 +49,13 @@ export function ReadingListPanel() {
     return () => window.removeEventListener("keydown", onKey);
   }, [isOpen]);
 
+  // Listen for open event from navbar (dispatched via custom event)
+  useEffect(() => {
+    const onOpen = () => setIsOpen(true);
+    window.addEventListener("kartixvale:open-reading-list", onOpen);
+    return () => window.removeEventListener("kartixvale:open-reading-list", onOpen);
+  }, []);
+
   // Build a lookup of book covers by slug for display
   const bookCoverMap = new Map(
     booksData.map((b) => [bookToSlug(b.title), b.coverUrl])

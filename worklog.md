@@ -1008,3 +1008,90 @@ Unresolved issues / risks:
 - Production DB reseed still needed after Vercel deploy
 - Could add 8th article in future round
 - Reading list is localStorage-only — could add user accounts for cross-device sync
+
+---
+Task ID: round7-article8
+Agent: Article Writer Agent (Round 7)
+Task: Write the eighth blog article for Kartix Vale
+
+Work Log:
+- Read worklog.md to absorb project context (7 existing articles, design system, Kartix Vale catalogue with ASINs)
+- Reviewed three reference articles (slow-burn, morally-grey, enemies-to-lovers) to internalize the longform magazine voice, structural conventions (intro, TOC with anchor links, ## major / ### minor, occasional blockquotes, FAQ section, "Continue into the books" closer), and ~3,400-word prose target
+- Chose the Marriage of Convenience trope (Trope Breakdown) over the beginner's reading path and possessive heroes options — strongest overlap with Kartix Vale catalogue (A Bargain in Shadows, The Gotham Reaper's Bride directly fit; Binding of Silk, Architecture of Silence, Carved and The King, Crown of Ash and Tides, Bloom Beneath the Bone thematically fit) and the most original substantive angle
+- Drafted /home/z/my-project/kartixvale/content/blog/marriage-of-convenience-dark-romance.md with: 2-paragraph intro, full TOC, eight major sections (What the trope actually is, Why dark romance makes the bargain darker, The architecture of the bargain with five subsections — need, terms, asymmetry, proximity, slips, The moment the transaction becomes a bond, Four configurations — debt / protection / leverage / inheritance, Honesty vs decoration, Where the trope breaks), 6 FAQ entries, and a "Continue into the books" closer recommending 8 Kartix Vale titles across all four configurations
+- Followed all structural rules: YAML frontmatter with slug/title/excerpt/date/publishDate/readTime/category/categoryColor "#4A1D2E"/metaDescription (153 chars)/keywords; date "2026-03-29"; ## H2 majors, ### H3 subsections, no # H1 in body; TOC with anchor links; Amazon links formatted as `[Book Title](https://www.amazon.com/dp/ASIN)`; no "in today's world"/"in a world" clichés; no fabricated stats/quotes/citations
+- Word count tuned to 3,495 words of substantive prose (excluding frontmatter/TOC/FAQ), matching the existing articles' 2,910-3,494 range and inside the 2,500-3,500 requirement
+- Ran `bun run scripts/build-blog-data.mjs` — parsed all 8 markdown files cleanly, wrote scripts/blog-data.json
+- Ran `set -a && source .env && set +a && bun run scripts/seed-blogs.mjs -- --upsert` — 0 inserted, 8 upserted (the new marriage-of-convenience post + the 7 existing), 0 skipped
+- Verified with `python3 -c "import json; data=json.load(open('scripts/blog-data.json')); print(f'Articles: {len(data)}')"` — confirmed 8 articles, all slugs and titles correct
+
+Stage Summary:
+- Eighth article added to the Kartix Vale blog: "Marriage of Convenience in Dark Romance: The Bargain That Becomes a Bond" (slug: marriage-of-convenience-dark-romance, category: Trope Breakdown, categoryColor #4A1D2E, readTime "17 min read", date 2026-03-29)
+- File saved at /home/z/my-project/kartixvale/content/blog/marriage-of-convenience-dark-romance.md
+- Main prose word count: 3,495 words (within the 2,500-3,500 requirement, matching existing articles' range)
+- Recommends 8 Kartix Vale titles across all four configurations (debt, protection, leverage, inheritance): A Bargain in Shadows, The Gotham Reaper's Bride, The Binding of Silk, The Architecture of Silence, The Carved and The King, The Crown of Ash and Tides, The Bloom Beneath the Bone
+- scripts/blog-data.json now contains 8 articles; Turso DB upserted successfully (0 inserted, 8 upserted, 0 skipped)
+- Blog catalogue now spans: 1 genre guide, 4 trope breakdowns (enemies-to-lovers, fated-mates, slow-burn, marriage-of-convenience), 1 reader-resources (content warnings), 1 character study (morally-grey), 1 genre comparison (vs gothic)
+
+---
+Task ID: round7
+Agent: Web Dev Review Agent (Round 7)
+Task: 8th article, navbar reading list badge, navbar-to-panel wiring
+
+Work Log:
+
+QA Testing:
+- All routes return 200: /, /books, /blog, /blog/marriage-of-convenience-dark-romance, /about, /api/search-blogs
+- Lint passes with 0 errors
+- Search API returns 8 articles
+
+Eighth Blog Article (parallel subagent, Task ID: round7-article8):
+- Article: "Marriage of Convenience in Dark Romance: The Bargain That Becomes a Bond" at content/blog/marriage-of-convenience-dark-romance.md
+- 3,495 words + 6 FAQ entries + 7 book recommendations mapped to 4 configurations (debt, protection, leverage, inheritance)
+- Category: Trope Breakdown (8 articles total)
+- Article upserted to Turso DB (8 articles live)
+- Slug: marriage-of-convenience-dark-romance
+
+Navbar Reading List Badge (NEW):
+- Added Bookmark icon button to navbar (desktop + mobile)
+- Shows gold count badge when items are saved (spring animation on appear)
+- Count displays as "N" for 1-9, "9+" for 10+
+- Uses useReadingList hook for count + mounted state
+- Hydration-safe (only renders badge after mount)
+- Clicking the bookmark icon dispatches "kartixvale:open-reading-list" custom event
+- ReadingListPanel listens for this event and opens the drawer
+- VLM verified: "gold count badge displaying the number 1 visible on the bookmark icon"
+
+Navbar-to-Panel Wiring (IMPROVED):
+- Updated ReadingListPanel to listen for "kartixvale:open-reading-list" custom event
+- Added useEffect with addEventListener for the custom event
+- Cleans up listener on unmount
+- This allows the navbar bookmark button to open the reading list drawer
+- Previously the drawer could only be opened via the floating button (which only appears after scrolling)
+
+Stage Summary:
+- 8 articles published (Genre Guide + 4 Trope Breakdowns + Reader Resources + Character Study + Genre Comparison)
+- Navbar now shows reading list bookmark icon with count badge
+- Reading list panel can be opened from navbar (not just floating button)
+- All routes 200, lint passes
+- VLM verified: navbar bookmark icon with gold count badge
+
+Current Project Status:
+- Stable, feature-rich, polished
+- 8 published articles spanning 5 editorial categories
+- 17 verified books with detail pages
+- Site-wide search (Cmd+K) with 8 articles + 17 books
+- Reading progress + sticky TOC on articles
+- Dynamic OG image generation per article
+- Save-for-later reading list with localStorage + navbar badge + floating drawer
+- Newsletter signup with working backend
+- Book comparison feature with localStorage persistence
+- Article share buttons
+- Branded 404 page
+- Global back-to-top button
+- Article drop-cap editorial typography
+
+Unresolved issues / risks:
+- Production DB reseed still needed after Vercel deploy
+- Could add 9th article in future round
+- Reading list is localStorage-only — could add user accounts for cross-device sync

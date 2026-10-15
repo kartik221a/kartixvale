@@ -5,8 +5,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Sun, Moon, Search } from "lucide-react";
+import { Menu, X, Sun, Moon, Search, Bookmark } from "lucide-react";
 import { SearchModal } from "@/components/search/search-modal";
+import { useReadingList } from "@/hooks/use-reading-list";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -22,6 +23,7 @@ export function Navbar() {
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
+  const { count: readingListCount, mounted: readingListMounted } = useReadingList();
 
   useEffect(() => {
     setMounted(true);
@@ -123,6 +125,28 @@ export function Navbar() {
             <Search className="h-4 w-4" />
           </button>
 
+          {/* Reading List Trigger — shows count badge when items saved */}
+          {readingListMounted && (
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent("kartixvale:open-reading-list"))}
+              className="relative w-9 h-9 flex items-center justify-center rounded-full border border-border/50 text-muted-foreground hover:text-gold hover:border-gold/40 transition-all duration-300 focus-ring"
+              aria-label={`Reading list (${readingListCount} saved)`}
+              title="Reading list"
+            >
+              <Bookmark className="h-4 w-4" />
+              {readingListCount > 0 && (
+                <motion.span
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", stiffness: 500, damping: 25 }}
+                  className="absolute -top-1 -right-1 w-4 h-4 flex items-center justify-center rounded-full bg-gold text-ink text-[9px] font-bold"
+                >
+                  {readingListCount > 9 ? "9+" : readingListCount}
+                </motion.span>
+              )}
+            </button>
+          )}
+
           {/* Theme Toggle */}
           {mounted && (
             <button
@@ -159,7 +183,7 @@ export function Navbar() {
           )}
         </div>
 
-        {/* Mobile: Search + Theme Toggle + Hamburger */}
+        {/* Mobile: Search + Reading List + Theme Toggle + Hamburger */}
         <div className="md:hidden flex items-center gap-1.5">
           <button
             onClick={() => setIsSearchOpen(true)}
@@ -168,6 +192,20 @@ export function Navbar() {
           >
             <Search className="h-4 w-4" />
           </button>
+          {readingListMounted && (
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent("kartixvale:open-reading-list"))}
+              className="relative w-9 h-9 flex items-center justify-center rounded-full border border-border/50 text-muted-foreground hover:text-gold hover:border-gold/40 transition-all duration-300 focus-ring"
+              aria-label={`Reading list (${readingListCount} saved)`}
+            >
+              <Bookmark className="h-4 w-4" />
+              {readingListCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 flex items-center justify-center rounded-full bg-gold text-ink text-[9px] font-bold">
+                  {readingListCount > 9 ? "9+" : readingListCount}
+                </span>
+              )}
+            </button>
+          )}
           {mounted && (
             <button
               onClick={toggleTheme}
