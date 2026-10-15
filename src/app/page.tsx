@@ -5,109 +5,91 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { BookCard } from "@/components/books/book-card";
-import { EmailCapture } from "@/components/marketing/email-capture";
-import { FaqSection } from "@/components/marketing/faq-section";
 import { BookModal } from "@/components/books/book-modal";
 import { Navbar } from "@/components/layout/navbar";
-import GlitchText from "@/components/reactbits/GlitchText";
-import Particles from "@/components/reactbits/Particles";
+import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import {
-  ChevronDown,
+  ArrowRight,
   BookOpen,
-  Eye,
-  Heart,
   Feather,
-  Moon,
   Flame,
-  Castle,
-  Sparkles,
   Ghost,
+  Moon,
+  Sparkles,
   ExternalLink,
-  Skull,
+  ChevronDown,
 } from "lucide-react";
 import {
   booksData,
-  beneathTheVeilSeries,
+  featuredBooks,
+  bookSeries,
   standaloneNovels,
   type BookData,
 } from "@/lib/books-data";
 
-const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
+// ============================================================
+// Motion variants — restrained, editorial
+// ============================================================
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.7, ease: "easeOut" },
+    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
   },
 };
 
-const staggerContainer = {
+const fadeIn = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 0.9 } },
+};
+
+const stagger = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.15, delayChildren: 0.1 },
+    transition: { staggerChildren: 0.12, delayChildren: 0.05 },
   },
 };
 
-const fadeInLeft = {
-  hidden: { opacity: 0, x: -40 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.7, ease: "easeOut" },
-  },
-};
-
-const fadeInRight = {
-  hidden: { opacity: 0, x: 40 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.7, ease: "easeOut" },
-  },
-};
-
-const genres = [
+// ============================================================
+// Worlds / genres to highlight
+// ============================================================
+const worlds = [
   {
-    title: "Dark Fae",
-    desc: "Courts of shadow and thorn, where love is a weapon and bonds are forged in blood",
-    icon: Feather,
-    color: "text-purple-400",
-  },
-  {
-    title: "Paranormal",
-    desc: "Beyond the veil of reality, where the dead whisper and the living listen",
-    icon: Ghost,
-    color: "text-blue-400",
-  },
-  {
-    title: "Gothic",
-    desc: "Manors, moors, and madness — where the walls have ears and the dark has teeth",
-    icon: Castle,
-    color: "text-gray-300",
-  },
-  {
-    title: "Fantasy",
-    desc: "Magic-woven obsessions across worlds where power and love are inseparable",
-    icon: Sparkles,
-    color: "text-gold",
-  },
-  {
-    title: "Mystery",
-    desc: "Love hides in the dark, and every answer leads deeper into the labyrinth",
-    icon: Moon,
-    color: "text-cyan-400",
-  },
-  {
-    title: "Demons & Fae",
-    desc: "Where monsters love deepest and the line between salvation and damnation blurs",
+    title: "Dark Romance",
+    description:
+      "Love under pressure. Morally grey characters, obsession, and the cost of wanting someone you shouldn't.",
     icon: Flame,
-    color: "text-blood-light",
+    href: "/books",
+  },
+  {
+    title: "Gothic Romance",
+    description:
+      "Atmospheric manors, marriage of convenience, and secrets older than the houses that hold them.",
+    icon: Ghost,
+    href: "/books",
+  },
+  {
+    title: "Paranormal Romance",
+    description:
+      "Fated mates, wolf shifters, and the ancient bonds that choose their vessels without permission.",
+    icon: Moon,
+    href: "/books",
+  },
+  {
+    title: "Dark Fantasy",
+    description:
+      "Curses, gods, drowned memories, and the price of forbidden magic in worlds built on ruins.",
+    icon: Sparkles,
+    href: "/books",
   },
 ];
 
+// ============================================================
+// Page
+// ============================================================
 export default function HomePage() {
   const [selectedBook, setSelectedBook] = useState<BookData | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -126,249 +108,162 @@ export default function HomePage() {
     <main className="min-h-screen flex flex-col">
       <Navbar />
 
-      {/* ===== HERO SECTION ===== */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Background image */}
-        <div className="absolute inset-0">
-          <Image
-            src="/images/hero-bg.png"
-            alt="Dark romantic atmosphere"
-            fill
-            className="object-cover object-center"
-            priority
-            quality={90}
-          />
-          <div className="absolute inset-0 bg-black/60" />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/80" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.4)_70%,rgba(0,0,0,0.9)_100%)]" />
-        </div>
+      {/* ============================================================
+          HERO
+          ============================================================ */}
+      <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden">
+        {/* Atmospheric background */}
+        <div className="absolute inset-0 hero-gradient" />
 
-        {/* Floating particles */}
-        <div className="absolute inset-0 pointer-events-none">
-          <Particles
-            particleCount={60}
-            particleSpread={8}
-            speed={0.06}
-            particleColors={["#8B0000", "#C9A84C", "#4a0000"]}
-            moveParticlesOnHover
-            particleHoverFactor={0.3}
-            alphaParticles
-            particleBaseSize={50}
-            sizeRandomness={1.5}
-            cameraDistance={25}
-            disableRotation={false}
-          />
-        </div>
+        {/* Particulate texture (very subtle) */}
+        <div
+          className="absolute inset-0 opacity-30 pointer-events-none mix-blend-overlay"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 25% 35%, rgba(184,146,74,0.18) 0%, transparent 25%), radial-gradient(circle at 75% 70%, rgba(92,10,10,0.22) 0%, transparent 30%)",
+          }}
+        />
 
-        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto pt-16">
+        {/* Vignette */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse 80% 100% at 50% 50%, transparent 0%, rgba(12,9,7,0.6) 100%)",
+          }}
+        />
+
+        {/* Hero content */}
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center">
           <motion.div
             initial="hidden"
             animate="visible"
-            variants={staggerContainer}
+            variants={stagger}
           >
+            {/* Eyebrow */}
             <motion.p
-              variants={fadeInUp}
-              className="text-gold/80 tracking-[0.3em] uppercase text-xs md:text-sm mb-6 font-medium"
+              variants={fadeUp}
+              className="font-display text-[11px] sm:text-xs tracking-[0.4em] uppercase text-gold mb-6"
             >
-              Dark Romance Author
+              Dark Romance · Gothic · Paranormal
             </motion.p>
 
-            {/* GlitchText name */}
-            <motion.div
-              variants={fadeInUp}
-              className="w-full overflow-visible"
+            {/* Headline */}
+            <motion.h1
+              variants={fadeUp}
+              className="font-serif text-[2.5rem] leading-[1.05] sm:text-6xl md:text-7xl lg:text-[5.5rem] lg:leading-[1] text-foreground text-glow-soft"
             >
-              <GlitchText
-                speed={0.5}
-                enableShadows
-                enableOnHover
-                className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl uppercase"
-                style={{
-                  letterSpacing: "0.15em",
-                  background:
-                    "linear-gradient(135deg, #C9A84C 0%, #D4AF37 40%, #B8860B 60%, #C9A84C 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                  filter: "drop-shadow(0 0 12px rgba(201, 168, 76, 0.3))",
-                }}
-              >
-                Kartix Vale
-              </GlitchText>
-            </motion.div>
+              Love was never
+              <br />
+              <span className="italic text-gold">meant</span> to be safe.
+            </motion.h1>
 
+            {/* Divider */}
             <motion.div
-              variants={fadeInUp}
-              className="divider-gold w-48 md:w-64 mx-auto my-6"
+              variants={fadeUp}
+              className="divider-ornament w-64 mx-auto my-8"
             />
 
+            {/* Subhead */}
             <motion.p
-              variants={fadeInUp}
-              className="font-serif text-xl md:text-2xl lg:text-3xl text-foreground/80 italic mb-8"
+              variants={fadeUp}
+              className="font-body text-lg sm:text-xl md:text-2xl text-foreground/80 max-w-2xl mx-auto leading-relaxed"
             >
-              &ldquo;Love was never meant to be safe&rdquo;
+              The novels of Kartix Vale — atmospheric, morally grey, and unflinching
+              about the rooms most romances only glance into on the way somewhere safer.
             </motion.p>
 
-            <motion.p
-              variants={fadeInUp}
-              className="text-muted-foreground text-sm mb-8 max-w-md mx-auto"
-            >
-              7 books. 4 worlds. Infinite darkness. Every story is a descent
-              worth taking.
-            </motion.p>
-
+            {/* CTAs */}
             <motion.div
-              variants={fadeInUp}
-              className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10"
+              variants={fadeUp}
+              className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-10"
             >
-              <a href="#featured-book">
+              <Link href="/books" className="block w-full sm:w-auto">
                 <Button
-                  variant="blood"
-                  size="lg"
-                  className="font-semibold px-8 h-12 text-base transition-all duration-300 hover:shadow-[0_0_30px_rgba(220,20,60,0.5)] hover:scale-105"
-                  data-track="explore-darkness"
+                  variant="oxblood"
+                  className="w-full sm:w-auto h-12 px-8 text-sm tracking-wider uppercase font-semibold"
                 >
-                  <BookOpen className="h-5 w-5 mr-2" />
-                  Explore the Darkness
+                  <BookOpen className="h-4 w-4 mr-2" />
+                  Explore the Books
                 </Button>
-              </a>
-              <Link href="/books">
+              </Link>
+              <Link href="/blog/what-is-dark-romance" className="block w-full sm:w-auto">
                 <Button
                   variant="gold"
-                  className="transition-all duration-300"
+                  className="w-full sm:w-auto h-12 px-8 text-sm tracking-wider uppercase font-semibold"
                 >
-                  View All Books
+                  Read the Journal
+                  <ArrowRight className="h-4 w-4 ml-2" />
                 </Button>
               </Link>
             </motion.div>
-
-            <motion.div variants={fadeInUp} className="max-w-md mx-auto">
-              <p className="text-muted-foreground text-sm mb-3">
-                Get a free chapter from the latest release
-              </p>
-              <EmailCapture source="hero" variant="hero" />
-            </motion.div>
-          </motion.div>
-
-          {/* Scroll indicator */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 2, duration: 1 }}
-            className="absolute bottom-8 left-1/2 -translate-x-1/2"
-          >
-            <a
-              href="#featured-book"
-              className="text-muted-foreground/50 hover:text-blood-light transition-colors"
-            >
-              <ChevronDown className="h-6 w-6 animate-bounce" />
-            </a>
           </motion.div>
         </div>
+
+        {/* Scroll hint */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2, duration: 0.8 }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 pointer-events-none"
+        >
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            className="flex flex-col items-center gap-1 text-muted-foreground"
+          >
+            <span className="font-display text-[10px] tracking-[0.3em] uppercase">
+              Begin
+            </span>
+            <ChevronDown className="h-3 w-3" />
+          </motion.div>
+        </motion.div>
       </section>
 
-      {/* ===== FEATURED BOOK SECTION ===== */}
-      <section
-        id="featured-book"
-        className="py-16 md:py-24 bg-gradient-dark relative overflow-hidden"
-      >
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-midnight/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-80 h-80 bg-blood/5 rounded-full blur-3xl" />
-        </div>
-
-        <div className="max-w-6xl mx-auto px-4 relative z-10">
+      {/* ============================================================
+          FEATURED BOOKS — editorial composition
+          ============================================================ */}
+      <section className="relative py-20 md:py-32 bg-gradient-dark overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={staggerContainer}
+            viewport={{ once: true, margin: "-80px" }}
+            variants={stagger}
           >
-            <motion.div variants={fadeInUp} className="text-center mb-10">
-              <p className="text-gold/80 tracking-[0.3em] uppercase text-xs md:text-sm mb-3">
-                Featured Release
+            {/* Section header */}
+            <motion.div variants={fadeUp} className="text-center mb-14 md:mb-20">
+              <p className="font-display text-[11px] tracking-[0.4em] uppercase text-gold mb-3">
+                The Collection
               </p>
-              <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-foreground">
-                Enter the Fae Court
+              <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl text-foreground mb-4 leading-tight">
+                Featured Works
               </h2>
-              <div className="divider-gold w-24 mx-auto mt-4" />
-            </motion.div>
-
-            <motion.div variants={fadeInUp}>
-              <BookCard
-                title={booksData[0].title}
-                coverUrl={booksData[0].coverUrl}
-                genre={booksData[0].genre}
-                price={booksData[0].price}
-                amazonUrl={booksData[0].amazonUrl}
-                freeReadSlug={booksData[0].freeReadSlug}
-                featured
-                description={
-                  booksData[0].description[0] +
-                  " " +
-                  booksData[0].description[1]
-                }
-                onBookClick={() => openBookModal(booksData[0])}
-              />
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ===== BENEATH THE VEIL SERIES PREVIEW ===== */}
-      <section className="py-16 md:py-24 bg-section-alt relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blood/5 rounded-full blur-3xl" />
-        </div>
-
-        <div className="max-w-6xl mx-auto px-4 relative z-10">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={staggerContainer}
-          >
-            <motion.div variants={fadeInUp} className="text-center mb-10">
-              <p className="text-gold/80 tracking-[0.3em] uppercase text-xs md:text-sm mb-3">
-                The Series
-              </p>
-              <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-foreground">
-                Beneath the Veil
-              </h2>
-              <div className="divider-gold w-24 mx-auto mt-4" />
-              <p className="text-muted-foreground text-sm mt-4 max-w-lg mx-auto">
-                Four books. One descent. A gothic world where the veil between
-                realities is thinning, and the cost of love is everything.
+              <div className="divider-gold w-24 mx-auto" />
+              <p className="font-body text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mt-6 leading-relaxed">
+                A curated entry into the catalogue. Series openers, standalones, and
+                recent releases — each a doorway into a different shade of dark.
               </p>
             </motion.div>
 
-            {/* Series Books Grid */}
+            {/* Featured grid — 6 books */}
             <motion.div
-              variants={staggerContainer}
-              className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-8"
+              variants={stagger}
+              className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 md:gap-8"
             >
-              {beneathTheVeilSeries.map((book) => (
-                <motion.div key={book.title} variants={fadeInUp}>
-                  <BookCard
-                    title={book.title}
-                    coverUrl={book.coverUrl}
-                    genre={book.genre}
-                    price={book.price}
-                    amazonUrl={book.amazonUrl}
-                    freeReadSlug={book.freeReadSlug}
-                    onBookClick={() => openBookModal(book)}
-                  />
+              {featuredBooks.map((book) => (
+                <motion.div key={book.title} variants={fadeUp}>
+                  <BookCard book={book} onBookClick={openBookModal} compact />
                 </motion.div>
               ))}
             </motion.div>
 
-            <motion.div variants={fadeInUp} className="text-center">
+            {/* CTA */}
+            <motion.div variants={fadeUp} className="text-center mt-14">
               <Link href="/books">
-                <Button
-                  variant="gold"
-                  className="transition-all duration-300"
-                >
-                  View Full Collection
+                <Button variant="gold" className="h-12 px-8 text-sm tracking-wider uppercase font-semibold">
+                  View All {booksData.length} Books
+                  <ArrowRight className="h-4 w-4 ml-2" />
                 </Button>
               </Link>
             </motion.div>
@@ -376,176 +271,63 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ===== SECTION DIVIDER IMAGE ===== */}
-      <div className="relative h-32 md:h-48 overflow-hidden">
-        <Image
-          src="/images/ornate-divider.png"
-          alt="Dark atmospheric divider"
-          fill
-          className="object-cover object-center"
+      {/* ============================================================
+          EXPLORE THE WORLDS — genres
+          ============================================================ */}
+      <section className="relative py-20 md:py-28 bg-section-alt overflow-hidden">
+        <div
+          className="absolute inset-0 pointer-events-none opacity-30"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 20% 30%, rgba(160,24,24,0.06) 0%, transparent 35%), radial-gradient(circle at 80% 70%, rgba(184,146,74,0.05) 0%, transparent 35%)",
+          }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-section-alt" />
-      </div>
 
-      {/* ===== ABOUT THE AUTHOR SECTION ===== */}
-      <section className="py-16 md:py-24 bg-gradient-dark relative overflow-hidden">
-        {/* Background decoration */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-midnight/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-80 h-80 bg-blood/5 rounded-full blur-3xl" />
-        </div>
-
-        {/* Background particles */}
-        <div className="absolute inset-0 pointer-events-none opacity-40">
-          <Particles
-            particleCount={25}
-            particleSpread={10}
-            speed={0.03}
-            particleColors={["#8B0000", "#C9A84C"]}
-            alphaParticles
-            particleBaseSize={30}
-            sizeRandomness={1}
-            cameraDistance={25}
-            disableRotation
-          />
-        </div>
-
-        <div className="max-w-4xl mx-auto px-4 relative z-10">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={staggerContainer}
+            viewport={{ once: true, margin: "-80px" }}
+            variants={stagger}
           >
-            <motion.div variants={fadeInUp} className="text-center mb-10">
-              <p className="text-gold/80 tracking-[0.3em] uppercase text-xs md:text-sm mb-3">
-                The Mind Behind the Words
+            <motion.div variants={fadeUp} className="text-center mb-14">
+              <p className="font-display text-[11px] tracking-[0.4em] uppercase text-gold mb-3">
+                The Atmospheres
               </p>
-              <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-foreground">
-                The Author
+              <h2 className="font-serif text-3xl md:text-5xl text-foreground mb-4 leading-tight">
+                Explore the Worlds
               </h2>
-              <div className="divider-gold w-24 mx-auto mt-4" />
+              <div className="divider-gold w-24 mx-auto" />
+              <p className="font-body text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mt-6">
+                Every Kartix Vale novel belongs to one of these atmospheres —
+                each one a different way to fall into the dark.
+              </p>
             </motion.div>
 
             <motion.div
-              variants={fadeInUp}
-              className="flex flex-col md:flex-row items-center gap-8 md:gap-12"
+              variants={stagger}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6"
             >
-              {/* Mysterious emblem */}
-              <motion.div
-                variants={fadeInLeft}
-                className="flex-shrink-0"
-              >
-                <div className="w-48 h-48 md:w-60 md:h-60 rounded-full bg-gradient-to-br from-midnight via-blood/20 to-midnight flex items-center justify-center border border-gold/20 relative overflow-hidden shadow-[0_0_50px_rgba(139,0,0,0.25)]">
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <Skull className="h-10 w-10 md:h-12 md:w-12 text-gold/20" />
-                  </div>
-                  <span className="relative logo-text text-lg md:text-2xl uppercase text-center leading-tight">
-                    Kartix
-                    <br />
-                    Vale
-                  </span>
-                </div>
-              </motion.div>
-
-              {/* Bio */}
-              <motion.div variants={fadeInRight} className="text-center md:text-left space-y-4">
-                <p className="text-foreground/90 text-base md:text-lg leading-relaxed">
-                  Kartix Vale writes dark romance that lives in the space
-                  between love and obsession, safety and ruin. At twenty-two,
-                  the worlds built on the page are older than the person writing
-                  them — born from a lifelong fascination with the shadowy
-                  corners of love that most stories are afraid to explore.
-                </p>
-                <p className="text-foreground/80 text-sm md:text-base leading-relaxed">
-                  Every story asks the same question, dressed in different
-                  shadows:{" "}
-                  <span className="text-blood-light italic font-serif">
-                    What would you sacrifice for love?
-                  </span>{" "}
-                  The answer is never simple. It is never safe. And it is always
-                  worth the descent.
-                </p>
-                <p className="text-muted-foreground text-sm md:text-base leading-relaxed">
-                  Shy by nature but relentless on the page, Kartix prefers to
-                  let the stories speak for themselves. There is no photo because
-                  the author believes the words should find you before the person
-                  does. Based nowhere in particular. Writing from the dark.
-                </p>
-                <div className="flex flex-wrap gap-3 pt-2 justify-center md:justify-start">
-                  <Link href="/about">
-                    <Button
-                      variant="outline"
-                      className="border-blood/30 text-blood-light hover:bg-blood/10 hover:border-blood/50 transition-all duration-300"
-                    >
-                      <Eye className="h-4 w-4 mr-2" />
-                      Full Author Bio
-                    </Button>
-                  </Link>
-                  <a href="#email-capture">
-                    <Button
-                      variant="gold"
-                      className="transition-all duration-300"
-                    >
-                      Subscribe for Updates
-                    </Button>
-                  </a>
-                </div>
-              </motion.div>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ===== GENRE HIGHLIGHT SECTION ===== */}
-      <section className="py-16 md:py-24 bg-section-alt relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-midnight/5 rounded-full blur-3xl" />
-        </div>
-
-        <div className="max-w-6xl mx-auto px-4 relative z-10">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={staggerContainer}
-          >
-            <motion.div variants={fadeInUp} className="text-center mb-12">
-              <p className="text-gold/80 tracking-[0.3em] uppercase text-xs md:text-sm mb-3">
-                The Territories
-              </p>
-              <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-foreground">
-                Worlds of Dark Romance
-              </h2>
-              <div className="divider-gold w-24 mx-auto mt-4" />
-            </motion.div>
-
-            <motion.div
-              variants={staggerContainer}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
-            >
-              {genres.map((genre) => {
-                const Icon = genre.icon;
+              {worlds.map((world) => {
+                const Icon = world.icon;
                 return (
-                  <motion.div
-                    key={genre.title}
-                    variants={fadeInUp}
-                    className="card-dark rounded-xl p-6 group hover:border-blood/30 hover:shadow-[0_0_25px_rgba(139,0,0,0.15)] transition-all duration-300"
-                  >
-                    <div className="flex items-center gap-3 mb-3">
-                      <div
-                        className={`p-2 rounded-lg bg-muted/50 ${genre.color} group-hover:scale-110 transition-transform duration-300`}
-                      >
-                        <Icon className="h-5 w-5" />
-                      </div>
-                      <h3 className="font-serif text-xl text-foreground">
-                        {genre.title}
+                  <motion.div key={world.title} variants={fadeUp}>
+                    <Link
+                      href={world.href}
+                      className="group block h-full card-dark rounded-md p-6 md:p-8 transition-all duration-300 hover:border-gold/40 hover:shadow-[0_0_40px_-12px_rgba(184,146,74,0.2)] focus-ring"
+                    >
+                      <Icon className="h-7 w-7 text-gold mb-4 transition-transform duration-500 group-hover:scale-110" />
+                      <h3 className="font-serif text-xl md:text-2xl text-foreground mb-2 leading-tight">
+                        {world.title}
                       </h3>
-                    </div>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {genre.desc}
-                    </p>
+                      <p className="font-body text-sm text-muted-foreground leading-relaxed">
+                        {world.description}
+                      </p>
+                      <div className="mt-5 flex items-center text-[11px] font-display tracking-[0.2em] uppercase text-gold/70 group-hover:text-gold transition-colors">
+                        Discover
+                        <ArrowRight className="h-3 w-3 ml-1 transition-transform duration-300 group-hover:translate-x-1" />
+                      </div>
+                    </Link>
                   </motion.div>
                 );
               })}
@@ -554,239 +336,249 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ===== STANDALONE NOVELS PREVIEW ===== */}
-      <section className="py-16 md:py-24 bg-gradient-dark relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/4 w-72 h-72 bg-blood/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-gold/3 rounded-full blur-3xl" />
-        </div>
+      {/* ============================================================
+          SERIES SPOTLIGHT — Beneath the Veil feature
+          ============================================================ */}
+      {bookSeries[0] && (
+        <section className="relative py-20 md:py-32 bg-gradient-dark overflow-hidden">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-80px" }}
+              variants={stagger}
+              className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center"
+            >
+              {/* Series covers */}
+              <motion.div variants={fadeUp} className="lg:col-span-7">
+                <div className="grid grid-cols-4 gap-3 md:gap-5">
+                  {bookSeries[0].books.map((book, i) => (
+                    <Link
+                      key={book.title}
+                      href={book.amazonUrl || "/books"}
+                      target={book.amazonUrl ? "_blank" : undefined}
+                      rel={book.amazonUrl ? "noopener noreferrer" : undefined}
+                      className="group block relative aspect-[2/3] rounded-sm overflow-hidden cover-shadow cover-shadow-hover focus-ring"
+                    >
+                      <Image
+                        src={book.coverUrl}
+                        alt={`Cover of ${book.title}`}
+                        fill
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                        sizes="(max-width: 768px) 25vw, 14vw"
+                      />
+                      <div className="absolute top-2 left-2 font-display text-[9px] tracking-[0.15em] uppercase px-1.5 py-0.5 bg-ink/80 text-gold border border-gold/30 rounded-sm">
+                        {i + 1}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </motion.div>
 
-        <div className="max-w-6xl mx-auto px-4 relative z-10">
+              {/* Series description */}
+              <motion.div variants={fadeUp} className="lg:col-span-5">
+                <p className="font-display text-[11px] tracking-[0.4em] uppercase text-gold mb-3">
+                  The Series · Complete
+                </p>
+                <h2 className="font-serif text-3xl md:text-5xl text-foreground mb-5 leading-tight">
+                  Beneath the Veil
+                </h2>
+                <div className="divider-gold w-16 mb-6" />
+                <p className="font-body text-base md:text-lg text-foreground/80 leading-relaxed mb-4">
+                  {bookSeries[0].description}
+                </p>
+
+                {/* Reading order */}
+                <div className="mt-6 mb-7">
+                  <p className="font-display text-[10px] tracking-[0.3em] uppercase text-gold/70 mb-3">
+                    Reading Order
+                  </p>
+                  <ol className="space-y-1.5">
+                    {bookSeries[0].books.map((book, i) => (
+                      <li
+                        key={book.title}
+                        className="flex items-baseline gap-3 text-sm text-foreground/80"
+                      >
+                        <span className="font-display text-gold text-xs w-4">
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <span>{book.title}</span>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+
+                <Link href="/books#beneath-the-veil">
+                  <Button variant="oxblood" className="h-12 px-8 text-sm tracking-wider uppercase font-semibold">
+                    View Series
+                    <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </Link>
+              </motion.div>
+            </motion.div>
+          </div>
+        </section>
+      )}
+
+      {/* ============================================================
+          EDITORIAL — latest article
+          ============================================================ */}
+      <section className="relative py-20 md:py-32 bg-section-alt overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={staggerContainer}
+            viewport={{ once: true, margin: "-80px" }}
+            variants={stagger}
           >
-            <motion.div variants={fadeInUp} className="text-center mb-10">
-              <p className="text-gold/80 tracking-[0.3em] uppercase text-xs md:text-sm mb-3">
-                Complete Stories
+            <motion.div variants={fadeUp} className="text-center mb-14">
+              <p className="font-display text-[11px] tracking-[0.4em] uppercase text-gold mb-3">
+                The Journal
               </p>
-              <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-foreground">
-                Standalone Novels
+              <h2 className="font-serif text-3xl md:text-5xl text-foreground mb-4 leading-tight">
+                From the Dark Library
               </h2>
-              <div className="divider-gold w-24 mx-auto mt-4" />
-              <p className="text-muted-foreground text-sm mt-4 max-w-lg mx-auto">
-                Each a world unto itself. Each a descent into darkness with no
-                way out but through.
+              <div className="divider-gold w-24 mx-auto" />
+              <p className="font-body text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mt-6">
+                Longform essays on dark romance — the genre, the tropes, and the
+                books that define it.
               </p>
             </motion.div>
 
-            <motion.div
-              variants={staggerContainer}
-              className="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-5"
-            >
-              {standaloneNovels.map((book) => (
-                <motion.div key={book.title} variants={fadeInUp}>
-                  <BookCard
-                    title={book.title}
-                    coverUrl={book.coverUrl}
-                    genre={book.genre}
-                    price={book.price}
-                    amazonUrl={book.amazonUrl}
-                    freeReadSlug={book.freeReadSlug}
-                    onBookClick={() => openBookModal(book)}
-                  />
-                </motion.div>
-              ))}
-            </motion.div>
+            {/* Featured article */}
+            <motion.article variants={fadeUp}>
+              <Link
+                href="/blog/what-is-dark-romance"
+                className="group block grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 card-dark rounded-md p-6 md:p-10 transition-all duration-500 hover:border-gold/40 hover:shadow-[0_0_60px_-20px_rgba(184,146,74,0.25)] focus-ring"
+              >
+                {/* Article meta / index */}
+                <div className="lg:col-span-4 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center gap-3 mb-5">
+                      <span className="font-display text-[10px] tracking-[0.3em] uppercase px-2.5 py-1 bg-blood/15 text-blood-light dark:text-gold border border-gold/30 rounded-sm">
+                        Genre Guide
+                      </span>
+                      <span className="font-body text-sm text-muted-foreground italic">
+                        12 min read
+                      </span>
+                    </div>
+                    <h3 className="font-serif text-2xl md:text-3xl lg:text-4xl text-foreground leading-tight mb-4 group-hover:text-gold transition-colors duration-300">
+                      What Is Dark Romance?
+                    </h3>
+                    <p className="font-body italic text-base text-blood-light dark:text-gold/90 mb-5">
+                      A reader's guide to the genre, its tropes, and its dark allure.
+                    </p>
+                  </div>
+                  <div className="flex items-center text-[11px] font-display tracking-[0.3em] uppercase text-gold">
+                    Read Article
+                    <ArrowRight className="h-3 w-3 ml-2 transition-transform duration-300 group-hover:translate-x-1" />
+                  </div>
+                </div>
+
+                {/* Excerpt */}
+                <div className="lg:col-span-8 lg:border-l lg:border-border/40 lg:pl-12">
+                  <p className="font-body text-base md:text-lg text-foreground/80 leading-relaxed mb-4">
+                    <span className="font-serif text-2xl md:text-3xl text-gold float-left mr-2 leading-none mt-1">
+                      R
+                    </span>
+                    omance, as a genre, has always been more interested in desire than in
+                    polite conversation. It leans toward the unstable, the unspoken, the
+                    things people do in private that they would not describe at dinner.
+                  </p>
+                  <p className="font-body text-base md:text-lg text-foreground/70 leading-relaxed mb-4">
+                    Dark romance is what happens when a writer stops apologizing for that
+                    interest — when the story turns its full attention to the rooms most
+                    romances only glance into on their way somewhere safer.
+                  </p>
+                  <p className="font-body text-base text-muted-foreground italic">
+                    The mechanics matter too, and we will get to them. But the genre is
+                    easier to recognize than to fence in...
+                  </p>
+                </div>
+              </Link>
+            </motion.article>
           </motion.div>
         </div>
       </section>
 
-      {/* ===== EMAIL CAPTURE SECTION ===== */}
-      <section
-        id="email-capture"
-        className="relative py-16 md:py-24 overflow-hidden"
-      >
-        {/* Background image */}
-        <div className="absolute inset-0">
-          <Image
-            src="/images/newsletter-bg.png"
-            alt="Dark atmospheric background"
-            fill
-            className="object-cover object-center"
-          />
-          <div className="absolute inset-0 bg-black/70" />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0d0d0d] via-transparent to-[#0a0a0a]" />
-        </div>
-
-        {/* Floating particles */}
-        <div className="absolute inset-0 pointer-events-none opacity-40">
-          <Particles
-            particleCount={30}
-            particleSpread={10}
-            speed={0.04}
-            particleColors={["#8B0000", "#C9A84C"]}
-            alphaParticles
-            particleBaseSize={30}
-            sizeRandomness={1}
-            cameraDistance={25}
-            disableRotation
-          />
-        </div>
-
-        <div className="max-w-xl mx-auto px-4 relative z-10">
+      {/* ============================================================
+          ABOUT THE AUTHOR — concise, understated
+          ============================================================ */}
+      <section className="relative py-20 md:py-28 bg-gradient-dark overflow-hidden">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={fadeInUp}
+            viewport={{ once: true, margin: "-80px" }}
+            variants={stagger}
           >
-            <EmailCapture source="email-section" variant="card" />
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ===== FAQ SECTION ===== */}
-      <section className="py-16 md:py-24 bg-gradient-dark relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-blood/5 rounded-full blur-3xl" />
-        </div>
-
-        <div className="relative z-10">
-          <FaqSection />
-        </div>
-      </section>
-
-      {/* ===== CTA SECTION ===== */}
-      <section className="py-16 md:py-24 bg-section-alt relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-blood/5 rounded-full blur-3xl" />
-        </div>
-
-        {/* Background particles */}
-        <div className="absolute inset-0 pointer-events-none opacity-30">
-          <Particles
-            particleCount={20}
-            particleSpread={8}
-            speed={0.03}
-            particleColors={["#8B0000", "#C9A84C"]}
-            alphaParticles
-            particleBaseSize={25}
-            sizeRandomness={1}
-            cameraDistance={25}
-            disableRotation
-          />
-        </div>
-
-        <div className="max-w-3xl mx-auto px-4 text-center relative z-10">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={staggerContainer}
-          >
-            <motion.div variants={fadeInUp}>
-              <Heart className="h-10 w-10 text-blood-light mx-auto mb-6" />
+            <motion.div variants={fadeUp} className="mb-6">
+              <Feather className="h-8 w-8 text-gold mx-auto" />
             </motion.div>
-            <motion.h2
-              variants={fadeInUp}
-              className="font-serif text-3xl md:text-4xl lg:text-5xl text-foreground mb-4"
-            >
-              Ready to Fall Into the Dark?
-            </motion.h2>
             <motion.p
-              variants={fadeInUp}
-              className="text-muted-foreground text-base md:text-lg mb-8 max-w-xl mx-auto"
+              variants={fadeUp}
+              className="font-display text-[11px] tracking-[0.4em] uppercase text-gold mb-3"
             >
-              Your next obsession is one click away. Start reading A Bargain in
-              Shadows today and fall into the Beneath the Veil series.
+              The Author
             </motion.p>
-            <motion.div
-              variants={fadeInUp}
-              className="flex flex-col sm:flex-row items-center justify-center gap-4"
+            <motion.h2
+              variants={fadeUp}
+              className="font-serif text-3xl md:text-5xl text-foreground mb-5 leading-tight"
             >
+              Kartix Vale
+            </motion.h2>
+            <motion.div variants={fadeUp} className="divider-gold w-24 mx-auto mb-8" />
+            <motion.p
+              variants={fadeUp}
+              className="font-body text-lg md:text-xl text-foreground/80 leading-relaxed mb-4"
+            >
+              Kartix Vale writes emotionally intense novels filled with dangerous
+              chemistry, morally grey characters, slow-burning desire, and cinematic
+              worlds that linger long after the last page.
+            </motion.p>
+            <motion.p
+              variants={fadeUp}
+              className="font-body text-base md:text-lg text-muted-foreground leading-relaxed mb-8"
+            >
+              The catalogue moves between dark romance, gothic fiction, paranormal
+              romance, and dark fantasy — bound together by an insistence on writing
+              love under pressure, and on earning its endings rather than assuming them.
+            </motion.p>
+            <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Link href="/about">
+                <Button variant="gold" className="h-11 px-7 text-sm tracking-wider uppercase font-semibold">
+                  Read More
+                  <ArrowRight className="h-4 w-4 ml-2" />
+                </Button>
+              </Link>
               <a
-                href="https://www.amazon.com/dp/B0GWZQ8QDM"
+                href="https://www.amazon.com/author/kartixvale"
                 target="_blank"
                 rel="noopener noreferrer"
-                data-track="buy-amazon-cta"
               >
-                <Button variant="blood" className="font-semibold px-10 h-14 text-lg transition-all duration-300 hover:shadow-[0_0_40px_rgba(220,20,60,0.5)] hover:scale-105">
-                  <ExternalLink className="h-5 w-5 mr-2" />
-                  Start the Series — $5.99
+                <Button
+                  variant="outline"
+                  className="h-11 px-7 text-sm tracking-wider uppercase font-semibold border-gold/30 text-gold hover:bg-gold/10 hover:border-gold/50"
+                >
+                  Amazon Author Page
+                  <ExternalLink className="h-4 w-4 ml-2" />
                 </Button>
               </a>
-              <Link href="/books">
-                <Button
-                  variant="gold"
-                  className="transition-all duration-300"
-                >
-                  View All Books
-                </Button>
-              </Link>
             </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* ===== FOOTER ===== */}
-      <footer className="bg-section-footer border-t border-border py-10 mt-auto">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center">
-            <div className="mb-4">
-              <span className="logo-text text-xl uppercase">Kartix</span>
-            </div>
-            <p className="font-serif text-lg text-foreground/60 italic mb-4">
-              &ldquo;Love was never meant to be safe&rdquo;
-            </p>
-            <div className="divider-gold w-16 mx-auto mb-6" />
-            <nav
-              className="flex justify-center gap-6 mb-6"
-              aria-label="Footer navigation"
-            >
-              <Link
-                href="/"
-                className="text-sm text-muted-foreground hover:text-blood-light transition-colors"
-              >
-                Home
-              </Link>
-              <Link
-                href="/books"
-                className="text-sm text-muted-foreground hover:text-blood-light transition-colors"
-              >
-                Books
-              </Link>
-              <Link
-                href="/about"
-                className="text-sm text-muted-foreground hover:text-blood-light transition-colors"
-              >
-                About
-              </Link>
-              <Link
-                href="/blog"
-                className="text-sm text-muted-foreground hover:text-blood-light transition-colors"
-              >
-                Blog
-              </Link>
-            </nav>
-            <p className="text-xs text-muted-foreground/50">
-              &copy; 2025 Kartix Vale. All rights reserved.
-            </p>
-            <p className="text-xs text-muted-foreground/40 mt-1">
-              All books available on Amazon
-            </p>
-          </div>
-        </div>
-      </footer>
+      {/* ============================================================
+          NEWSLETTER (existing integration preserved)
+          ============================================================ */}
 
-      {/* ===== BOOK MODAL ===== */}
-      <BookModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        book={selectedBook}
-      />
+      <Footer />
+
+      {/* ============================================================
+          BOOK MODAL
+          ============================================================ */}
+      <BookModal isOpen={isModalOpen} onClose={closeModal} book={selectedBook} />
     </main>
   );
 }

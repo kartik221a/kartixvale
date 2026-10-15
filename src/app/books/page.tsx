@@ -1,35 +1,60 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import Link from "next/link";
 import { BookCard } from "@/components/books/book-card";
 import { BookModal } from "@/components/books/book-modal";
 import { Navbar } from "@/components/layout/navbar";
-import Particles from "@/components/reactbits/Particles";
-import DecayCard from "@/components/reactbits/DecayCard";
-import { booksData, beneathTheVeilSeries, standaloneNovels, type BookData } from "@/lib/books-data";
+import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { BookOpen, ListOrdered, ExternalLink } from "lucide-react";
+import {
+  Search,
+  X,
+  ListOrdered,
+  ExternalLink,
+  ArrowRight,
+} from "lucide-react";
+import {
+  booksData,
+  bookSeries,
+  standaloneNovels,
+  type BookData,
+} from "@/lib/books-data";
 
-const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } },
-};
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
+// ============================================================
+// Motion variants
+// ============================================================
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.15, delayChildren: 0.1 },
+    y: 0,
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
   },
 };
 
+const stagger = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.08, delayChildren: 0.04 },
+  },
+};
+
+// ============================================================
+// Filter type
+// ============================================================
+type Filter = "all" | "series" | "standalones" | "ku";
+
+// ============================================================
+// Books page
+// ============================================================
 export default function BooksPage() {
   const [selectedBook, setSelectedBook] = useState<BookData | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filter, setFilter] = useState<Filter>("all");
 
   const openBookModal = (book: BookData) => {
     setSelectedBook(book);
@@ -41,385 +66,440 @@ export default function BooksPage() {
     setTimeout(() => setSelectedBook(null), 300);
   };
 
+  // Filter logic — applies to "All Books" view
+  const filteredBooks = useMemo(() => {
+    let books = booksData;
+
+    if (filter === "series") {
+      books = books.filter((b) => b.series !== "Standalone");
+    } else if (filter === "standalones") {
+      books = books.filter((b) => b.series === "Standalone");
+    } else if (filter === "ku") {
+      books = books.filter((b) => b.kindleUnlimited);
+    }
+
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      books = books.filter(
+        (b) =>
+          b.title.toLowerCase().includes(q) ||
+          b.subtitle?.toLowerCase().includes(q) ||
+          b.genre.toLowerCase().includes(q) ||
+          b.series?.toLowerCase().includes(q)
+      );
+    }
+
+    return books;
+  }, [filter, searchQuery]);
+
   return (
     <main className="min-h-screen flex flex-col">
       <Navbar />
 
-      {/* ===== HERO SECTION ===== */}
-      <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
-        {/* Background image */}
-        <div className="absolute inset-0">
-          <Image
-            src="/images/books-page-bg.png"
-            alt="Dark library atmosphere"
-            fill
-            className="object-cover object-center"
-            priority
-            quality={90}
-          />
-          <div className="absolute inset-0 bg-black/60" />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/80" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.4)_70%,rgba(0,0,0,0.9)_100%)]" />
-        </div>
+      {/* ============================================================
+          PAGE HERO — editorial masthead
+          ============================================================ */}
+      <section className="relative pt-32 pb-20 md:pt-44 md:pb-28 overflow-hidden bg-gradient-ink">
+        {/* Atmospheric background */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-50"
+          style={{
+            backgroundImage:
+              "radial-gradient(ellipse 70% 50% at 30% 20%, rgba(160,24,24,0.15) 0%, transparent 55%), radial-gradient(ellipse 60% 50% at 80% 80%, rgba(184,146,74,0.10) 0%, transparent 55%)",
+          }}
+        />
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse 80% 100% at 50% 50%, transparent 0%, rgba(12,9,7,0.6) 100%)",
+          }}
+        />
 
-        {/* Particle effect */}
-        <div className="absolute inset-0 pointer-events-none">
-          <Particles
-            particleCount={60}
-            particleSpread={8}
-            speed={0.06}
-            particleColors={["#8B0000", "#FFD700", "#4a0000"]}
-            moveParticlesOnHover
-            particleHoverFactor={0.3}
-            alphaParticles
-            particleBaseSize={50}
-            sizeRandomness={1.5}
-            cameraDistance={25}
-            disableRotation={false}
-          />
-        </div>
-
-        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto pt-16">
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial="hidden"
             animate="visible"
-            variants={staggerContainer}
+            variants={stagger}
           >
-            <motion.p variants={fadeInUp} className="text-gold/80 tracking-[0.3em] uppercase text-xs md:text-sm mb-4 font-medium">
-              Kartix Vale
+            <motion.p
+              variants={fadeUp}
+              className="font-display text-[11px] tracking-[0.4em] uppercase text-gold mb-5"
+            >
+              The Collection · 17 Books · 3 Series
             </motion.p>
             <motion.h1
-              variants={fadeInUp}
-              className="font-serif text-5xl sm:text-6xl md:text-7xl text-foreground text-glow-red mb-4"
+              variants={fadeUp}
+              className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-foreground leading-[1.05] text-glow-soft"
             >
-              The Collection
+              The Kartix Vale
+              <br />
+              <span className="italic text-gold">Catalogue</span>
             </motion.h1>
-            <motion.div variants={fadeInUp} className="divider-gold w-48 md:w-64 mx-auto my-6" />
+            <motion.div variants={fadeUp} className="divider-ornament w-64 mx-auto my-8" />
             <motion.p
-              variants={fadeInUp}
-              className="font-serif text-xl md:text-2xl text-foreground/70 italic"
+              variants={fadeUp}
+              className="font-body text-lg md:text-xl text-foreground/80 max-w-2xl mx-auto leading-relaxed"
             >
-              Every story. Every shadow. One click away.
+              Every book. Every series. Every shadow. Curated reading paths through
+              dark romance, gothic fiction, and dark fantasy — with verified Amazon
+              links and Kindle Unlimited availability.
             </motion.p>
           </motion.div>
         </div>
       </section>
 
-      {/* ===== BENEATH THE VEIL SERIES ===== */}
-      <section className="py-16 md:py-24 bg-gradient-dark relative overflow-hidden">
-        {/* Background decoration */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-midnight/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-80 h-80 bg-blood/5 rounded-full blur-3xl" />
-        </div>
-
-        <div className="max-w-6xl mx-auto px-4 relative z-10">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={staggerContainer}
-          >
-            {/* Section Header */}
-            <motion.div variants={fadeInUp} className="text-center mb-6">
-              <p className="text-gold/80 tracking-[0.3em] uppercase text-xs md:text-sm mb-3">
-                The Series
-              </p>
-              <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-foreground">
-                Beneath the Veil
-              </h2>
-              <div className="divider-gold w-24 mx-auto mt-4" />
-            </motion.div>
-
-            {/* Reading Order Notice */}
-            <motion.div
-              variants={fadeInUp}
-              className="card-dark rounded-xl p-5 md:p-6 mb-10 max-w-2xl mx-auto"
-            >
-              <div className="flex items-center gap-3 mb-3">
-                <ListOrdered className="h-5 w-5 text-gold" />
-                <h3 className="font-serif text-lg text-foreground">Reading Order</h3>
-              </div>
-              <p className="text-muted-foreground text-sm leading-relaxed mb-4">
-                The Beneath the Veil series is best experienced in order. Each book builds on the last,
-                deepening the mystery, the romance, and the darkness.
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {[
-                  { num: "1", title: "A Bargain in Shadows" },
-                  { num: "2", title: "The Unholy Reverie" },
-                  { num: "3", title: "A Crown of Ashes" },
-                  { num: "4", title: "Behind the Veil" },
-                ].map((book, i) => (
-                  <div key={book.num} className="flex items-center gap-2">
-                    <Badge className="bg-blood/20 text-blood-light border-blood/30 text-xs">
-                      {book.num}
-                    </Badge>
-                    <span className="text-xs md:text-sm text-foreground/70">{book.title}</span>
-                    {i < 3 && <span className="text-gold/40 mx-1 hidden sm:inline">→</span>}
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* Series Books Grid */}
-            <motion.div
-              variants={staggerContainer}
-              className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6"
-            >
-              {beneathTheVeilSeries.map((book) => (
-                <motion.div key={book.title} variants={fadeInUp}>
-                  <BookCard
-                    title={book.title}
-                    coverUrl={book.coverUrl}
-                    genre={book.genre}
-                    price={book.price}
-                    amazonUrl={book.amazonUrl}
-                    freeReadSlug={book.freeReadSlug}
-                    onBookClick={() => openBookModal(book)}
-                  />
-                </motion.div>
-              ))}
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ===== SECTION DIVIDER ===== */}
-      <div className="relative h-32 md:h-48 overflow-hidden">
-        <Image
-          src="/images/ornate-divider.png"
-          alt="Dark atmospheric divider"
-          fill
-          className="object-cover object-center"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-section-alt" />
-      </div>
-
-      {/* ===== STANDALONE NOVELS ===== */}
-      <section className="py-16 md:py-24 bg-section-alt relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/4 w-72 h-72 bg-blood/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-gold/3 rounded-full blur-3xl" />
-        </div>
-
-        <div className="max-w-6xl mx-auto px-4 relative z-10">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={staggerContainer}
-          >
-            <motion.div variants={fadeInUp} className="text-center mb-12">
-              <p className="text-gold/80 tracking-[0.3em] uppercase text-xs md:text-sm mb-3">
-                Complete Stories
-              </p>
-              <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-foreground">
-                Standalone Novels
-              </h2>
-              <div className="divider-gold w-24 mx-auto mt-4" />
-              <p className="text-muted-foreground text-sm mt-4 max-w-lg mx-auto">
-                Each a world unto itself. Each a descent into darkness with no way out but through.
-              </p>
-            </motion.div>
-
-            {/* DecayCard Grid for Standalone Novels */}
-            <motion.div
-              variants={staggerContainer}
-              className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-items-center"
-            >
-              {standaloneNovels.map((book) => (
-                <motion.div
-                  key={book.title}
-                  variants={fadeInUp}
-                  className="flex flex-col items-center"
-                >
-                  {/* DecayCard - cover only, no overlay */}
-                  <div
-                    className="cursor-pointer group"
-                    onClick={() => openBookModal(book)}
-                  >
-                    <DecayCard
-                      width={220}
-                      height={330}
-                      image={book.coverUrl}
-                      baseFrequency={0.015}
-                      numOctaves={5}
-                      seed={4}
-                      maxDisplacement={300}
-                      movementBound={30}
-                    />
-                  </div>
-                  {/* Title + Buy below the card */}
-                  <div className="mt-3 w-[220px] text-center">
-                    <h3
-                      className="font-serif text-sm text-foreground leading-tight line-clamp-2 mb-2 cursor-pointer hover:text-gold transition-colors duration-200"
-                      onClick={() => openBookModal(book)}
-                    >
-                      {book.title}
-                    </h3>
-                    <div className="flex items-center justify-center gap-2 mb-2">
-                      {book.kindleUnlimited && (
-                        <Badge className="bg-gold/15 text-gold border-gold/30 text-[9px] uppercase tracking-wider">
-                          KU
-                        </Badge>
-                      )}
-                      <Badge className="bg-blood/20 text-blood-light border-blood/30 text-[9px] uppercase tracking-wider">
-                        {book.genre}
-                      </Badge>
-                    </div>
-                    <a
-                      href={book.amazonUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <Button variant="blood" className="w-full font-semibold transition-all duration-300 hover:shadow-[0_0_20px_rgba(220,20,60,0.3)] text-xs h-9">
-                        <ExternalLink className="h-3 w-3 mr-1" />
-                        Buy — {book.price}
-                      </Button>
-                    </a>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ===== ALL BOOKS OVERVIEW ===== */}
-      <section className="py-16 md:py-20 bg-gradient-dark">
-        <div className="max-w-6xl mx-auto px-4">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={staggerContainer}
-          >
-            <motion.div variants={fadeInUp} className="text-center mb-10">
-              <h2 className="font-serif text-2xl md:text-3xl text-foreground mb-3">
-                Complete Library
-              </h2>
-              <div className="divider-gold w-16 mx-auto" />
-              <p className="text-muted-foreground text-sm mt-4">
-                All {booksData.length} books in one view
-              </p>
-            </motion.div>
-
-            <motion.div
-              variants={staggerContainer}
-              className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5"
-            >
-              {booksData.map((book) => (
-                <motion.div key={book.title} variants={fadeInUp}>
-                  <BookCard
-                    title={book.title}
-                    coverUrl={book.coverUrl}
-                    genre={book.genre}
-                    price={book.price}
-                    amazonUrl={book.amazonUrl}
-                    freeReadSlug={book.freeReadSlug}
-                    onBookClick={() => openBookModal(book)}
-                  />
-                </motion.div>
-              ))}
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ===== CTA ===== */}
-      <section className="py-16 md:py-20 bg-section-alt relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-blood/5 rounded-full blur-3xl" />
-        </div>
-        <div className="max-w-3xl mx-auto px-4 text-center relative z-10">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={staggerContainer}
-          >
-            <motion.div variants={fadeInUp}>
-              <BookOpen className="h-10 w-10 text-gold mx-auto mb-6" />
-            </motion.div>
-            <motion.h2
-              variants={fadeInUp}
-              className="font-serif text-3xl md:text-4xl text-foreground mb-4"
-            >
-              Start Your Descent
-            </motion.h2>
-            <motion.p
-              variants={fadeInUp}
-              className="text-muted-foreground text-base md:text-lg mb-8 max-w-lg mx-auto"
-            >
-              Begin with A Bargain in Shadows and fall into the Beneath the Veil series, or explore any standalone world.
-            </motion.p>
-            <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a
-                href="https://www.amazon.com/dp/B0GWZQ8QDM"
-                target="_blank"
-                rel="noopener noreferrer"
+      {/* ============================================================
+          SEARCH + FILTER BAR
+          ============================================================ */}
+      <section className="sticky top-16 md:top-20 z-30 bg-overlay/95 backdrop-blur-md border-y border-border/40 py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row gap-3 md:items-center md:justify-between">
+          {/* Search */}
+          <div className="relative flex-1 max-w-md">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+            <input
+              type="search"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search by title, genre, or series..."
+              className="w-full h-10 pl-10 pr-9 bg-card border border-border rounded-md text-sm text-foreground placeholder:text-muted-foreground focus-ring"
+              aria-label="Search books"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center text-muted-foreground hover:text-foreground rounded-sm focus-ring"
+                aria-label="Clear search"
               >
-                <Button variant="blood" className="font-semibold px-8 h-12 text-base transition-all duration-300 hover:shadow-[0_0_30px_rgba(220,20,60,0.4)] hover:scale-105">
-                  <ExternalLink className="h-4 w-4 mr-2" />
-                  Start the Series — $5.99
-                </Button>
-              </a>
-              <Link href="/">
-                <Button
-                  variant="gold"
-                  className="transition-all duration-300"
-                >
-                  Back to Home
-                </Button>
-              </Link>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
+                <X className="h-3 w-3" />
+              </button>
+            )}
+          </div>
 
-      {/* ===== FOOTER ===== */}
-      <footer className="bg-section-footer border-t border-border py-10 mt-auto">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center">
-            <div className="mb-4">
-              <span className="logo-text text-xl uppercase">Kartix</span>
-            </div>
-            <p className="font-serif text-lg text-foreground/60 italic mb-4">
-              &ldquo;Love was never meant to be safe&rdquo;
-            </p>
-            <div className="divider-gold w-16 mx-auto mb-6" />
-            <nav className="flex justify-center gap-6 mb-6" aria-label="Footer navigation">
-              <Link href="/" className="text-sm text-muted-foreground hover:text-blood-light transition-colors">
-                Home
-              </Link>
-              <Link href="/books" className="text-sm text-muted-foreground hover:text-blood-light transition-colors">
-                Books
-              </Link>
-              <Link href="/about" className="text-sm text-muted-foreground hover:text-blood-light transition-colors">
-                About
-              </Link>
-              <Link href="/blog" className="text-sm text-muted-foreground hover:text-blood-light transition-colors">
-                Blog
-              </Link>
-            </nav>
-            <p className="text-xs text-muted-foreground/50">
-              &copy; 2025 Kartix Vale. All rights reserved.
-            </p>
-            <p className="text-xs text-muted-foreground/40 mt-1">
-              All books available on Amazon
-            </p>
+          {/* Filter tabs */}
+          <div className="flex items-center gap-1 text-xs font-display tracking-[0.15em] uppercase">
+            {([
+              { id: "all", label: `All (${booksData.length})` },
+              { id: "series", label: "Series" },
+              { id: "standalones", label: "Standalones" },
+              { id: "ku", label: "Kindle U." },
+            ] as const).map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setFilter(tab.id)}
+                className={`px-3 py-2 rounded-sm transition-colors focus-ring ${
+                  filter === tab.id
+                    ? "text-gold bg-gold/10 border border-gold/30"
+                    : "text-muted-foreground hover:text-foreground border border-transparent"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
           </div>
         </div>
-      </footer>
+      </section>
 
-      {/* ===== BOOK MODAL ===== */}
-      <BookModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        book={selectedBook}
-      />
+      {/* ============================================================
+          SEARCH RESULTS (when searching or filtering)
+          ============================================================ */}
+      {searchQuery || filter !== "all" ? (
+        <section className="py-16 md:py-20 bg-background">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="mb-8 flex items-baseline justify-between">
+              <h2 className="font-serif text-2xl md:text-3xl text-foreground">
+                {filteredBooks.length} {filteredBooks.length === 1 ? "result" : "results"}
+              </h2>
+              <button
+                onClick={() => {
+                  setSearchQuery("");
+                  setFilter("all");
+                }}
+                className="text-xs font-display tracking-[0.2em] uppercase text-gold hover:text-foreground transition-colors focus-ring rounded-sm"
+              >
+                Reset
+              </button>
+            </div>
+
+            {filteredBooks.length === 0 ? (
+              <div className="text-center py-16">
+                <p className="font-serif italic text-xl text-muted-foreground mb-2">
+                  No books matched &ldquo;{searchQuery}&rdquo;
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Try a different title, genre, or series name.
+                </p>
+              </div>
+            ) : (
+              <motion.div
+                initial="hidden"
+                animate="visible"
+                variants={stagger}
+                className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 md:gap-8"
+              >
+                {filteredBooks.map((book) => (
+                  <motion.div key={book.title} variants={fadeUp}>
+                    <BookCard book={book} onBookClick={openBookModal} compact />
+                  </motion.div>
+                ))}
+              </motion.div>
+            )}
+          </div>
+        </section>
+      ) : (
+        <>
+          {/* ============================================================
+              SERIES SECTIONS
+              ============================================================ */}
+          {bookSeries.map((series) => (
+            <section
+              key={series.name}
+              id={series.name.toLowerCase().replace(/\s+/g, "-")}
+              className="relative py-20 md:py-28 bg-gradient-dark overflow-hidden"
+            >
+              <div
+                className="absolute inset-0 pointer-events-none opacity-40"
+                style={{
+                  backgroundImage: `radial-gradient(circle at 20% 30%, rgba(160,24,24,0.08) 0%, transparent 40%), radial-gradient(circle at 80% 70%, rgba(184,146,74,0.05) 0%, transparent 40%)`,
+                }}
+              />
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <motion.div
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: "-80px" }}
+                  variants={stagger}
+                >
+                  {/* Section header */}
+                  <motion.div variants={fadeUp} className="mb-10 md:mb-14">
+                    <div className="flex items-center gap-3 mb-3">
+                      <span className="font-display text-[11px] tracking-[0.4em] uppercase text-gold">
+                        Series
+                      </span>
+                      {series.complete ? (
+                        <span className="font-display text-[9px] tracking-[0.2em] uppercase px-2 py-0.5 bg-gold/15 text-gold border border-gold/30 rounded-sm">
+                          Complete
+                        </span>
+                      ) : (
+                        <span className="font-display text-[9px] tracking-[0.2em] uppercase px-2 py-0.5 bg-blood/15 text-blood-light dark:text-gold border border-gold/30 rounded-sm">
+                          Ongoing
+                        </span>
+                      )}
+                    </div>
+                    <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl text-foreground leading-tight">
+                      {series.name}
+                    </h2>
+                    <div className="divider-gold w-24 mt-4" />
+                    <p className="font-body text-base md:text-lg text-muted-foreground max-w-3xl mt-5 leading-relaxed">
+                      {series.description}
+                    </p>
+                  </motion.div>
+
+                  {/* Reading order notice */}
+                  <motion.div
+                    variants={fadeUp}
+                    className="card-dark rounded-md p-5 md:p-6 mb-10 max-w-3xl"
+                  >
+                    <div className="flex items-center gap-3 mb-3">
+                      <ListOrdered className="h-5 w-5 text-gold" />
+                      <h3 className="font-display text-xs tracking-[0.2em] uppercase text-foreground">
+                        Reading Order
+                      </h3>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      {series.books.map((book, i) => (
+                        <div key={book.title} className="flex items-center gap-2">
+                          <span className="font-display text-[10px] tracking-[0.2em] uppercase px-2 py-1 bg-ink/80 dark:bg-card text-gold border border-gold/30 rounded-sm">
+                            {book.seriesNumber === 0 ? "Prequel" : `Book ${i + 1}`}
+                          </span>
+                          <span className="text-sm text-foreground/80">{book.title}</span>
+                          {i < series.books.length - 1 && (
+                            <span className="text-gold/40 mx-1">→</span>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+
+                  {/* Books grid */}
+                  <motion.div
+                    variants={stagger}
+                    className={`grid grid-cols-2 ${
+                      series.books.length >= 4 ? "lg:grid-cols-4" : "lg:grid-cols-2"
+                    } gap-6 md:gap-8`}
+                  >
+                    {series.books.map((book) => (
+                      <motion.div key={book.title} variants={fadeUp}>
+                        <BookCard book={book} onBookClick={openBookModal} />
+                      </motion.div>
+                    ))}
+                  </motion.div>
+                </motion.div>
+              </div>
+            </section>
+          ))}
+
+          {/* ============================================================
+              STANDALONE NOVELS
+              ============================================================ */}
+          <section
+            id="standalones"
+            className="relative py-20 md:py-28 bg-section-alt overflow-hidden"
+          >
+            <div
+              className="absolute inset-0 pointer-events-none opacity-50"
+              style={{
+                backgroundImage:
+                  "radial-gradient(circle at 70% 20%, rgba(184,146,74,0.06) 0%, transparent 40%), radial-gradient(circle at 30% 80%, rgba(160,24,24,0.06) 0%, transparent 40%)",
+              }}
+            />
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-80px" }}
+                variants={stagger}
+              >
+                <motion.div variants={fadeUp} className="mb-10 md:mb-14 text-center">
+                  <p className="font-display text-[11px] tracking-[0.4em] uppercase text-gold mb-3">
+                    Complete Stories
+                  </p>
+                  <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl text-foreground leading-tight">
+                    Standalone Novels
+                  </h2>
+                  <div className="divider-gold w-24 mx-auto mt-4" />
+                  <p className="font-body text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mt-6 leading-relaxed">
+                    Each a world unto itself. Each a descent into darkness with no
+                    way out but through. Read in any order.
+                  </p>
+                </motion.div>
+
+                <motion.div
+                  variants={stagger}
+                  className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 md:gap-8"
+                >
+                  {standaloneNovels.map((book) => (
+                    <motion.div key={book.title} variants={fadeUp}>
+                      <BookCard book={book} onBookClick={openBookModal} compact />
+                    </motion.div>
+                  ))}
+                </motion.div>
+              </motion.div>
+            </div>
+          </section>
+
+          {/* ============================================================
+              COMPLETE LIBRARY OVERVIEW
+              ============================================================ */}
+          <section className="py-16 md:py-20 bg-gradient-dark">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-80px" }}
+                variants={stagger}
+              >
+                <motion.div variants={fadeUp} className="text-center mb-10">
+                  <p className="font-display text-[11px] tracking-[0.4em] uppercase text-gold mb-3">
+                    The Complete Library
+                  </p>
+                  <h2 className="font-serif text-2xl md:text-3xl text-foreground mb-3">
+                    All {booksData.length} Books
+                  </h2>
+                  <div className="divider-gold w-16 mx-auto" />
+                </motion.div>
+
+                <motion.div
+                  variants={stagger}
+                  className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-4 md:gap-5"
+                >
+                  {booksData.map((book) => (
+                    <motion.div key={book.title} variants={fadeUp}>
+                      <BookCard book={book} onBookClick={openBookModal} compact showMeta={false} />
+                    </motion.div>
+                  ))}
+                </motion.div>
+              </motion.div>
+            </div>
+          </section>
+
+          {/* ============================================================
+              CTA — where to begin
+              ============================================================ */}
+          <section className="py-20 md:py-24 bg-section-alt relative overflow-hidden">
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background:
+                  "radial-gradient(ellipse 50% 60% at 50% 100%, rgba(160,24,24,0.10) 0%, transparent 70%)",
+              }}
+            />
+            <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-80px" }}
+                variants={stagger}
+              >
+                <motion.p
+                  variants={fadeUp}
+                  className="font-display text-[11px] tracking-[0.4em] uppercase text-gold mb-3"
+                >
+                  Where to Begin
+                </motion.p>
+                <motion.h2
+                  variants={fadeUp}
+                  className="font-serif text-3xl md:text-5xl text-foreground mb-4 leading-tight"
+                >
+                  Start Your Descent
+                </motion.h2>
+                <motion.div variants={fadeUp} className="divider-gold w-24 mx-auto mb-6" />
+                <motion.p
+                  variants={fadeUp}
+                  className="font-body text-base md:text-lg text-muted-foreground max-w-xl mx-auto mb-8 leading-relaxed"
+                >
+                  Begin with <em>A Bargain in Shadows</em> for the four-book
+                  Beneath the Veil series, or pick any standalone and fall in.
+                  Every book is enrolled in Kindle Unlimited.
+                </motion.p>
+                <motion.div
+                  variants={fadeUp}
+                  className="flex flex-col sm:flex-row items-center justify-center gap-3"
+                >
+                  <a
+                    href="https://www.amazon.com/dp/B0GWZQ8QDM"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button variant="oxblood" className="h-12 px-8 text-sm tracking-wider uppercase font-semibold">
+                      <ExternalLink className="h-4 w-4 mr-2" />
+                      Begin the Series · $5.99
+                    </Button>
+                  </a>
+                  <a
+                    href="https://www.amazon.com/author/kartixvale"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button
+                      variant="gold"
+                      className="h-12 px-8 text-sm tracking-wider uppercase font-semibold"
+                    >
+                      Amazon Author Page
+                      <ArrowRight className="h-4 w-4 ml-2" />
+                    </Button>
+                  </a>
+                </motion.div>
+              </motion.div>
+            </div>
+          </section>
+        </>
+      )}
+
+      <Footer />
+
+      {/* Book modal */}
+      <BookModal isOpen={isModalOpen} onClose={closeModal} book={selectedBook} />
     </main>
   );
 }

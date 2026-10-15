@@ -24,6 +24,10 @@ const buttonVariants = cva(
           "shadow-xs hover:shadow-[0_0_20px_rgba(220,20,60,0.3)]",
         gold:
           "border border-gold/30 text-gold hover:bg-gold/10 hover:border-gold/50",
+        oxblood:
+          "shadow-xs hover:shadow-[0_0_24px_rgba(160,24,24,0.4)]",
+        ivory:
+          "bg-ivory text-ink shadow-xs hover:bg-parchment",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
@@ -81,6 +85,41 @@ function Button({
         data-variant="blood"
         className={cn(buttonVariants({ variant, size, className }))}
         style={bloodStyle}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        {...props}
+      />
+    )
+  }
+
+  // Oxblood variant: sophisticated deep red — premium dark romance primary action
+  if (variant === "oxblood") {
+    const oxbloodStyle: React.CSSProperties = {
+      backgroundColor: "#5c0a0a",
+      color: "#f6efe4",
+      ...style,
+    }
+
+    const handleMouseEnter = (e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => {
+      const el = e.currentTarget as HTMLElement
+      el.style.backgroundColor = "#7a1818"
+      el.style.color = "#f6efe4"
+      props.onMouseEnter?.(e as any)
+    }
+
+    const handleMouseLeave = (e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => {
+      const el = e.currentTarget as HTMLElement
+      el.style.backgroundColor = "#5c0a0a"
+      el.style.color = "#f6efe4"
+      props.onMouseEnter?.(e as any)
+    }
+
+    return (
+      <Comp
+        data-slot="button"
+        data-variant="oxblood"
+        className={cn(buttonVariants({ variant, size, className }))}
+        style={oxbloodStyle}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         {...props}

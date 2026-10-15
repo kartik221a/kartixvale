@@ -22,7 +22,9 @@ interface BookModalProps {
     whatToExpect: string[];
     contentWarning?: string;
     series?: string;
+    seriesNumber?: number;
     kindleUnlimited?: boolean;
+    pageCount?: number;
   } | null;
 }
 
@@ -126,7 +128,12 @@ export function BookModal({ isOpen, onClose, book }: BookModalProps) {
                   )}
                   {book.series && (
                     <Badge className="bg-muted/50 text-muted-foreground border-border text-[10px] tracking-wider uppercase">
-                      {book.series}
+                      {book.series}{book.seriesNumber !== undefined && book.series !== "Standalone" ? ` · ${book.seriesNumber === 0 ? "Prequel" : `Book ${book.seriesNumber}`}` : ""}
+                    </Badge>
+                  )}
+                  {book.pageCount && (
+                    <Badge className="bg-muted/50 text-muted-foreground border-border text-[10px] tracking-wider uppercase">
+                      {book.pageCount} pages
                     </Badge>
                   )}
                 </div>

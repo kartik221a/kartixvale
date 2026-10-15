@@ -1,205 +1,140 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Star, ExternalLink, BookOpen } from "lucide-react";
+import { ExternalLink, BookMarked } from "lucide-react";
+import type { BookData } from "@/lib/books-data";
+import { cn } from "@/lib/utils";
 
 interface BookCardProps {
-  title: string;
-  coverUrl: string;
-  genre: string;
-  price?: string;
-  amazonUrl?: string;
-  comingSoon?: boolean;
-  featured?: boolean;
-  description?: string;
-  freeReadSlug?: string;
-  onBookClick?: () => void;
+  book: BookData;
+  onBookClick?: (book: BookData) => void;
+  /** Compact = grid view (smaller title, smaller buy button) */
+  compact?: boolean;
+  /** Show full metadata (genre, KU badge, series number) */
+  showMeta?: boolean;
+  className?: string;
 }
 
+/**
+ * Premium book cover card.
+ * Designed to let the cover be the star — minimal chrome, restrained hover.
+ */
 export function BookCard({
-  title,
-  coverUrl,
-  genre,
-  price,
-  amazonUrl,
-  comingSoon = false,
-  featured = false,
-  description,
-  freeReadSlug,
+  book,
   onBookClick,
+  compact = false,
+  showMeta = true,
+  className,
 }: BookCardProps) {
-  if (featured) {
-    return (
-      <article className="card-dark rounded-xl overflow-hidden">
-        <div className="flex flex-col md:flex-row gap-6 md:gap-8 p-6 md:p-8">
-          {/* Book Cover - clickable */}
-          <div
-            className="flex-shrink-0 flex justify-center cursor-pointer"
-            onClick={onBookClick}
-          >
-            <div className="relative w-48 md:w-64 aspect-[2/3] rounded-lg overflow-hidden shadow-2xl shadow-black/50 group">
-              <Image
-                src={coverUrl}
-                alt={title}
-                fill
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
-                sizes="(max-width: 768px) 192px, 256px"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-            </div>
-          </div>
+  const handleClick = () => onBookClick?.(book);
 
-          {/* Book Details */}
-          <div className="flex-1 flex flex-col justify-center">
-            <Badge className="bg-blood/20 text-blood-light border-blood/30 w-fit mb-3 text-xs tracking-wider uppercase">
-              {genre}
-            </Badge>
-            <h3
-              className="font-serif text-2xl md:text-3xl lg:text-4xl text-foreground mb-3 leading-tight cursor-pointer hover:text-gold transition-colors duration-200"
-              onClick={onBookClick}
-            >
-              {title}
-            </h3>
-            {description && (
-              <p className="text-muted-foreground text-sm md:text-base leading-relaxed mb-4 line-clamp-4">
-                {description}
-              </p>
-            )}
-            <div className="flex items-center gap-1 mb-4">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <Star
-                  key={star}
-                  className="h-4 w-4 text-gold-dim/40"
-                />
-              ))}
-              <span className="text-xs text-muted-foreground ml-2">
-                Be the first to review
-              </span>
-            </div>
-            <div className="flex flex-wrap items-center gap-3">
-              {comingSoon ? (
-                <Button
-                  disabled
-                  className="bg-muted text-muted-foreground cursor-not-allowed"
-                >
-                  Coming Soon
-                </Button>
-              ) : (
-                <a
-                  href={amazonUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-track="buy-amazon-featured"
-                >
-                  <Button variant="blood" className="font-semibold px-8 h-12 text-base transition-all duration-300 hover:shadow-[0_0_30px_rgba(220,20,60,0.4)] hover:scale-105">
-                    <ExternalLink className="h-4 w-4 mr-2" />
-                    Read Now — {price}
-                  </Button>
-                </a>
-              )}
-              {freeReadSlug && (
-                <Link href={`/free-reads/${freeReadSlug}`}>
-                  <Button
-                    variant="gold"
-                    className="transition-all duration-300 h-12"
-                  >
-                    <BookOpen className="h-4 w-4 mr-2" />
-                    Read Free Chapters
-                  </Button>
-                </Link>
-              )}
-            </div>
-          </div>
-        </div>
-      </article>
-    );
-  }
-
-  // Standard card - vertical grid card
   return (
-    <article className="card-dark rounded-xl overflow-hidden group transition-all duration-300 hover:border-blood/30 hover:shadow-[0_0_30px_rgba(139,0,0,0.15)]">
-      {/* Book Cover - clickable */}
-      <div
-        className="relative aspect-[2/3] overflow-hidden cursor-pointer"
-        onClick={comingSoon ? undefined : onBookClick}
+    <article
+      className={cn(
+        "group flex flex-col items-center text-center",
+        className
+      )}
+    >
+      {/* Cover */}
+      <button
+        type="button"
+        onClick={handleClick}
+        className="relative block w-full aspect-[2/3] overflow-hidden rounded-sm cover-shadow cover-shadow-hover cursor-pointer focus-ring"
+        aria-label={`View details for ${book.title}`}
       >
         <Image
-          src={coverUrl}
-          alt={title}
+          src={book.coverUrl}
+          alt={`Cover of ${book.title}${book.subtitle ? ` — ${book.subtitle}` : ""}`}
           fill
-          className={`object-cover transition-transform duration-500 group-hover:scale-105 ${comingSoon ? "grayscale opacity-60" : ""}`}
-          sizes="(max-width: 1024px) 50vw, 25vw"
+          className={cn(
+            "object-cover transition-transform duration-700",
+            "group-hover:scale-[1.04]"
+          )}
+          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
         />
-        {comingSoon && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/50">
-            <span className="font-serif text-lg md:text-xl text-gold tracking-wider uppercase">
-              Coming Soon
-            </span>
-          </div>
+        {/* Subtle vignette */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(180deg, transparent 60%, rgba(0,0,0,0.35) 100%)",
+          }}
+        />
+        {/* Series number badge (top-left) */}
+        {book.seriesNumber !== undefined && book.series !== "Standalone" && (
+          <span className="absolute top-2 left-2 font-display text-[10px] tracking-[0.15em] uppercase px-2 py-1 bg-ink/80 text-gold border border-gold/30 rounded-sm">
+            {book.seriesNumber === 0 ? "Prequel" : `Book ${book.seriesNumber}`}
+          </span>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-        <Badge className="absolute top-2 left-2 bg-blood/80 text-white border-none text-[10px] md:text-xs tracking-wider uppercase">
-          {genre}
-        </Badge>
-        {/* Hover hint - only for non-coming-soon */}
-        {!comingSoon && (
-          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/30">
-            <span className="text-white/80 text-xs font-medium tracking-wider uppercase bg-black/40 px-3 py-1.5 rounded-full border border-white/10">
-              View Details
-            </span>
-          </div>
+        {/* KU badge (top-right) */}
+        {book.kindleUnlimited && (
+          <span className="absolute top-2 right-2 font-display text-[9px] tracking-[0.15em] uppercase px-2 py-1 bg-gold/95 text-ink rounded-sm font-semibold">
+            KU
+          </span>
         )}
-      </div>
+        {/* Hover hint */}
+        <div className="absolute inset-0 flex items-end justify-center pb-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+          <span className="text-[10px] font-display tracking-[0.2em] uppercase text-ivory bg-ink/80 border border-gold/30 px-2.5 py-1 rounded-sm">
+            View Details
+          </span>
+        </div>
+      </button>
 
-      {/* Card Content */}
-      <div className="p-2.5 md:p-4">
-        <h3
-          className={`font-serif text-xs md:text-base text-foreground mb-2 leading-tight line-clamp-2 ${!comingSoon ? "cursor-pointer hover:text-gold transition-colors duration-200" : ""}`}
-          onClick={comingSoon ? undefined : onBookClick}
-        >
-          {title}
-        </h3>
-        {comingSoon ? (
-          <Button
-            disabled
-            className="w-full bg-muted text-muted-foreground cursor-not-allowed text-xs md:text-sm"
-          >
-            Coming Soon
-          </Button>
-        ) : (
-          <div className="flex flex-col gap-1.5">
-            <a
-              href={amazonUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-track={`buy-amazon-${title.slice(0, 20)}`}
-              className="block"
-              onClick={(e) => e.stopPropagation()}
+      {/* Meta */}
+      <div className={cn("w-full mt-3", compact ? "max-w-[180px]" : "max-w-[220px]")}>
+        {showMeta && (
+          <div className="flex items-center justify-center gap-1.5 mb-1.5">
+            <Badge
+              variant="outline"
+              className="text-[9px] tracking-[0.1em] uppercase px-1.5 py-0.5 border-gold/30 text-gold bg-transparent"
             >
-              <Button variant="blood" className="w-full font-semibold transition-all duration-300 hover:shadow-[0_0_20px_rgba(220,20,60,0.3)] text-xs md:text-sm">
-                <ExternalLink className="h-3 w-3 mr-1" />
-                Buy — {price}
-              </Button>
-            </a>
-            {freeReadSlug && (
-              <Link
-                href={`/free-reads/${freeReadSlug}`}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <Button
-                  variant="ghost"
-                  className="w-full text-gold/70 hover:text-gold hover:bg-gold/10 text-[10px] md:text-xs h-7 md:h-8"
-                >
-                  <BookOpen className="h-3 w-3 mr-1" />
-                  Read Free
-                </Button>
-              </Link>
-            )}
+              {book.genre}
+            </Badge>
           </div>
         )}
+        <h3
+          className={cn(
+            "font-serif text-foreground leading-tight cursor-pointer transition-colors duration-200 hover:text-gold",
+            compact ? "text-xs line-clamp-2" : "text-sm line-clamp-2"
+          )}
+          onClick={handleClick}
+        >
+          {book.title}
+        </h3>
+        {book.subtitle && !compact && (
+          <p className="text-[11px] text-muted-foreground italic mt-1 line-clamp-1">
+            {book.subtitle}
+          </p>
+        )}
+        <div className="flex items-center justify-center gap-2 mt-2.5">
+          <a
+            href={book.amazonUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="flex-1"
+            aria-label={`Buy ${book.title} on Amazon`}
+          >
+            <Button
+              variant="oxblood"
+              size="sm"
+              className="w-full h-7 text-[10px] tracking-wider uppercase font-semibold"
+            >
+              <ExternalLink className="h-3 w-3 mr-1" />
+              {book.price ? `Buy · ${book.price}` : "Buy"}
+            </Button>
+          </a>
+          <button
+            type="button"
+            onClick={handleClick}
+            className="h-7 w-7 flex items-center justify-center rounded-sm border border-border text-muted-foreground hover:text-gold hover:border-gold/40 transition-colors focus-ring"
+            aria-label={`View details for ${book.title}`}
+          >
+            <BookMarked className="h-3 w-3" />
+          </button>
+        </div>
       </div>
     </article>
   );

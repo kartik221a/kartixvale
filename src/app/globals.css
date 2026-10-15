@@ -1,4 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap');
+/**
+ * Kartix Vale — Design System
+ * ============================
+ *
+ * Premium dark romance aesthetic. Inspirations:
+ *  - Ink black + warm ivory + oxblood + antique gold + charcoal
+ *  - Editorial typography (Playfair Display for display, EB Garamond for body)
+ *  - Restrained motion, generous whitespace, deliberate rhythm
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -10,6 +20,8 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-serif: 'Playfair Display', serif;
+  --font-display: 'Cinzel', serif;
+  --font-body: 'EB Garamond', serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -39,118 +51,168 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+
+  /* Brand palette — premium dark romance */
+  --color-oxblood: var(--oxblood);
+  --color-oxblood-light: var(--oxblood-light);
+  --color-oxblood-dim: var(--oxblood-dim);
   --color-blood: var(--blood);
   --color-blood-light: var(--blood-light);
   --color-gold: var(--gold);
   --color-gold-dim: var(--gold-dim);
+  --color-gold-bright: var(--gold-bright);
+  --color-ink: var(--ink);
+  --color-charcoal: var(--charcoal);
+  --color-ivory: var(--ivory);
+  --color-parchment: var(--parchment);
   --color-midnight: var(--midnight);
   --color-midnight-light: var(--midnight-light);
+
   /* Theme-aware section colors */
   --color-section-alt: var(--section-alt);
   --color-section-footer: var(--section-footer);
   --color-surface: var(--surface);
   --color-overlay: var(--overlay);
+
+  /* Radius scale */
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-/* ===== LIGHT MODE (default) ===== */
+/* ===================================================================
+   LIGHT MODE — warm ivory literary publisher
+   =================================================================== */
 :root {
-  --radius: 0.625rem;
-  --background: #faf6f0;
-  --foreground: #1a0a1e;
-  --card: #f0e8dc;
-  --card-foreground: #1a0a1e;
-  --popover: #f0e8dc;
-  --popover-foreground: #1a0a1e;
-  --primary: #8B0000;
-  --primary-foreground: #ffffff;
-  --secondary: #f0e8dc;
-  --secondary-foreground: #1a0a1e;
-  --muted: #e8ddd0;
-  --muted-foreground: #7a6b5d;
-  --accent: #e8ddd0;
-  --accent-foreground: #1a0a1e;
-  --destructive: #8B0000;
-  --border: #d4c5b3;
-  --input: #d4c5b3;
-  --ring: #8B0000;
-  --chart-1: #8B0000;
-  --chart-2: #C9A84C;
-  --chart-3: #4A1D8E;
-  --chart-4: #8B0000;
-  --chart-5: #2D1B4E;
-  --sidebar: #faf6f0;
-  --sidebar-foreground: #1a0a1e;
-  --sidebar-primary: #8B0000;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #e8ddd0;
-  --sidebar-accent-foreground: #1a0a1e;
-  --sidebar-border: #d4c5b3;
-  --sidebar-ring: #8B0000;
+  --radius: 0.375rem;
 
-  --blood: #8B0000;
-  --blood-light: #DC143C;
-  --gold: #C9A84C;
-  --gold-dim: #8B7535;
-  --midnight: #2D1B4E;
-  --midnight-light: #4A1D8E;
+  /* Surfaces */
+  --background: #f6efe4;       /* warm ivory */
+  --foreground: #1a0f0a;       /* ink */
+  --card: #efe5d5;              /* parchment */
+  --card-foreground: #1a0f0a;
+  --popover: #efe5d5;
+  --popover-foreground: #1a0f0a;
 
-  /* Theme-aware section colors - Light */
-  --section-alt: #f0e8dc;
-  --section-footer: #e8ddd0;
-  --surface: #f0e8dc;
-  --overlay: rgba(250, 246, 240, 0.9);
+  /* Brand */
+  --primary: #5c0a0a;           /* deep oxblood */
+  --primary-foreground: #f6efe4;
+  --secondary: #efe5d5;
+  --secondary-foreground: #1a0f0a;
+  --muted: #e6dcc7;
+  --muted-foreground: #6b5d4a;
+  --accent: #e6dcc7;
+  --accent-foreground: #1a0f0a;
+  --destructive: #5c0a0a;
+  --border: #c9b89a;
+  --input: #c9b89a;
+  --ring: #5c0a0a;
+
+  --chart-1: #5c0a0a;
+  --chart-2: #b8924a;
+  --chart-3: #4a1d2e;
+  --chart-4: #7a1818;
+  --chart-5: #1f1b17;
+
+  /* Sidebar */
+  --sidebar: #f6efe4;
+  --sidebar-foreground: #1a0f0a;
+  --sidebar-primary: #5c0a0a;
+  --sidebar-primary-foreground: #f6efe4;
+  --sidebar-accent: #e6dcc7;
+  --sidebar-accent-foreground: #1a0f0a;
+  --sidebar-border: #c9b89a;
+  --sidebar-ring: #5c0a0a;
+
+  /* Brand tokens */
+  --oxblood: #5c0a0a;
+  --oxblood-light: #7a1818;
+  --oxblood-dim: #3d0707;
+  --blood: #5c0a0a;
+  --blood-light: #7a1818;
+  --gold: #b8924a;
+  --gold-dim: #8b6f30;
+  --gold-bright: #d4af6f;
+  --ink: #0f0a08;
+  --charcoal: #2a221c;
+  --ivory: #f6efe4;
+  --parchment: #efe5d5;
+  --midnight: #1f1b17;
+  --midnight-light: #2a221c;
+
+  /* Sectional */
+  --section-alt: #efe5d5;
+  --section-footer: #e6dcc7;
+  --surface: #efe5d5;
+  --overlay: rgba(246, 239, 228, 0.92);
 }
 
-/* ===== DARK MODE ===== */
+/* ===================================================================
+   DARK MODE — atmospheric ink with oxblood and antique gold
+   =================================================================== */
 .dark {
-  --background: #0a0a0a;
-  --foreground: #e8e4e0;
-  --card: #111111;
-  --card-foreground: #e8e4e0;
-  --popover: #111111;
-  --popover-foreground: #e8e4e0;
-  --primary: #DC143C;
-  --primary-foreground: #ffffff;
-  --secondary: #1a1a2e;
-  --secondary-foreground: #e8e4e0;
-  --muted: #1a1a1a;
-  --muted-foreground: #8a8a8a;
-  --accent: #1a1a2e;
-  --accent-foreground: #e8e4e0;
-  --destructive: #DC143C;
-  --border: #222222;
-  --input: #222222;
-  --ring: #DC143C;
-  --chart-1: #DC143C;
-  --chart-2: #C9A84C;
-  --chart-3: #4A1D8E;
-  --chart-4: #8B0000;
-  --chart-5: #2D1B4E;
-  --sidebar: #0a0a0a;
-  --sidebar-foreground: #e8e4e0;
-  --sidebar-primary: #DC143C;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #1a1a2e;
-  --sidebar-accent-foreground: #e8e4e0;
-  --sidebar-border: #222222;
-  --sidebar-ring: #DC143C;
+  --radius: 0.375rem;
 
-  --blood: #8B0000;
-  --blood-light: #DC143C;
-  --gold: #C9A84C;
-  --gold-dim: #8B7535;
-  --midnight: #2D1B4E;
-  --midnight-light: #4A1D8E;
+  /* Surfaces */
+  --background: #0c0907;        /* near-black ink */
+  --foreground: #e8dcc4;        /* warm ivory text */
+  --card: #14100c;              /* deep charcoal */
+  --card-foreground: #e8dcc4;
+  --popover: #14100c;
+  --popover-foreground: #e8dcc4;
 
-  /* Theme-aware section colors - Dark */
-  --section-alt: #0d0d0d;
-  --section-footer: #050505;
-  --surface: #111111;
-  --overlay: rgba(10, 10, 10, 0.9);
+  /* Brand */
+  --primary: #c9a24a;           /* antique gold as primary action in dark */
+  --primary-foreground: #0c0907;
+  --secondary: #1c1814;
+  --secondary-foreground: #e8dcc4;
+  --muted: #1a1612;
+  --muted-foreground: #8a7e6c;
+  --accent: #1c1814;
+  --accent-foreground: #e8dcc4;
+  --destructive: #a01818;
+  --border: #2a221c;
+  --input: #2a221c;
+  --ring: #b8924a;
+
+  --chart-1: #c9a24a;
+  --chart-2: #a01818;
+  --chart-3: #4a1d2e;
+  --chart-4: #5c0a0a;
+  --chart-5: #1f1b17;
+
+  /* Sidebar */
+  --sidebar: #0c0907;
+  --sidebar-foreground: #e8dcc4;
+  --sidebar-primary: #b8924a;
+  --sidebar-primary-foreground: #0c0907;
+  --sidebar-accent: #1c1814;
+  --sidebar-accent-foreground: #e8dcc4;
+  --sidebar-border: #2a221c;
+  --sidebar-ring: #b8924a;
+
+  /* Brand tokens */
+  --oxblood: #a01818;
+  --oxblood-light: #c41e1e;
+  --oxblood-dim: #5c0a0a;
+  --blood: #5c0a0a;
+  --blood-light: #c41e1e;
+  --gold: #b8924a;
+  --gold-dim: #8b6f30;
+  --gold-bright: #d4af6f;
+  --ink: #0c0907;
+  --charcoal: #14100c;
+  --ivory: #e8dcc4;
+  --parchment: #1c1814;
+  --midnight: #1f1b17;
+  --midnight-light: #2a221c;
+
+  /* Sectional */
+  --section-alt: #0f0c09;
+  --section-footer: #050402;
+  --surface: #14100c;
+  --overlay: rgba(12, 9, 7, 0.92);
 }
 
 @layer base {
@@ -159,62 +221,135 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-feature-settings: "ss01", "ss02", "kern", "liga";
   }
   html {
     scroll-behavior: smooth;
   }
-  /* Force white text on blood variant buttons — triple guarantee */
+
+  /* Reading-optimized body text defaults */
+  p {
+    line-height: 1.7;
+  }
+
+  /* Force white text on oxblood/blood buttons */
+  [data-variant="oxblood"],
+  [data-variant="oxblood"]:hover,
   [data-variant="blood"],
   [data-variant="blood"]:hover,
   button.bg-blood-light,
-  a.bg-blood-light {
+  a.bg-blood-light,
+  button.bg-oxblood,
+  a.bg-oxblood,
+  button.bg-oxblood-light,
+  a.bg-oxblood-light {
     color: #ffffff !important;
   }
 }
 
+/* ===================================================================
+   UTILITY CLASSES — design tokens
+   =================================================================== */
 @layer utilities {
+  /* ---- Typography ---- */
   .font-serif {
     font-family: 'Playfair Display', serif;
   }
+  .font-display {
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.08em;
+  }
+  .font-body {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.0625rem;
+  }
+
+  /* ---- Brand gradients & text effects ---- */
   .text-glow-red {
-    text-shadow: 0 0 20px rgba(220, 20, 60, 0.3), 0 0 40px rgba(220, 20, 60, 0.1);
+    text-shadow: 0 0 20px rgba(196, 30, 30, 0.35), 0 0 50px rgba(92, 10, 10, 0.15);
   }
   .text-glow-gold {
-    text-shadow: 0 0 20px rgba(201, 168, 76, 0.3), 0 0 40px rgba(201, 168, 76, 0.1);
+    text-shadow: 0 0 20px rgba(184, 146, 74, 0.4), 0 0 50px rgba(184, 146, 74, 0.15);
   }
+  .text-glow-soft {
+    text-shadow: 0 1px 24px rgba(184, 146, 74, 0.15);
+  }
+
   .logo-text {
-    font-family: 'Playfair Display', serif;
-    letter-spacing: 0.25em;
-    background: linear-gradient(135deg, #C9A84C 0%, #D4AF37 40%, #B8860B 60%, #C9A84C 100%);
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    background: linear-gradient(135deg, #d4af6f 0%, #b8924a 40%, #8b6f30 60%, #d4af6f 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    filter: drop-shadow(0 0 12px rgba(201, 168, 76, 0.3));
+    filter: drop-shadow(0 0 14px rgba(184, 146, 74, 0.35));
   }
+
+  .wordmark {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+  }
+
+  /* ---- Backgrounds & sections ---- */
   .bg-gradient-dark {
     background: linear-gradient(180deg, var(--background) 0%, var(--card) 50%, var(--background) 100%);
   }
+  .bg-gradient-ink {
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(160, 24, 24, 0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 100% 100%, rgba(184, 146, 74, 0.04) 0%, transparent 50%),
+      linear-gradient(180deg, var(--background) 0%, var(--card) 100%);
+  }
   .bg-gradient-blood {
-    background: linear-gradient(135deg, #8B0000 0%, #2D1B4E 100%);
+    background: linear-gradient(135deg, #5c0a0a 0%, #1f1b17 100%);
   }
   .bg-gradient-midnight {
-    background: linear-gradient(135deg, #2D1B4E 0%, var(--background) 100%);
+    background: linear-gradient(135deg, #1f1b17 0%, var(--background) 100%);
   }
   .hero-gradient {
     background:
-      radial-gradient(ellipse at 20% 50%, rgba(139, 0, 0, 0.15) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 50%, rgba(45, 27, 78, 0.2) 0%, transparent 50%),
-      radial-gradient(ellipse at 50% 0%, rgba(201, 168, 76, 0.05) 0%, transparent 50%),
+      radial-gradient(ellipse 70% 50% at 20% 30%, rgba(92, 10, 10, 0.18) 0%, transparent 55%),
+      radial-gradient(ellipse 70% 50% at 80% 70%, rgba(31, 27, 23, 0.6) 0%, transparent 55%),
+      radial-gradient(ellipse 100% 40% at 50% 0%, rgba(184, 146, 74, 0.08) 0%, transparent 50%),
       linear-gradient(180deg, var(--background) 0%, var(--card) 100%);
   }
   .card-dark {
     background: var(--surface);
     border: 1px solid var(--border);
   }
+  .surface-raised {
+    background: var(--surface);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.02) inset,
+      0 12px 32px -16px rgba(0, 0, 0, 0.4);
+  }
+
+  /* ---- Dividers ---- */
   .divider-gold {
-    background: linear-gradient(90deg, transparent, #C9A84C, transparent);
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
     height: 1px;
   }
+  .divider-ornament {
+    position: relative;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+  }
+  .divider-ornament::before {
+    content: '✦';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--gold);
+    background: var(--background);
+    padding: 0 0.75rem;
+    font-size: 0.875rem;
+  }
+
+  /* ---- Animation utilities ---- */
   .animate-fade-in {
     animation: fadeIn 0.6s ease-out forwards;
   }
@@ -224,9 +359,119 @@
   .animate-pulse-slow {
     animation: pulse 4s ease-in-out infinite;
   }
+  .animate-shimmer {
+    background: linear-gradient(90deg, transparent, rgba(184, 146, 74, 0.15), transparent);
+    background-size: 200% 100%;
+    animation: shimmer 2.5s ease-in-out infinite;
+  }
+
+  /* ---- Reading typography (article body) ---- */
+  .prose-editorial {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.1875rem;
+    line-height: 1.78;
+    color: var(--foreground);
+    letter-spacing: 0.005em;
+  }
+  .prose-editorial p {
+    margin-bottom: 1.4rem;
+  }
+  .prose-editorial p:first-of-type {
+    font-size: 1.25rem;
+    color: var(--foreground);
+  }
+  .prose-editorial h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--foreground);
+    margin-top: 3rem;
+    margin-bottom: 1.25rem;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+  .prose-editorial h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    font-style: italic;
+    color: var(--gold);
+    margin-top: 2.25rem;
+    margin-bottom: 0.9rem;
+    line-height: 1.3;
+  }
+  .prose-editorial h4 {
+    font-family: 'Cinzel', serif;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--gold);
+    margin-top: 1.75rem;
+    margin-bottom: 0.6rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .prose-editorial strong {
+    color: var(--foreground);
+    font-weight: 600;
+  }
+  .prose-editorial em {
+    color: var(--blood-light);
+    font-style: italic;
+  }
+  .prose-editorial a {
+    color: var(--blood-light);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+    transition: color 0.2s ease;
+  }
+  .prose-editorial a:hover {
+    color: var(--gold);
+  }
+  .prose-editorial blockquote {
+    border-left: 2px solid var(--gold);
+    padding-left: 1.5rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: var(--foreground);
+    opacity: 0.92;
+    font-size: 1.25rem;
+    line-height: 1.7;
+  }
+  .prose-editorial ul,
+  .prose-editorial ol {
+    margin: 1.25rem 0 1.5rem 1.5rem;
+  }
+  .prose-editorial ul li,
+  .prose-editorial ol li {
+    margin-bottom: 0.6rem;
+    line-height: 1.7;
+  }
+  .prose-editorial ul li::marker {
+    color: var(--gold);
+  }
+  .prose-editorial ol li::marker {
+    color: var(--gold);
+    font-family: 'Cinzel', serif;
+  }
+  .prose-editorial hr {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+    margin: 3rem 0;
+  }
+  .prose-editorial code {
+    font-family: var(--font-geist-mono), monospace;
+    font-size: 0.95em;
+    background: var(--muted);
+    padding: 0.1em 0.4em;
+    border-radius: 3px;
+  }
+
+  /* Legacy prose-dark alias kept for backwards compatibility */
   .prose-dark h2 {
     font-family: 'Playfair Display', serif;
-    font-size: 1.5rem;
+    font-size: 1.875rem;
     color: var(--foreground);
     margin-top: 2.5rem;
     margin-bottom: 1rem;
@@ -234,7 +479,7 @@
   }
   .prose-dark h3 {
     font-family: 'Playfair Display', serif;
-    font-size: 1.25rem;
+    font-size: 1.4rem;
     color: var(--gold);
     margin-top: 2rem;
     margin-bottom: 0.75rem;
@@ -242,7 +487,7 @@
   }
   .prose-dark p {
     color: var(--foreground);
-    opacity: 0.8;
+    opacity: 0.85;
     line-height: 1.75;
     margin-bottom: 1rem;
   }
@@ -261,48 +506,144 @@
   .prose-dark a:hover {
     color: var(--gold);
   }
+
+  /* ---- Image hover effects ---- */
+  .cover-shadow {
+    box-shadow:
+      0 1px 1px rgba(0, 0, 0, 0.15),
+      0 8px 18px -6px rgba(0, 0, 0, 0.4),
+      0 22px 50px -20px rgba(0, 0, 0, 0.55);
+  }
+  .cover-shadow-hover {
+    transition: box-shadow 0.5s ease, transform 0.5s ease;
+  }
+  .cover-shadow-hover:hover {
+    box-shadow:
+      0 1px 1px rgba(0, 0, 0, 0.2),
+      0 12px 24px -8px rgba(0, 0, 0, 0.45),
+      0 30px 70px -25px rgba(160, 24, 24, 0.35);
+  }
+
+  /* ---- Focus rings ---- */
+  .focus-ring {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+  .focus-ring:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+  }
+
+  /* ---- Texture overlay ---- */
+  .texture-grain {
+    position: relative;
+  }
+  .texture-grain::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(184, 146, 74, 0.04) 0%, transparent 30%),
+      radial-gradient(circle at 80% 70%, rgba(92, 10, 10, 0.05) 0%, transparent 35%);
+    mix-blend-mode: overlay;
+  }
+
+  /* ---- Reduced motion ---- */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-fade-in,
+    .animate-fade-in-up,
+    .animate-pulse-slow,
+    .animate-shimmer,
+    .cover-shadow-hover {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
 }
 
+/* ===================================================================
+   RESPONSIVE TYPOGRAPHY
+   =================================================================== */
 @media (min-width: 768px) {
-  .prose-dark h2 { font-size: 1.875rem; }
-  .prose-dark h3 { font-size: 1.5rem; }
+  .prose-editorial {
+    font-size: 1.25rem;
+  }
+  .prose-editorial p:first-of-type {
+    font-size: 1.375rem;
+  }
+  .prose-editorial h2 {
+    font-size: 2.125rem;
+  }
+  .prose-editorial h3 {
+    font-size: 1.6rem;
+  }
+  .prose-dark h2 {
+    font-size: 2rem;
+  }
+  .prose-dark h3 {
+    font-size: 1.5rem;
+  }
 }
 
+/* ===================================================================
+   KEYFRAMES
+   =================================================================== */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
-
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
-
 @keyframes pulse {
   0%, 100% { opacity: 0.4; }
   50% { opacity: 0.8; }
 }
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
 
-/* Custom scrollbar */
+/* ===================================================================
+   SCROLLBAR
+   =================================================================== */
 .dark ::-webkit-scrollbar-track {
-  background: #0a0a0a;
+  background: #0c0907;
 }
 ::-webkit-scrollbar-track {
   background: var(--background);
 }
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 3px;
+  background: var(--gold-dim);
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: var(--gold);
 }
 
-/* Selection color */
+/* ===================================================================
+   SELECTION
+   =================================================================== */
 ::selection {
-  background-color: rgba(220, 20, 60, 0.3);
-  color: #ffffff;
+  background-color: rgba(184, 146, 74, 0.28);
+  color: var(--foreground);
+}
+
+/* ===================================================================
+   PRINT-FRIENDLY FALLBACK
+   =================================================================== */
+@media print {
+  .animate-fade-in,
+  .animate-fade-in-up,
+  .animate-pulse-slow,
+  .animate-shimmer,
+  .cover-shadow-hover {
+    animation: none !important;
+    transition: none !important;
+  }
 }

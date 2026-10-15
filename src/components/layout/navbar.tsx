@@ -10,7 +10,6 @@ import { Menu, X, Sun, Moon } from "lucide-react";
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/books", label: "Books" },
-  { href: "/free-reads", label: "Free Reads" },
   { href: "/blog", label: "Blog" },
   { href: "/about", label: "About" },
 ];
@@ -28,12 +27,17 @@ export function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 30);
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setIsMobileOpen(false);
+  }, [pathname]);
 
   const closeMobileMenu = useCallback(() => {
     setIsMobileOpen(false);
@@ -47,37 +51,47 @@ export function Navbar() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isScrolled
-          ? "bg-overlay backdrop-blur-md border-b border-border/50 shadow-lg shadow-black/10 dark:shadow-black/30"
+          ? "bg-overlay backdrop-blur-xl border-b border-border/40 shadow-sm shadow-black/5"
           : "bg-transparent"
       }`}
     >
-      <nav className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 group">
-          <span className="logo-text text-xl md:text-2xl uppercase tracking-wider">
-            Kartix
+      <nav
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 md:h-20 flex items-center justify-between"
+        aria-label="Primary navigation"
+      >
+        {/* Wordmark */}
+        <Link
+          href="/"
+          className="flex items-center gap-2 group focus-ring rounded-sm"
+          aria-label="Kartix Vale — home"
+        >
+          <span className="wordmark text-base md:text-xl text-foreground group-hover:text-gold transition-colors duration-300">
+            Kartix&nbsp;Vale
           </span>
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-8 lg:gap-10">
           {navLinks.map((link) => {
-            const isActive = pathname === link.href;
+            const isActive =
+              link.href === "/"
+                ? pathname === "/"
+                : pathname.startsWith(link.href);
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`relative text-sm font-medium tracking-wider uppercase transition-colors duration-300 ${
+                className={`relative text-sm font-medium tracking-[0.15em] uppercase transition-colors duration-300 focus-ring rounded-sm ${
                   isActive
-                    ? "text-blood-light"
-                    : "text-muted-foreground hover:text-blood-light"
+                    ? "text-blood-light dark:text-gold"
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {link.label}
                 {isActive && (
                   <motion.div
                     layoutId="navbar-indicator"
-                    className="absolute -bottom-1 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blood-light to-transparent"
+                    className="absolute -bottom-1.5 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blood-light to-transparent dark:via-gold"
                     transition={{ type: "spring", stiffness: 350, damping: 30 }}
                   />
                 )}
@@ -89,8 +103,10 @@ export function Navbar() {
           {mounted && (
             <button
               onClick={toggleTheme}
-              className="relative w-9 h-9 flex items-center justify-center rounded-full border border-border/50 text-muted-foreground hover:text-blood-light hover:border-blood/30 transition-all duration-300 hover:scale-110"
-              aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+              className="relative w-9 h-9 flex items-center justify-center rounded-full border border-border/50 text-muted-foreground hover:text-blood-light dark:hover:text-gold hover:border-blood/30 dark:hover:border-gold/40 transition-all duration-300 hover:scale-110 focus-ring"
+              aria-label={
+                theme === "dark" ? "Switch to light mode" : "Switch to dark mode"
+              }
             >
               <AnimatePresence mode="wait" initial={false}>
                 {theme === "dark" ? (
@@ -120,20 +136,27 @@ export function Navbar() {
         </div>
 
         {/* Mobile: Theme Toggle + Hamburger */}
-        <div className="md:hidden flex items-center gap-2">
+        <div className="md:hidden flex items-center gap-1.5">
           {mounted && (
             <button
               onClick={toggleTheme}
-              className="w-9 h-9 flex items-center justify-center rounded-full border border-border/50 text-muted-foreground hover:text-blood-light hover:border-blood/30 transition-all duration-300"
-              aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+              className="w-9 h-9 flex items-center justify-center rounded-full border border-border/50 text-muted-foreground hover:text-blood-light dark:hover:text-gold hover:border-blood/30 dark:hover:border-gold/40 transition-all duration-300 focus-ring"
+              aria-label={
+                theme === "dark" ? "Switch to light mode" : "Switch to dark mode"
+              }
             >
-              {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              {theme === "dark" ? (
+                <Sun className="h-4 w-4" />
+              ) : (
+                <Moon className="h-4 w-4" />
+              )}
             </button>
           )}
           <button
-            className="w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-blood-light transition-colors"
+            className="w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors focus-ring rounded-sm"
             onClick={() => setIsMobileOpen(!isMobileOpen)}
             aria-label={isMobileOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isMobileOpen}
           >
             {isMobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -148,20 +171,23 @@ export function Navbar() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="md:hidden overflow-hidden bg-overlay backdrop-blur-md border-b border-border/50"
+            className="md:hidden overflow-hidden bg-overlay backdrop-blur-xl border-b border-border/40"
           >
             <div className="px-4 py-4 space-y-1">
               {navLinks.map((link) => {
-                const isActive = pathname === link.href;
+                const isActive =
+                  link.href === "/"
+                    ? pathname === "/"
+                    : pathname.startsWith(link.href);
                 return (
                   <Link
                     key={link.href}
                     href={link.href}
                     onClick={closeMobileMenu}
-                    className={`block py-3 px-4 rounded-lg text-sm font-medium tracking-wider uppercase transition-all duration-200 ${
+                    className={`block py-3 px-4 rounded-md text-sm font-medium tracking-[0.15em] uppercase transition-all duration-200 focus-ring ${
                       isActive
-                        ? "text-blood-light bg-blood/10"
-                        : "text-muted-foreground hover:text-blood-light hover:bg-white/5 dark:hover:bg-white/5"
+                        ? "text-blood-light dark:text-gold bg-blood/5 dark:bg-gold/5"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                     }`}
                   >
                     {link.label}

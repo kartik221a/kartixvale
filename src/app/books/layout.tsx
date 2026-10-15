@@ -3,26 +3,32 @@ import { Metadata } from "next";
 const baseUrl = "https://kartixvale.vercel.app";
 
 export const metadata: Metadata = {
-  title: "Books — The Collection | Kartix Vale",
+  title: "Books — The Complete Catalogue | Kartix Vale",
   description:
-    "Explore Kartix Vale's complete collection of dark romance novels. The Beneath the Veil series (4 books) and standalone novels including Thorns of the Fae Thorne and Gotham Reaper's Bride. Available on Amazon.",
+    "Explore all 17 Kartix Vale novels — the Beneath the Veil series (4 books), Crimson Shifters, Starving Gods, and 10 standalone dark romance, gothic, and dark fantasy novels. Available on Amazon and Kindle Unlimited.",
   keywords: [
     "Kartix Vale books",
-    "dark romance books",
+    "dark romance novels",
     "Beneath the Veil series",
+    "Crimson Shifters",
+    "Starving Gods",
     "dark fae romance",
     "gothic romance novels",
     "paranormal romance",
-    "slow burn dark romance",
+    "wolf shifter romance",
+    "dark romantasy",
+    "dark fantasy romance",
     "enemies to lovers books",
+    "slow burn dark romance",
+    "Kindle Unlimited dark romance",
   ],
   alternates: {
     canonical: `${baseUrl}/books`,
   },
   openGraph: {
-    title: "Books — Kartix Vale",
+    title: "Books — The Complete Catalogue | Kartix Vale",
     description:
-      "7 dark romance novels. The Beneath the Veil series + standalone worlds. Available on Amazon and Kindle Unlimited.",
+      "17 novels across 3 series and 10 standalones. Dark romance, gothic, paranormal, and dark fantasy. Available on Amazon and Kindle Unlimited.",
     url: `${baseUrl}/books`,
     siteName: "Kartix Vale",
     type: "website",
@@ -40,7 +46,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Books — Kartix Vale",
     description:
-      "7 dark romance novels. The Beneath the Veil series + standalone worlds.",
+      "17 novels across 3 series and 10 standalones — dark romance, gothic, paranormal, and dark fantasy.",
     images: ["https://m.media-amazon.com/images/I/61kY61LNZ-L._SY522_.jpg"],
   },
   robots: {

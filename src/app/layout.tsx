@@ -17,21 +17,31 @@ const geistMono = Geist_Mono({
 const siteUrl = "https://kartixvale.vercel.app";
 
 export const metadata: Metadata = {
-  title: "Kartix Vale — Dark Romance Author | Love Was Never Meant to Be Safe",
+  title: {
+    default: "Kartix Vale — Dark Romance Author | Love Was Never Meant to Be Safe",
+    template: "%s | Kartix Vale",
+  },
   description:
-    "Official website of Kartix Vale, dark romance author. Explore dark fae romance, paranormal romance, gothic romance, and fantasy romance novels. Love was never meant to be safe.",
+    "Official website of Kartix Vale, dark romance author. Seventeen novels across three series and ten standalones — dark fae, gothic, paranormal, and dark fantasy romance. Love was never meant to be safe.",
   keywords: [
     "dark romance",
+    "dark romance author",
+    "Kartix Vale",
     "dark fae romance",
     "paranormal romance",
     "gothic romance",
-    "fantasy romance",
-    "slow burn romance",
-    "Kartix Vale",
+    "dark fantasy romance",
+    "wolf shifter romance",
+    "fated mates",
+    "dark romantasy",
+    "Beneath the Veil series",
+    "Crimson Shifters",
+    "Starving Gods",
     "dark romance books",
-    "fae romance novels",
-    "demons and fae romance",
-    "mystery thriller romance",
+    "Kindle Unlimited dark romance",
+    "morally grey romance",
+    "enemies to lovers",
+    "slow burn romance",
   ],
   authors: [{ name: "Kartix Vale" }],
   creator: "Kartix Vale",
@@ -40,7 +50,7 @@ export const metadata: Metadata = {
     canonical: siteUrl,
   },
   icons: {
-    icon: "/favicon-source.png",
+    icon: "/favicon.ico",
   },
   metadataBase: new URL(siteUrl),
   verification: {
@@ -49,7 +59,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Kartix Vale — Dark Romance Author",
     description:
-      "Explore dark fae romance, paranormal romance, gothic romance, and fantasy romance novels by Kartix Vale. Love was never meant to be safe.",
+      "Seventeen novels across three series and ten standalones — dark fae, gothic, paranormal, and dark fantasy romance by Kartix Vale. Love was never meant to be safe.",
     url: siteUrl,
     siteName: "Kartix Vale",
     type: "website",
@@ -67,7 +77,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Kartix Vale — Dark Romance Author",
     description:
-      "Explore dark fae romance, paranormal romance, gothic romance, and fantasy romance novels. Love was never meant to be safe.",
+      "Seventeen novels. Three series. Ten standalones. Dark romance, gothic, paranormal, and dark fantasy. Love was never meant to be safe.",
     images: ["https://m.media-amazon.com/images/I/61kY61LNZ-L._SY522_.jpg"],
   },
   robots: {
@@ -107,32 +117,13 @@ function JsonLd() {
     jobTitle: "Author",
     genre: "Dark Romance",
     description:
-      "Kartix Vale writes dark romance that lives in the space between love and obsession, safety and ruin. Drawing from the shadows of fae courts, gothic manors, and the monsters we love.",
-    sameAs: [siteUrl],
-  };
-
-  const bookSchema = {
-    "@context": "https://schema.org",
-    "@type": "Book",
-    name: "Thorns of the Fae Thorne: A Slow Burn Dark Fae Romance",
-    author: {
-      "@type": "Person",
-      name: "Kartix Vale",
-    },
-    genre: ["Dark Fae Romance", "Paranormal Romance", "Mystery/Thriller Romance"],
-    url: "https://www.amazon.com/dp/B0H1BTKZ4M",
-    image: "https://m.media-amazon.com/images/I/61kY61LNZ-L._SY522_.jpg",
-    isbn: "B0H1BTKZ4M",
-    bookFormat: "EBook",
-    offers: {
-      "@type": "Offer",
-      price: "2.99",
-      priceCurrency: "USD",
-      availability: "https://schema.org/InStock",
-      url: "https://www.amazon.com/dp/B0H1BTKZ4M",
-    },
-    description:
-      "THREE HUNDRED YEARS AGO, SOMETHING BROKE THE WORLD. THE FAE COURT HAS BEEN LYING ABOUT IT EVER SINCE. The Thornwall is consuming everything. Ancient cities swallowed whole.",
+      "Kartix Vale writes emotionally intense novels filled with dangerous chemistry, morally grey characters, slow-burning desire, and cinematic worlds that linger long after the last page.",
+    url: siteUrl,
+    sameAs: [
+      siteUrl,
+      "https://www.amazon.com/author/kartixvale",
+      "https://www.amazon.com.au/Kartix-Vale/e/B0H1Y3GVK1",
+    ],
   };
 
   const faqSchema = {
@@ -144,7 +135,15 @@ function JsonLd() {
         name: "What genre does Kartix Vale write?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Dark romance, including dark fae romance, paranormal romance, gothic romance, fantasy romance, and mystery/thriller romance. Every story explores the shadowy edges of love.",
+          text: "Dark romance, gothic romance, paranormal romance, dark fantasy romance, and dark romantasy. Every story explores the shadowy edges of love under pressure.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "How many books has Kartix Vale published?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Seventeen novels across three series — Beneath the Veil (4 books), Crimson Shifters (2 books), Starving Gods (1 book) — and ten standalone novels.",
         },
       },
       {
@@ -152,7 +151,7 @@ function JsonLd() {
         name: "Are the books suitable for all readers?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Kartix Vale's books are intended for mature readers (18+). They explore dark themes, complex relationships, and intense emotional experiences.",
+          text: "Kartix Vale's books are intended for mature readers (18+). They explore dark themes, complex relationships, and intense emotional experiences. Each book includes a content warning.",
         },
       },
       {
@@ -160,31 +159,15 @@ function JsonLd() {
         name: "Where can I buy the books?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "All books are available on Amazon in both ebook and paperback formats.",
+          text: "All books are available on Amazon in both ebook and paperback formats, and most are enrolled in Kindle Unlimited.",
         },
       },
       {
         "@type": "Question",
-        name: "How often are new books released?",
+        name: "What is the Beneath the Veil series reading order?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Kartix publishes regularly. Subscribe to the newsletter to be the first to know about new releases.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "Can I get a free preview?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Yes! Subscribe to the newsletter and receive an exclusive free chapter from the latest release.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "Does Kartix Vale have social media?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Stay connected through the newsletter for now. Social media links coming soon!",
+          text: "Beneath the Veil is best read in order: Book 1 — A Bargain in Shadows, Book 2 — The Unholy Reverie, Book 3 — A Crown of Ashes, Book 4 — Behind the Veil.",
         },
       },
     ],
@@ -199,10 +182,6 @@ function JsonLd() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(authorSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(bookSchema) }}
       />
       <script
         type="application/ld+json"
