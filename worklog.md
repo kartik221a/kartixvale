@@ -801,3 +801,108 @@ Unresolved issues / risks:
 - Reading list is localStorage-only — could add user accounts for cross-device sync
 - Could add 6th article in future round
 - Could add book comparison feature (side-by-side)
+
+---
+Task ID: round5-article6
+Agent: Article Writer Agent (Round 5)
+Task: Write the sixth blog article for Kartix Vale
+
+Work Log:
+- Read /home/z/my-project/kartixvale/worklog.md to understand the project context, the design system, and the 5 existing articles already published
+- Reviewed the existing articles (especially "fated-mates-dark-romance.md" and "morally-grey-characters-dark-romance.md") to internalize the magazine voice, the honest/dishonest framing, the configuration-breakdown structure, and the "Continue into the books" recommendation pattern
+- Chose topic 1 — "Slow Burn Romance: Why the Wait Makes It Devastating" — to add a Trope Breakdown that does not duplicate any of articles 1-5 (avoids overlap with fated-mates, enemies-to-lovers, morally grey, content warnings, and the genre primer)
+- Drafted the article with the following structure: intro; What a slow burn actually is; Why dark romance makes the wait hit harder; The architecture of tension (proximity, rule, slips, retreats, breaking point); The moment of contact (recognition, contact, reckoning); What makes a slow burn "earned" (4 criteria); Four configurations of the dark slow burn (honor, captivity, suspicion, devotion); Where the trope breaks (4 failure modes); 6 FAQ entries; Continue into the books (with Kartix Vale book recommendations mapped to each configuration)
+- Wrote the article to /home/z/my-project/kartixvale/content/blog/slow-burn-dark-romance.md
+- Performed multiple revision passes to tighten prose and bring word count into target range (final main prose excluding frontmatter and FAQ: ~3,605 words; consistent with existing catalogue range of 3,429-3,666 words for the previously published articles)
+- Verified all Kartix Vale book ASINs and Amazon links are formatted correctly with real titles and ASINs from the brief (Thorns of the Fae Thorne, A Bargain in Shadows, The Gotham Reaper's Bride, The Binding of Silk, The Architecture of Silence, The Bloom Beneath the Bone, All the Hollow Places)
+- Ran `bun run scripts/build-blog-data.mjs` to rebuild scripts/blog-data.json — all 6 articles parsed successfully
+- Ran `bun run scripts/seed-blogs.mjs -- --upsert` (with .env sourced) — 6 posts upserted to the Turso database, 0 inserted, 0 skipped
+- Verified scripts/blog-data.json contains 6 articles including the new "slow-burn-dark-romance" entry
+
+Stage Summary:
+- New article written: "Slow Burn Romance: Why the Wait Makes It Devastating" (slug: slow-burn-dark-romance, category: Trope Breakdown, ~3,605 words main prose + 6 FAQ entries)
+- Saved to: /home/z/my-project/kartixvale/content/blog/slow-burn-dark-romance.md
+- Database updated: all 6 articles now in scripts/blog-data.json and seeded to Turso via upsert
+- The article expands the blog's trope coverage without duplicating the fated-mates, enemies-to-lovers, morally grey, content warnings, or genre primer articles
+- The article naturally recommends 7 Kartix Vale books (Thorns of the Fae Thorne, A Bargain in Shadows, The Gotham Reaper's Bride, The Binding of Silk, The Architecture of Silence, The Bloom Beneath the Bone, All the Hollow Places) mapped to the four configurations of the dark slow burn it identifies
+
+---
+Task ID: round5
+Agent: Web Dev Review Agent (Round 5)
+Task: 6th article, book comparison feature, share buttons
+
+Work Log:
+
+QA Testing:
+- All routes return 200: /, /books, /blog, /blog/slow-burn-dark-romance, /about, /books/a-bargain-in-shadows, /api/search-blogs
+- Lint passes with 0 errors
+- Search API now returns 6 articles
+
+Sixth Blog Article (parallel subagent, Task ID: round5-article6):
+- Article: "Slow Burn Romance: Why the Wait Makes It Devastating" at content/blog/slow-burn-dark-romance.md
+- 3,605 words of substantive prose + 6 FAQ entries + 7 book recommendations
+- Category: Trope Breakdown (6 articles total)
+- Article upserted to Turso DB (6 articles live)
+- Slug: slow-burn-dark-romance
+
+Book Comparison Feature (NEW — MAJOR):
+- Created src/components/books/compare-modal.tsx — full comparison system:
+  * Module-level state + subscription pattern (shared across components without prop drilling)
+  * useCompare hook: slugs, count, toggleCompare, removeSlug, clearAll
+  * CompareButton — two variants: compact (h-7 icon) + default (h-10 with label)
+    - Visual states: add (+) → added (check, gold accent)
+    - Disabled state when 3 books already selected
+    - Prevents navigation (stopPropagation + preventDefault)
+  * CompareModal — full-screen modal with side-by-side book comparison
+    - Header: "Compare Books" with count indicator
+    - Each book column: cover, title, subtitle, metadata rows, hook, what-to-expect, content warning, buy button, full details link
+    - Remove button per book (top-right X)
+    - Esc to close, body scroll lock
+    - Responsive grid (1-3 columns based on selection)
+  * CompareFloatingButton — appears when books are selected
+    - Bottom-left position (next to back-to-top)
+    - Gold pill with GitCompare icon + count badge
+    - Opens CompareModal on click
+- Added CompareButton (compact) to BookCard component
+- Added CompareButton (default) to book detail page (next to Save button)
+- Added CompareModal + CompareFloatingButton to books page
+- Verified via agent-browser: compare buttons visible on cards, floating button appears with count, modal opens with 2 books side-by-side
+
+Article Share Buttons (NEW):
+- Created src/components/blog/share-buttons.tsx — share row
+  * Twitter / X share (window.open intent tweet)
+  * Facebook share (window.open sharer.php)
+  * Copy link (navigator.clipboard with execCommand fallback)
+  * "Copied!" confirmation toast with checkmark
+  * SSR-safe (builds full URL on client via useEffect)
+  * Two variants: horizontal (default) + vertical
+- Added to article page footer (next to "Back to The Dark Library" link)
+- Responsive: stacks vertically on mobile, horizontal on desktop
+
+Stage Summary:
+- 6 articles published (Genre Guide + 3 Trope Breakdowns + Reader Resources + Character Study)
+- Book comparison feature fully functional: select up to 3, view side-by-side modal
+- Article share buttons (Twitter, Facebook, copy link)
+- All routes 200, lint passes
+- VLM verified: compare buttons on cards, floating button with count, modal with 2 books side-by-side
+
+Current Project Status:
+- Stable, feature-rich, polished
+- 6 published articles
+- 17 verified books with detail pages
+- Site-wide search (Cmd+K)
+- Reading progress + sticky TOC on articles
+- Dynamic OG image generation per article
+- Save-for-later reading list with localStorage
+- Newsletter signup with working backend
+- Book comparison feature (up to 3 books side-by-side)
+- Article share buttons
+- Branded 404 page
+- Global back-to-top button
+- Article drop-cap editorial typography
+
+Unresolved issues / risks:
+- Production DB reseed still needed after Vercel deploy
+- Could add 7th article in future round
+- Reading list is localStorage-only — could add user accounts for cross-device sync
+- Compare state resets on page navigation (module-level state, not persisted) — could add localStorage persistence

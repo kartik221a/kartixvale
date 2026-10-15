@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ExternalLink } from "lucide-react";
 import { SaveButton } from "@/components/reading-list/save-button";
+import { CompareButton } from "@/components/books/compare-modal";
 import type { BookData } from "@/lib/books-data";
 import { bookToSlug } from "@/lib/books-data";
 import { cn } from "@/lib/utils";
@@ -142,6 +143,7 @@ export function BookCard({
             href={detailHref}
             variant="compact"
           />
+          <CompareButton slug={bookToSlug(book.title)} title={book.title} variant="compact" />
         </div>
       </div>
     </article>

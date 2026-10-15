@@ -8,6 +8,7 @@ import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { SaveButton } from "@/components/reading-list/save-button";
+import { CompareButton } from "@/components/books/compare-modal";
 import type { BookData } from "@/lib/books-data";
 import { bookToSlug } from "@/lib/books-data";
 import {
@@ -231,6 +232,13 @@ export default function BookDetailClient({
                   slug={bookToSlug(book.title)}
                   title={book.title}
                   href={`/books/${bookToSlug(book.title)}`}
+                  className="h-12"
+                />
+                {/* Add to comparison */}
+                <CompareButton
+                  slug={bookToSlug(book.title)}
+                  title={book.title}
+                  variant="default"
                   className="h-12"
                 />
               </div>

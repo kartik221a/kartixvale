@@ -7,6 +7,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { SaveButton } from "@/components/reading-list/save-button";
+import { ShareButtons } from "@/components/blog/share-buttons";
 import type { BlogPost } from "@/lib/blog-service";
 import { featuredBooks } from "@/lib/books-data";
 import {
@@ -303,15 +304,22 @@ export default function BlogPostClient({ post, relatedPosts }: BlogPostClientPro
                   dangerouslySetInnerHTML={{ __html: post.content }}
                 />
 
-                {/* Article footer — back to blog */}
+                {/* Article footer — back to blog + share */}
                 <div className="mt-16 pt-8 border-t border-border/40">
-                  <Link
-                    href="/blog"
-                    className="inline-flex items-center gap-2 text-sm font-display tracking-[0.15em] uppercase text-gold hover:text-foreground transition-colors focus-ring rounded-sm"
-                  >
-                    <ArrowLeft className="h-3.5 w-3.5" />
-                    Back to The Dark Library
-                  </Link>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <Link
+                      href="/blog"
+                      className="inline-flex items-center gap-2 text-sm font-display tracking-[0.15em] uppercase text-gold hover:text-foreground transition-colors focus-ring rounded-sm"
+                    >
+                      <ArrowLeft className="h-3.5 w-3.5" />
+                      Back to The Dark Library
+                    </Link>
+                    <ShareButtons
+                      url={`/blog/${post.slug}`}
+                      title={post.title}
+                      description={post.excerpt}
+                    />
+                  </div>
                 </div>
               </div>
             </div>

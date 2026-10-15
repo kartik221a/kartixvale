@@ -4,6 +4,10 @@ import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { BookCard } from "@/components/books/book-card";
+import {
+  CompareModal,
+  CompareFloatingButton,
+} from "@/components/books/compare-modal";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
@@ -56,6 +60,7 @@ export default function BooksPage() {
   const [filter, setFilter] = useState<Filter>("all");
   const [genreFilter, setGenreFilter] = useState<string>("all");
   const [sort, setSort] = useState<Sort>("default");
+  const [isCompareOpen, setIsCompareOpen] = useState(false);
 
   // Filter + sort logic — applies to "All Books" view
   const filteredBooks = useMemo(() => {
@@ -635,6 +640,13 @@ export default function BooksPage() {
       )}
 
       <Footer />
+
+      {/* Book comparison modal + floating button */}
+      <CompareFloatingButton onOpen={() => setIsCompareOpen(true)} />
+      <CompareModal
+        isOpen={isCompareOpen}
+        onClose={() => setIsCompareOpen(false)}
+      />
     </main>
   );
 }
