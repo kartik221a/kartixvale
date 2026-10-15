@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ExternalLink } from "lucide-react";
+import { SaveButton } from "@/components/reading-list/save-button";
 import type { BookData } from "@/lib/books-data";
 import { bookToSlug } from "@/lib/books-data";
 import { cn } from "@/lib/utils";
@@ -134,6 +135,13 @@ export function BookCard({
           >
             Details
           </Link>
+          <SaveButton
+            kind="book"
+            slug={bookToSlug(book.title)}
+            title={book.title}
+            href={detailHref}
+            variant="compact"
+          />
         </div>
       </div>
     </article>

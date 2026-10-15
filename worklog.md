@@ -540,3 +540,132 @@ Unresolved issues / risks:
 - Could add reading-time estimation that auto-calculates from word count (currently manual in frontmatter)
 - Could add book comparison feature (side-by-side book details)
 - Could add a "Save for later" feature via localStorage
+
+---
+Task ID: round3-article4
+Agent: Article Writer Agent (Round 3)
+Task: Write the fourth blog article for Kartix Vale
+
+Work Log:
+- Read existing worklog.md and all 3 existing blog articles (what-is-dark-romance, enemies-to-lovers-dark-romance, dark-romance-content-warnings) to align with established voice, structure, and design system
+- Surveyed Kartix Vale book catalogue (16 titles with verified ASINs) to plan genuine book recommendations
+- Chose topic #1 (Morally Grey Characters) as a Character Study — category distinct from the existing Genre Guide / Trope Breakdown / Reader Resources trio; gives the new article a non-overlapping niche while building on the morally-grey subsection introduced in article 1
+- Drafted the article in the sophisticated longform magazine voice established by the prior articles: precise definitions, multi-part taxonomy, ethical specificity, no euphemism, no marketing tone
+- Built the structure: intro → TOC with anchor links → 7 major sections (##) with 3 subsections (###) inside "The three modes of moral greyness" → 6 FAQ entries → "Continue into the books" CTA
+- Wrote original framings not present in articles 1-3: the three modes (compromised hero / principled monster / transformed villain), the morally-grey-vs-toxic line drawn via "moral commitments are settled on the degradation of the person they are with", and the redemption-vs-acceptance dichotomy
+- Referenced 9 Kartix Vale books where they genuinely fit the article's taxonomy: The Gotham Reaper's Bride, A Bargain in Shadows, The Carved and The King, The Crown of Ash and Tides, The Sickle Bearer's Vessel, Thorns of the Fae Thorne, The Art of Vanishing, The Binding of Silk, The Architecture of Silence — all linked with verified ASINs
+- Verified prose word count = 3,474 words (within 2,500–3,500 range, excluding frontmatter, FAQ, and Continue section); metaDescription = 157 chars (within 150–160 range); keywords = 7 (within 3–7 range)
+- Confirmed no "in today's world" / "in a world" clichés; no fabricated statistics, quotes, or citations; no keyword stuffing
+- Saved article to /home/z/my-project/kartixvale/content/blog/morally-grey-characters-dark-romance.md
+- Ran `bun run scripts/build-blog-data.mjs` — parsed all 4 markdown files and wrote to scripts/blog-data.json
+- Ran `bun run scripts/seed-blogs.mjs -- --upsert` (with .env loaded) — upserted all 4 posts to Turso database (0 inserted, 4 upserted, 0 skipped)
+- Verified blog-data.json now contains 4 articles
+
+Stage Summary:
+- Fourth article published: "Morally Grey Characters: Why Dark Romance Loves Its Villains" (slug: morally-grey-characters-dark-romance, category: Character Study, categoryColor: #4A1D2E)
+- Article path: /home/z/my-project/kartixvale/content/blog/morally-grey-characters-dark-romance.md
+- Prose length: 3,474 words (within 2,500-3,500 target); total body 4,444 words incl. FAQ + Continue
+- Database updated: all 4 articles now in Turso blogs table (what-is-dark-romance, enemies-to-lovers-dark-romance, dark-romance-content-warnings, morally-grey-characters-dark-romance)
+- Catalogue span covered by book recommendations: gothic (Bargain in Shadows, Gotham Reaper's Bride), dark romantasy (Carved and The King, Crown of Ash and Tides, Thorns of the Fae Thorne), mythological villain worship (Sickle Bearer's Vessel), Victorian psychological (Art of Vanishing, Binding of Silk, Architecture of Silence)
+- Blog now spans four distinct categories: Genre Guide, Trope Breakdown (x2), Reader Resources, Character Study
+
+---
+Task ID: round3
+Agent: Web Dev Review Agent (Round 3)
+Task: 4th article, dynamic OG images, reading list, polish, 404 page
+
+Work Log:
+
+QA Testing:
+- All 10 routes return 200: /, /books, /books/[slug], /blog, /blog/what-is-dark-romance, /blog/enemies-to-lovers-dark-romance, /blog/dark-romance-content-warnings, /blog/morally-grey-characters-dark-romance, /about, /api/search-blogs
+- 404 page returns 404 status correctly
+- Lint passes with 0 errors
+
+Fourth Blog Article (parallel subagent, Task ID: round3-article4):
+- Article written: "Morally Grey Characters: Why Dark Romance Loves Its Villains" at content/blog/morally-grey-characters-dark-romance.md
+- 3,474 words of substantive prose + 6 FAQ entries + 9 Kartix Vale book recommendations
+- Category: Character Study (4th editorial angle — Genre Guide + Trope Breakdown + Reader Resources + Character Study)
+- Article upserted to Turso DB (4 articles now live)
+- Slug: morally-grey-characters-dark-romance
+
+Dynamic Open Graph Image Generation (NEW):
+- Created src/app/blog/[slug]/opengraph-image.tsx using next/og ImageResponse
+- Generates 1200x630 PNG with brand palette (oxblood + gold + ink + ivory)
+- Each article gets a unique OG image with its title, category, read time, excerpt
+- Features: KV brand mark, gold divider, article title, italic excerpt, "Love was never meant to be safe" tagline
+- Updated blog/[slug]/page.tsx to remove static OG image reference (Next.js auto-detects opengraph-image route)
+- Verified: all 4 articles generate valid PNGs (167KB-180KB each)
+- VLM confirmed: "What Is Dark Romance? A Reader's Guide to the Genre, Its Tropes and The Dark Allure" with KARTIX VALE brand visible
+
+Reading Time Auto-Estimation:
+- Updated scripts/build-blog-data.mjs with estimateReadTime() helper
+- Strips markdown formatting (frontmatter, code blocks, links, symbols) to count actual prose words
+- Uses 238 words/minute (scientific consensus for adult reading speed)
+- Returns formatted string like "12 min read"
+- Falls back to frontmatter readTime if specified (backward compatible)
+
+Save-for-Later / Reading List Feature (NEW):
+- Created src/hooks/use-reading-list.ts — localStorage-backed reading list hook
+  * addItem, removeItem, isSaved, toggleItem, clearAll functions
+  * Cross-component sync via custom event + storage event listener
+  * Hydration-safe (returns empty array on server, loads on mount)
+  * Type-safe with ReadingListItem interface (kind, slug, title, href, addedAt)
+- Created src/components/reading-list/save-button.tsx — bookmark button
+  * Two variants: "default" (h-10 with label) and "compact" (h-7 w-7 icon only)
+  * Saves to reading list on click, shows "Saved" confirmation toast
+  * Visual states: bookmark (unsaved) → bookmark-check (saved, gold accent)
+  * AnimatePresence confirmation toast with checkmark icon
+  * Hydration-safe (renders placeholder until mounted)
+- Created src/components/reading-list/reading-list-panel.tsx — floating button + drawer
+  * Floating pill button (bottom-right) appears after scroll when items exist
+  * Shows count badge (gold circle with item count)
+  * Slide-in drawer from right with backdrop
+  * List shows saved items with thumbnail (book cover or article icon)
+  * Each item: thumbnail, title, kind label, remove (trash) button
+  * Empty state: "Your reading list is empty" with Browse Books CTA
+  * Footer: Clear All + Continue Reading (links to most recent item)
+  * Esc to close, body scroll lock when open
+- Added SaveButton to:
+  * Book detail page (full variant, next to Buy + Kindle Unlimited buttons)
+  * Article page (full variant, in byline next to "All Articles" link)
+  * BookCard component (compact variant, next to Buy + Details buttons)
+- Added ReadingListPanel to root layout (always mounted, globally accessible)
+
+404 Not Found Page (NEW):
+- Created src/app/not-found.tsx — branded 404 page
+- Client component (avoids Button event handler serialization issue)
+- Large "4|0|4" display with italic gold "0"
+- "This page has fallen through the Veil." tagline
+- Two CTAs: Return Home (oxblood) + Browse Books (gold outline)
+- Search tip with Ctrl+K keyboard hint
+- Same atmospheric background as other pages
+- Navbar + Footer included for consistent navigation
+
+Stage Summary:
+- All 11 routes return 200 (incl /api/search-blogs + 4 article OG images)
+- 404 page returns proper 404 status
+- Lint passes (0 errors)
+- 4 articles published (Genre Guide + Trope Breakdown + Reader Resources + Character Study)
+- Dynamic OG images generated per article via next/og
+- Reading list feature fully functional: save books + articles, view in drawer, remove items
+- Reading time auto-estimated from word count
+- Branded 404 page
+- VLM verified: book detail Save button visible, reading list drawer opens with saved items
+
+Current Project Status:
+- Stable, feature-rich, polished
+- 4 published articles spanning 4 distinct categories
+- 17 verified books with detail pages
+- Site-wide search (Cmd+K)
+- Reading progress + sticky TOC on articles
+- Dynamic OG image generation per article
+- Save-for-later reading list with localStorage persistence
+- Branded 404 page
+
+Unresolved issues / risks:
+- Production DB reseed still needed after Vercel deploy
+- OG image uses default serif font (browser falls back) — could load custom font via fetch for brand consistency
+- Reading list is localStorage-only (not synced across devices) — could add user accounts in future
+- Could add 5th article in future round
+- Could add book comparison feature (side-by-side)
+- Could add newsletter signup integration

@@ -7,6 +7,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { SaveButton } from "@/components/reading-list/save-button";
 import type { BookData } from "@/lib/books-data";
 import { bookToSlug } from "@/lib/books-data";
 import {
@@ -224,6 +225,14 @@ export default function BookDetailClient({
                     </Button>
                   </a>
                 )}
+                {/* Save to reading list */}
+                <SaveButton
+                  kind="book"
+                  slug={bookToSlug(book.title)}
+                  title={book.title}
+                  href={`/books/${bookToSlug(book.title)}`}
+                  className="h-12"
+                />
               </div>
 
               {/* Reading meta line */}

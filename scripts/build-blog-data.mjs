@@ -96,13 +96,36 @@ function buildPost(filePath) {
     excerpt: frontmatter.excerpt,
     date: frontmatter.date,
     publishDate: frontmatter.publishDate || null,
-    readTime: frontmatter.readTime,
+    readTime: frontmatter.readTime || estimateReadTime(body),
     category: frontmatter.category,
     categoryColor: frontmatter.categoryColor,
     metaDescription: frontmatter.metaDescription,
     keywords: Array.isArray(frontmatter.keywords) ? frontmatter.keywords : [],
     content: body,
   };
+}
+
+/**
+ * Estimate reading time from word count.
+ * Average adult reading speed: 238 words/minute (scientific consensus).
+ * Returns formatted string like "12 min read" or "8 min read".
+ * If frontmatter already specifies readTime, that takes precedence.
+ */
+function estimateReadTime(markdownBody) {
+  // Strip markdown formatting to count actual prose words
+  const plainText = markdownBody
+    .replace(/^---[\s\S]*?---/, '') // frontmatter
+    .replace(/```[\s\S]*?```/g, ' ') // code blocks
+    .replace(/`[^`]+`/g, ' ') // inline code
+    .replace(/!\[[^\]]*\]\([^)]+\)/g, ' ') // images
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // links → text
+    .replace(/[#>*_~\-]/g, ' ') // markdown symbols
+    .replace(/\n+/g, ' ') // newlines
+    .trim();
+
+  const wordCount = plainText.split(/\s+/).filter(Boolean).length;
+  const minutes = Math.max(1, Math.round(wordCount / 238));
+  return `${minutes} min read`;
 }
 
 function main() {

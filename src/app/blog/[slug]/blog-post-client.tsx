@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
+import { SaveButton } from "@/components/reading-list/save-button";
 import type { BlogPost } from "@/lib/blog-service";
 import { featuredBooks } from "@/lib/books-data";
 import {
@@ -221,13 +222,13 @@ export default function BlogPostClient({ post, relatedPosts }: BlogPostClientPro
             {/* Byline */}
             <motion.div
               variants={fadeUp}
-              className="mt-6 flex items-center justify-between"
+              className="mt-6 flex items-center justify-between gap-3"
             >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold/30 to-blood/20 border border-gold/30 flex items-center justify-center">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold/30 to-blood/20 border border-gold/30 flex items-center justify-center flex-shrink-0">
                   <span className="font-display text-gold text-sm">KV</span>
                 </div>
-                <div>
+                <div className="min-w-0">
                   <p className="font-serif text-sm text-foreground leading-tight">
                     Kartix Vale
                   </p>
@@ -236,13 +237,21 @@ export default function BlogPostClient({ post, relatedPosts }: BlogPostClientPro
                   </p>
                 </div>
               </div>
-              <Link
-                href="/blog"
-                className="hidden sm:inline-flex items-center gap-1.5 text-xs font-display tracking-[0.15em] uppercase text-muted-foreground hover:text-gold transition-colors focus-ring rounded-sm"
-              >
-                <ArrowLeft className="h-3 w-3" />
-                All Articles
-              </Link>
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <SaveButton
+                  kind="article"
+                  slug={post.slug}
+                  title={post.title}
+                  href={`/blog/${post.slug}`}
+                />
+                <Link
+                  href="/blog"
+                  className="hidden sm:inline-flex items-center gap-1.5 text-xs font-display tracking-[0.15em] uppercase text-muted-foreground hover:text-gold transition-colors focus-ring rounded-sm"
+                >
+                  <ArrowLeft className="h-3 w-3" />
+                  All Articles
+                </Link>
+              </div>
             </motion.div>
           </motion.div>
         </div>
