@@ -403,9 +403,9 @@ export default function HomePage() {
                   </ol>
                 </div>
 
-                <Link href="/books#beneath-the-veil">
+                <Link href="/books/series/beneath-the-veil">
                   <Button variant="oxblood" className="h-12 px-8 text-sm tracking-wider uppercase font-semibold">
-                    View Series
+                    View Series Guide
                     <ArrowRight className="h-4 w-4 ml-2" />
                   </Button>
                 </Link>

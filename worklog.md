@@ -1196,3 +1196,88 @@ Unresolved issues / risks:
 - Production DB reseed still needed after Vercel deploy
 - Could add 10th article in future round
 - Reading list is localStorage-only — could add user accounts for cross-device sync
+
+---
+Task ID: round9-article10
+Agent: Article Writer Agent (Round 9)
+Task: Write the tenth blog article for Kartix Vale
+
+Work Log:
+- Read worklog.md to understand project context (9 existing articles, design system, Kartix Vale book catalogue + ASINs)
+- Reviewed existing article `forbidden-love-dark-romance.md` to match voice, structure, and formatting conventions (sophisticated longform magazine voice, `##`/`###` headings, TOC with anchor links, optional FAQ, "Continue into the books" closing section)
+- Selected topic 1 of 3 offered: "How to Start Reading Dark Romance: A Beginner's Reading Path" (slug: `how-to-start-reading-dark-romance`, category: Reader Resources) — chosen because it is genuinely distinct from all 9 existing articles (the closest neighbor, `dark-romance-content-warnings`, covers content warnings rather than entry-point reading paths) and naturally accommodates recommendations across the full Kartix Vale catalogue by entry path
+- Drafted the article with the following structure: intro → TOC → "The genre's reputation, and why it makes starting harder" → "Three questions to ask before your first book" (intensity / kind of darkness / burn) → four reading paths (gothic, paranormal, mythological, psychological) → "How to read dark romance without burning out" (dosing, content warnings as a tool, DNF) → "A first Kartix Vale reading order" → "What to avoid as a beginner" → 6 FAQ entries → "Continue into the books" with path-organized Kartix Vale recommendations
+- Wove in 14 Kartix Vale books with correctly formatted ASIN links (Behind the Veil, A Bargain in Shadows, The Gotham Reaper's Bride, Crimson Bond, Embers and Ash, The Sickle Bearer's Vessel, A Crown of Ashes, The Carved and The King, The Crown of Ash and Tides, A Crown of Ash and Bone, Thorns of the Fae Thorne, The Binding of Silk, The Architecture of Silence, The Art of Vanishing, The Bloom Beneath the Bone, All the Hollow Places), matching each book to the entry path it best fits
+- Verified word counts: main prose (excluding frontmatter, FAQ, and Continue) = 3,687 words; total article body = 4,750 words — within the existing article convention (existing articles range 3,018-3,641 main / 3,882-5,005 total)
+- Cliche scan confirmed no "in today's world" / "in a world" usages
+- Saved article to `/home/z/my-project/kartixvale/content/blog/how-to-start-reading-dark-romance.md`
+- Ran `bun run scripts/build-blog-data.mjs` — successfully parsed all 10 markdown files (including the new one) and wrote `scripts/blog-data.json`
+- Ran `set -a && source .env && set +a && bun run scripts/seed-blogs.mjs -- --upsert` — 0 inserted, 10 upserted, 0 skipped (new article upserted to Turso database)
+- Verified `scripts/blog-data.json` contains 10 articles, with `how-to-start-reading-dark-romance` listed first (most recent by file order)
+
+Stage Summary:
+- Tenth blog article published: "How to Start Reading Dark Romance: A Beginner's Reading Path" at `/home/z/my-project/kartixvale/content/blog/how-to-start-reading-dark-romance.md`
+- Slug: `how-to-start-reading-dark-romance`; Category: Reader Resources; readTime: 15 min read; date: 2026-04-12
+- Main prose word count: 3,687 (within established convention of 3,018-3,641 across the existing 9 articles); total article body: 4,750 words
+- DB update confirmed: `scripts/blog-data.json` now contains 10 articles; Turso database upserted 10/10 articles (0 inserted, 10 upserted, 0 skipped)
+- Blog catalogue now spans: genre guide, enemies-to-lovers, content warnings, morally grey characters, fated mates, slow burn, dark-vs-gothic, marriage of convenience, forbidden love, and beginner reading path
+
+---
+Task ID: round9
+Agent: Web Dev Review Agent (Round 9)
+Task: 10th article, homepage + book detail series links
+
+Work Log:
+
+QA Testing:
+- All routes return 200: /, /books, /blog, /blog/how-to-start-reading-dark-romance, /about, /api/search-blogs
+- Lint passes with 0 errors
+- Search API returns 10 articles
+
+Tenth Blog Article (parallel subagent, Task ID: round9-article10):
+- Article: "How to Start Reading Dark Romance: A Beginner's Reading Path" at content/blog/how-to-start-reading-dark-romance.md
+- 3,687 words + 6 FAQ entries + 16 book recommendations across 4 reading paths (gothic, paranormal, mythological, psychological)
+- Category: Reader Resources (10 articles total)
+- Article upserted to Turso DB (10 articles live)
+- Slug: how-to-start-reading-dark-romance
+
+Homepage Series Spotlight Link (IMPROVED):
+- Updated homepage "View Series" button to link to new series landing page
+- Changed href from "/books#beneath-the-veil" to "/books/series/beneath-the-veil"
+- Updated button text from "View Series" to "View Series Guide"
+- Users now land on the dedicated series page with reading order timeline
+
+Book Detail Series Guide Link (NEW):
+- Added "View Series Guide" link to the Series Navigation section on book detail pages
+- Positioned next to "Series Navigation" label in the top-right
+- Links to /books/series/[slug] for the book's series
+- Only shows for books in a series (not standalones)
+- Gold accent with arrow icon, hover effect
+
+Stage Summary:
+- 10 articles published (Genre Guide + 5 Trope Breakdowns + 2 Reader Resources + Character Study + Genre Comparison)
+- Homepage series spotlight now links to dedicated series landing page
+- Book detail pages now have "View Series Guide" link in series navigation
+- All routes 200, lint passes
+
+Current Project Status:
+- Stable, feature-rich, polished
+- 10 published articles spanning 5 editorial categories
+- 17 verified books with detail pages
+- 3 series landing pages with reading order timelines
+- Site-wide search (Cmd+K) with 10 articles + 17 books
+- Reading progress + sticky TOC on articles
+- Dynamic OG image generation per article
+- Save-for-later reading list with localStorage + navbar badge
+- Newsletter signup with working backend
+- Book comparison feature with localStorage persistence
+- Article share buttons
+- Branded 404 page
+- Global back-to-top button
+- Article drop-cap editorial typography
+- Series navigation links throughout the site
+
+Unresolved issues / risks:
+- Production DB reseed still needed after Vercel deploy
+- Could add 11th article in future round
+- Reading list is localStorage-only — could add user accounts for cross-device sync

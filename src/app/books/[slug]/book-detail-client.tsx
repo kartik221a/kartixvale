@@ -264,9 +264,18 @@ export default function BookDetailClient({
               {/* Series navigation */}
               {(nextBook || previousBook) && (
                 <div className="mt-8 pt-6 border-t border-border/40">
-                  <p className="font-display text-[10px] tracking-[0.3em] uppercase text-gold mb-3">
-                    Series Navigation
-                  </p>
+                  <div className="flex items-center justify-between mb-3">
+                    <p className="font-display text-[10px] tracking-[0.3em] uppercase text-gold">
+                      Series Navigation
+                    </p>
+                    <Link
+                      href={`/books/series/${book.series!.toLowerCase().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-").replace(/-+/g, "-")}`}
+                      className="text-[10px] font-display tracking-[0.2em] uppercase text-gold/70 hover:text-gold transition-colors focus-ring rounded-sm flex items-center gap-1"
+                    >
+                      View Series Guide
+                      <ArrowRight className="h-3 w-3" />
+                    </Link>
+                  </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {previousBook ? (
                       <Link
