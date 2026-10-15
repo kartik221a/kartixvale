@@ -380,6 +380,19 @@
     font-size: 1.25rem;
     color: var(--foreground);
   }
+  /* Drop-cap on the first paragraph of article body — editorial flourish */
+  article.prose-editorial > p:first-of-type::first-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.75rem;
+    line-height: 0.85;
+    font-weight: 700;
+    float: left;
+    margin-right: 0.65rem;
+    margin-top: 0.35rem;
+    margin-bottom: -0.15rem;
+    color: var(--gold);
+    text-shadow: 0 2px 8px rgba(184, 146, 74, 0.2);
+  }
   .prose-editorial h2 {
     font-family: 'Playfair Display', serif;
     font-size: 1.875rem;

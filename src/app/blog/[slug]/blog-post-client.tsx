@@ -16,7 +16,6 @@ import {
   ArrowRight,
   BookOpen,
   ExternalLink,
-  ChevronUp,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -52,13 +51,11 @@ interface BlogPostClientProps {
 }
 
 export default function BlogPostClient({ post, relatedPosts }: BlogPostClientProps) {
-  const [showBackToTop, setShowBackToTop] = useState(false);
   const [readingProgress, setReadingProgress] = useState(0);
   const [activeHeading, setActiveHeading] = useState<string>("");
 
   useEffect(() => {
     const onScroll = () => {
-      setShowBackToTop(window.scrollY > 800);
       // Reading progress
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = docHeight > 0 ? (window.scrollY / docHeight) * 100 : 0;
@@ -119,10 +116,6 @@ export default function BlogPostClient({ post, relatedPosts }: BlogPostClientPro
     });
     setTocEntries(entries);
   }, [post.content]);
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
 
   return (
     <main id="main-content" className="min-h-screen flex flex-col">
@@ -480,22 +473,6 @@ export default function BlogPostClient({ post, relatedPosts }: BlogPostClientPro
       )}
 
       <Footer />
-
-      {/* ============================================================
-          BACK TO TOP — floating, appears after scroll
-          ============================================================ */}
-      {showBackToTop && (
-        <motion.button
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          onClick={scrollToTop}
-          className="fixed bottom-6 right-6 z-40 w-12 h-12 flex items-center justify-center rounded-full bg-ink/80 dark:bg-card/80 border border-gold/30 text-gold hover:bg-ink hover:border-gold/50 transition-all duration-300 backdrop-blur-md focus-ring"
-          aria-label="Back to top"
-        >
-          <ChevronUp className="h-5 w-5" />
-        </motion.button>
-      )}
     </main>
   );
 }

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
+import { EmailCapture } from "@/components/marketing/email-capture";
 import {
   Feather,
   Moon,
@@ -340,6 +341,22 @@ export default function AboutPage() {
                   <ExternalLink className="h-4 w-4 ml-2" />
                 </Button>
               </a>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Newsletter signup */}
+      <section className="py-16 md:py-20 bg-section-alt">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            variants={stagger}
+          >
+            <motion.div variants={fadeUp}>
+              <EmailCapture variant="editorial" source="about-page" />
             </motion.div>
           </motion.div>
         </div>

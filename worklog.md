@@ -669,3 +669,135 @@ Unresolved issues / risks:
 - Could add 5th article in future round
 - Could add book comparison feature (side-by-side)
 - Could add newsletter signup integration
+
+---
+Task ID: round4-article5
+Agent: Article Writer Agent (Round 4)
+Task: Write the fifth blog article for Kartix Vale
+
+Work Log:
+- Read worklog.md and reviewed the four existing articles (what-is-dark-romance, enemies-to-lovers-dark-romance, dark-romance-content-warnings, morally-grey-characters-dark-romance) to align with the established longform magazine voice, the design system, and the book catalogue
+- Surveyed the 17-title Kartix Vale catalogue to plan genuine book recommendations that fit the chosen topic
+- Chose topic #1 (Fated Mates) as a Trope Breakdown — the topic most distinct from the existing four articles (none of which touch the paranormal/supernatural dimension), explicitly suggested as a future article in the round3 worklog notes, and the one with the most direct Kartix Vale book match (Crimson Bond, Embers and Ash are explicitly fated-mates shifter romances)
+- Drafted the article in the established sophisticated voice: precise definitions, ontological framing of the bond, multi-part taxonomy, ethical specificity, no euphemism, no marketing tone
+- Built the structure: intro → TOC with anchor links → 7 major sections (##) with 7 subsections (###) split between "The architecture of the bond" (3 subsections: recognition, pull, claiming) and "Four configurations of the fated-mates bond" (4 subsections: hunger, inheritance, altar, wound) → 6 FAQ entries → "Continue into the books" CTA
+- Wrote original framings not present in articles 1-4: the ontological-vs-poetic-vs-dramatic distinction between fated-mates, soulmates, and true-love; the architecture of the bond (recognition/pull/claiming); the four configurations (hunger/inheritance/altar/wound); the four moves the best books make to earn the heroine's agency back (honesty, interiority, choice, hero's matching work); and the failure modes (decorative bond, erased heroine, claiming-as-payoff, consent-problem-solved-rather-than-staged)
+- Referenced 8 Kartix Vale books where they genuinely fit the article's taxonomy: Crimson Bond + Embers and Ash (bond as hunger), The Sickle Bearer's Vessel + All the Hollow Places (bond as altar), The Carved and The King + A Crown of Ashes (bond as inheritance), Thorns of the Fae Thorne + A Bargain in Shadows (bond as wound) — all linked with verified Amazon ASINs
+- Iteratively trimmed prose from 3,806 → 3,497 words (within 2,500-3,500 target) via targeted reductions to redundant phrasing while preserving the article's argumentative structure
+- Verified final metrics: prose = 3,497 words (excl. frontmatter, FAQ, Continue); metaDescription = 157 chars (within 150-160 range); keywords = 7 (within 3-7 range); H2 sections = 10; H3 subsections = 7; Amazon links = 8 (all verified ASINs)
+- Confirmed no "in today's world" / "in a world" / "in today's society" / "in the modern world" clichés; no fabricated statistics, quotes from real people, or citations; no keyword stuffing
+- Saved article to /home/z/my-project/kartixvale/content/blog/fated-mates-dark-romance.md
+- Ran `bun run scripts/build-blog-data.mjs` — parsed all 5 markdown files (fated-mates-dark-romance: 4666 words) and wrote to scripts/blog-data.json
+- Ran `bun run scripts/seed-blogs.mjs -- --upsert` (with .env loaded) — upserted all 5 posts to Turso database (0 inserted, 5 upserted, 0 skipped)
+- Verified blog-data.json now contains 5 articles in correct order
+
+Stage Summary:
+- Fifth article published: "Fated Mates in Dark Romance: When the Bond Chooses for You" (slug: fated-mates-dark-romance, category: Trope Breakdown, categoryColor: #4A1D2E)
+- Article path: /home/z/my-project/kartixvale/content/blog/fated-mates-dark-romance.md
+- Prose length: 3,497 words (within 2,500-3,500 target); total body 4,553 words incl. FAQ + Continue
+- Database updated: all 5 articles now in Turso blogs table (what-is-dark-romance, enemies-to-lovers-dark-romance, dark-romance-content-warnings, morally-grey-characters-dark-romance, fated-mates-dark-romance)
+- Catalogue span covered by book recommendations: shifter fated-mates (Crimson Bond, Embers and Ash), mythological villain worship (Sickle Bearer's Vessel), dark fantasy of curses/gods (All the Hollow Places), dark romantasy (Carved and The King, A Crown of Ashes), slow-burn dark fae (Thorns of the Fae Thorne), gothic marriage-of-convenience (A Bargain in Shadows)
+- Blog now spans five articles across four editorial categories: Genre Guide (1), Trope Breakdown (3), Reader Resources (1), Character Study (1) — gives readers a robust exploration of the dark romance genre with the new fated-mates article adding the paranormal/supernatural dimension not covered in prior articles
+
+---
+Task ID: round4
+Agent: Web Dev Review Agent (Round 4)
+Task: 5th article, newsletter signup, back-to-top, drop-cap, polish
+
+Work Log:
+
+QA Testing:
+- All routes return 200: /, /books, /blog, /blog/fated-mates-dark-romance, /about, /api/search-blogs
+- Lint passes with 0 errors
+- Newsletter subscribe API verified: POST /api/subscribe returns 201 for new emails, 200 for existing
+
+Fifth Blog Article (parallel subagent, Task ID: round4-article5):
+- Article: "Fated Mates in Dark Romance: When the Bond Chooses for You" at content/blog/fated-mates-dark-romance.md
+- 3,497 words + 6 FAQ + 8 book recommendations organized by 4 configurations (hunger, inheritance, altar, wound)
+- Category: Trope Breakdown (5th editorial angle — now 5 articles total)
+- Article upserted to Turso DB (5 articles live)
+- Slug: fated-mates-dark-romance
+
+Newsletter Signup Feature (NEW):
+- Restyled EmailCapture component with new design system (oxblood + gold + ink + ivory)
+- Added new "editorial" variant for homepage/about page — premium dark romance styled:
+  * Gold mail icon in circular border
+  * "The Inner Circle" eyebrow
+  * "Stay in the dark." heading
+  * "New articles, new books, and the occasional dispatch from the writing room." copy
+  * Email input + Subscribe button (oxblood variant with arrow)
+  * "No spam · Unsubscribe anytime" footer
+  * Atmospheric radial gradient background
+  * Card-dark container with gold border accents
+- Backend already existed: POST /api/subscribe → Turso Subscriber table
+- Updated all existing variants (hero, inline, card) to use new color tokens (gold instead of blood)
+- Added alreadySubscribed handling — shows different message for returning subscribers
+- Added newsletter section to:
+  * Homepage (before footer, "editorial" variant, source="homepage")
+  * About page (before footer, "editorial" variant, source="about-page")
+- Verified: POST /api/subscribe returns { message: "Successfully subscribed!", alreadySubscribed: false } for new emails
+- Verified: Returns { message: "Already subscribed", alreadySubscribed: true } for existing
+
+Back-to-Top Button (NEW):
+- Created src/components/layout/back-to-top.tsx — global floating button
+- Appears after scrolling 600px down
+- Positioned bottom-left (to avoid conflict with reading-list panel at bottom-right)
+- 44px circular button with chevron-up icon
+- Gold border + ink background with backdrop blur
+- Respects prefers-reduced-motion (smooth vs auto scroll)
+- Added to root layout (globally available on all pages)
+- Removed article-specific back-to-top button (was at bottom-right, now handled globally)
+- Cleaned up unused state (showBackToTop) and imports (ChevronUp) from article client
+
+Article Drop-Cap (NEW):
+- Added drop-cap to first paragraph of article body in globals.css
+- Targets: `article.prose-editorial > p:first-of-type::first-letter`
+- Playfair Display serif font, 3.75rem size, gold color with text-shadow
+- Floats left with proper margins for editorial feel
+- VLM-verified: visible on article pages with enlarged gold first letter
+
+Homepage Newsletter Section:
+- Added newsletter section between about author section and footer
+- Uses EmailCapture "editorial" variant
+- Source tracked as "homepage"
+- Surrounded by motion fadeUp animation
+- Atmospheric radial gradient background section
+
+About Page Newsletter Section:
+- Added newsletter section between CTA and footer
+- Uses EmailCapture "editorial" variant
+- Source tracked as "about-page"
+- Same motion animation treatment
+
+Cleanup:
+- Removed unused BookModal comment from homepage
+- Removed article-specific back-to-top state + scrollToTop function
+- Removed ChevronUp import from article client (no longer used there)
+
+Stage Summary:
+- 5 articles published (Genre Guide + 2 Trope Breakdowns + Reader Resources + Character Study)
+- Newsletter signup working on homepage + about page with real backend (Turso)
+- Global back-to-top button on all pages
+- Article drop-cap editorial flourish
+- All routes 200, lint passes
+- VLM verified: newsletter section visible, drop-cap visible on articles
+
+Current Project Status:
+- Stable, feature-rich, polished
+- 5 published articles
+- 17 verified books with detail pages
+- Site-wide search (Cmd+K)
+- Reading progress + sticky TOC on articles
+- Dynamic OG image generation per article
+- Save-for-later reading list with localStorage
+- Newsletter signup with working backend
+- Branded 404 page
+- Global back-to-top button
+- Article drop-cap editorial typography
+
+Unresolved issues / risks:
+- Production DB reseed still needed after Vercel deploy
+- OG image uses default serif font — could load custom font for brand consistency
+- Reading list is localStorage-only — could add user accounts for cross-device sync
+- Could add 6th article in future round
+- Could add book comparison feature (side-by-side)

@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { ReadingListPanel } from "@/components/reading-list/reading-list-panel";
+import { BackToTop } from "@/components/layout/back-to-top";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -220,6 +221,7 @@ export default function RootLayout({
         <ThemeProvider>
           {children}
         </ThemeProvider>
+        <BackToTop />
         <ReadingListPanel />
         <Toaster />
       </body>

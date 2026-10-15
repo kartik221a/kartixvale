@@ -1,6 +1,5 @@
 "use client";
 
-
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,6 +7,7 @@ import { BookCard } from "@/components/books/book-card";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
+import { EmailCapture } from "@/components/marketing/email-capture";
 import {
   ArrowRight,
   BookOpen,
@@ -630,14 +630,30 @@ export default function HomePage() {
       </section>
 
       {/* ============================================================
-          NEWSLETTER (existing integration preserved)
+          NEWSLETTER — editorial signup section
           ============================================================ */}
+      <section className="relative py-20 md:py-28 bg-section-alt overflow-hidden">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse 50% 60% at 50% 100%, rgba(184,146,74,0.08) 0%, transparent 70%)",
+          }}
+        />
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+          variants={stagger}
+          className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10"
+        >
+          <motion.div variants={fadeUp}>
+            <EmailCapture variant="editorial" source="homepage" />
+          </motion.div>
+        </motion.div>
+      </section>
 
       <Footer />
-
-      {/* ============================================================
-          BOOK MODAL
-          ============================================================ */}
     </main>
   );
 }
