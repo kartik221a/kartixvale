@@ -217,3 +217,157 @@ Stage Summary:
 - New design system: oxblood/gold/ink/ivory palette, Cinzel + EB Garamond + Playfair Display typography
 - Documentation written for future book/article additions
 - Ready for commit + push to GitHub
+
+---
+Task ID: 4 (second-article)
+Agent: Article Writer Agent
+Task: Write the second blog article for Kartix Vale
+
+Work Log:
+- Read worklog.md to understand project context: prior launch article (what-is-dark-romance), design system (oxblood/gold/ink/ivory, Cinzel + EB Garamond + Playfair Display), 17-book catalogue with verified Amazon ASINs
+- Read existing first article content/blog/what-is-dark-romance.md to absorb voice, structure, and quality bar — and to avoid content overlap
+- Reviewed scripts/build-blog-data.mjs to understand the frontmatter parsing pipeline and required fields
+- Chose topic "Enemies to Lovers in Dark Romance: Why the Trope Works at Its Darkest" (slug: enemies-to-lovers-dark-romance) — a trope-focused deep drill that complements (rather than overlaps) the first article's broad genre survey
+- Drafted article with original analytical framework: three configurations of enmity (institutional / cosmic-magical / personal), the turn mechanics, slow burn as structural rhythm, where the trope breaks, and the transformation-vs-harm line
+- Wrote 3,286 words of substantive prose (within 2,500–3,500 target), plus TOC, 6 FAQ entries, and a "Continue into the books" section
+- Included one unattributed pull quote (blockquote) on the trope's promise
+- Referenced 9 Kartix Vale books that genuinely fit enemies-to-lovers configurations: A Bargain in Shadows, The Gotham Reaper's Bride, Thorns of the Fae Thorne, Crimson Bond, The Carved and The King, All the Hollow Places, The Binding of Silk, The Architecture of Silence, Behind the Veil — all with correct Amazon ASIN links
+- Used proper heading hierarchy: H2 for major sections, H3 for the three enmity subtypes, no H1 in body (title in frontmatter)
+- Frontmatter: slug, title, excerpt, date (2026-02-15), publishDate, readTime (13 min read), category (Trope Breakdown), categoryColor (#5C0A0A), metaDescription (155 chars), 6 keywords
+- Verified quality bar programmatically: no "in today's world"/"in a world" clichés, no fabricated quotes/attributions/stats, no keyword stuffing, no H1 in body
+- Saved article at /home/z/my-project/kartixvale/content/blog/enemies-to-lovers-dark-romance.md
+- Ran `bun run scripts/build-blog-data.mjs` — both articles parsed successfully (enemies-to-lovers: 4275 words total body; what-is-dark-romance: 3882 words total body)
+- Sourced .env and ran `bun run scripts/seed-blogs.mjs -- --upsert` — both articles upserted to Turso database (0 inserted, 2 upserted, 0 skipped)
+- Verified scripts/blog-data.json contains 2 articles with correct slugs and titles
+
+Stage Summary:
+- Second blog article written and saved at /home/z/my-project/kartixvale/content/blog/enemies-to-lovers-dark-romance.md
+- Article is original, complementary to the first article (trope deep-dive vs. genre survey), 3,286 words substantive prose
+- Both articles now present in scripts/blog-data.json and upserted to the Turso blogs table
+- Database update confirmed: 2 articles upserted successfully
+- Tone and quality bar matches the first article (sophisticated longform magazine voice, honest treatment of sensitive themes, distinguishes fiction from real-world relationship expectations)
+
+---
+Task ID: 11
+Agent: Web Dev Review Agent (Round 1)
+Task: Continuous development — QA testing, new features, polish, commit + push
+
+Work Log:
+
+QA Testing:
+- Verified dev server running on port 3001 (port 3000 used by sandbox main project)
+- Tested all routes return 200: /, /books, /blog, /about, /blog/what-is-dark-romance, /blog/enemies-to-lovers-dark-romance, /books/a-bargain-in-shadows, /books/thorns-of-the-fae-thorne, /books/behind-the-veil, /sitemap.xml, /robots.txt
+- Ran `bun run lint` — 0 errors
+- Verified no errors in dev.log
+
+Second Blog Article (parallel subagent, Task ID 4):
+- Launched subagent to write second article in parallel with image generation
+- Article written: "Enemies to Lovers in Dark Romance: Why the Trope Works at Its Darkest" at content/blog/enemies-to-lovers-dark-romance.md
+- 3,286 words of substantive prose + 6 FAQ entries + 9 Kartix Vale book recommendations
+- Subagent ran build-blog-data.mjs + seed-blogs.mjs --upsert → 2 articles now in Turso DB
+- Slug: enemies-to-lovers-dark-romance
+
+Atmospheric Image Generation (image-generation skill):
+- Generated 3 atmospheric dark romance images:
+  * /public/images/hero-atmosphere.png (1344x768) — gothic cathedral + smoke + crimson fog
+  * /public/images/manor-atmosphere.png (1344x768) — gothic manor on cliff with candlelit window
+  * /public/images/article-og-dark-romance.png (1344x768) — book covers on table with roses + candlelight
+- All images verified via VLM: no people, no text, suitable for premium dark romance brand
+- Hero image integrated into homepage hero section with color grading overlays for text readability
+
+Homepage Updates:
+- Replaced gradient-only hero with atmospheric hero image (hero-atmosphere.png)
+- Added multi-layer color grading overlays (linear gradient + radial blood/gold tints + vignette)
+- Improved text contrast: subhead changed from /80 to /85 opacity
+- Added second featured article to editorial section (Enemies to Lovers article with reversed layout for visual variety)
+- Removed unused imports (standaloneNovels, fadeIn, BookModal, useState)
+- Removed unused modal state management (BookCard now links to detail pages instead)
+
+Book Detail Page (NEW FEATURE):
+- Created src/app/books/[slug]/page.tsx (server component) with:
+  * generateStaticParams for all 17 book slugs
+  * generateMetadata with book-specific keywords, OG image, Twitter card
+  * Book schema structured data (with offers, isPartOf for series)
+  * BreadcrumbList structured data
+- Created src/app/books/[slug]/book-detail-client.tsx (client component) with:
+  * Breadcrumb navigation (Home / Books / Book Title)
+  * Atmospheric hero section with manor-atmosphere.png background
+  * Two-column layout: large cover (with KU badge) + meta panel
+  * Badges: genre, series position, page count, KU
+  * Hook blockquote with gold left border
+  * Buy CTAs: "Buy on Amazon · $X.XX" + "Read on Kindle Unlimited"
+  * Reading meta line (By Kartix Vale, ~X hour read, 18+ Mature)
+  * Series navigation (Previous/Next books in series, with arrows)
+  * Synopsis section with full description (prose-editorial typography)
+  * What to Expect list with check-circle bullets
+  * Content warning callout with alert icon
+  * Buy CTA section (final, strong)
+  * Related books grid (4 covers)
+- Added helper functions to src/lib/books-data.ts: bookToSlug, getBookBySlug, getAllBookSlugs, getRelatedBooks, getNextInSeries, getPreviousInSeries
+
+BookCard Component Update:
+- Replaced button+modal pattern with Next.js Link to /books/[slug]
+- Added "Details" link button replacing the old icon-only button
+- Removed onBookClick prop (no longer needed)
+- Updated all callers (homepage, books page) to remove onBookClick prop
+
+Books Page Improvements:
+- Added genre filter chips (row 2 of sticky filter bar)
+- Added sort dropdown: Default, Title A-Z, Price ↑, Price ↓, Series Order
+- Added reset filters button (X icon) when search/filter active
+- Added availableGenres memo (chips adapt to current main filter)
+- Reading order list now uses Links (clickable to detail pages)
+- Added helper text "Click any cover for full synopsis, content warnings, and reading order"
+- Improved empty state with reset button
+- Removed unused modal state management
+
+Sitemap Updates:
+- Added all 17 book detail URLs (/books/[slug]) to sitemap
+- Added fallback slug for enemies-to-lovers-dark-romance article
+- All 17 book URLs included with priority 0.7, monthly changeFrequency
+
+Accessibility Improvements:
+- Added skip-to-main-content link in root layout (sr-only, visible on focus)
+- Added id="main-content" to all <main> elements on all pages
+- Focus management preserved in navbar (mobile menu closes on route change)
+- Existing focus-ring utility used throughout
+
+SEO + Structured Data:
+- Updated /books layout to inject ItemList schema (all 17 books) + BookSeries schemas (3 series)
+- Book detail pages have Book schema with offers, isPartOf for series
+- Book detail pages have BreadcrumbList schema
+- Article page now uses /images/article-og-dark-romance.png for OG/Twitter images
+- Article alt text and image dimensions updated
+
+VLM Verification:
+- Homepage screenshot rated 9/10 (hero image visible, text readable, premium feel)
+- Books page filter bar verified: search, tabs, sort dropdown, genre chips all visible
+- Book detail page rated 9/10 (clean two-column layout, prominent buy buttons, atmospheric background)
+
+Stage Summary:
+- All routes return 200, lint passes, no runtime errors
+- New book detail pages for all 17 books (deep-linked from cards, related grids, series navigation)
+- New second article "Enemies to Lovers in Dark Romance" — 3,286 words, published
+- Hero image integrated with proper color grading for readability
+- Filter system enhanced with genre chips + sort dropdown + reset button
+- Book schema structured data on /books landing + /books/[slug] pages
+- Skip-to-main-content accessibility link + id="main-content" on all pages
+- 3 atmospheric images generated (hero, manor for book detail bg, article OG)
+- Ready for commit + push
+
+Current Project Status:
+- Stable and feature-complete
+- All recommended next steps from the task description addressed:
+  ✅ Book-detail page (route /books/[slug]) — DONE
+  ✅ Search/filter improvement on books page (genre chips, sort) — DONE
+  ✅ Second blog article — DONE
+  ✅ Homepage hero with generated atmospheric image — DONE
+  ✅ Open Graph image for article — DONE
+  ✅ Accessibility improvements — DONE
+  ✅ Structured data for individual books — DONE
+
+Unresolved issues / risks:
+- Vercel cron job not yet re-seeded for production (will need `bun run seed:blogs -- --reset` in production env after deploy)
+- Old unused scripts in scripts/ folder (legacy from previous blog system) — could be cleaned up in future round
+- No mobile-specific screenshot testing (would be nice to add for next round)
+- Book modal component (BookModal) is now unused by homepage/books page, but kept for backward compat — could be removed in future round

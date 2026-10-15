@@ -1,8 +1,9 @@
 import { MetadataRoute } from "next";
 import { getAllBlogSlugs } from "@/lib/blog-service";
+import { getAllBookSlugs } from "@/lib/books-data";
 
 // Fallback blog slugs - used if database is unreachable
-const FALLBACK_BLOG_SLUGS = ["what-is-dark-romance"];
+const FALLBACK_BLOG_SLUGS = ["what-is-dark-romance", "enemies-to-lovers-dark-romance"];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://kartixvale.vercel.app";
@@ -35,6 +36,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
+  // Book detail pages — generated from verified catalogue
+  const bookPages: MetadataRoute.Sitemap = getAllBookSlugs().map((slug) => ({
+    url: `${baseUrl}/books/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
   // Blog post pages — try database first, fall back to hardcoded list
   let blogSlugs: string[];
   try {
@@ -54,5 +63,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  return [...staticPages, ...blogPages];
+  return [...staticPages, ...bookPages, ...blogPages];
 }

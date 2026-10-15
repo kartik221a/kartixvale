@@ -210,6 +210,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:px-4 focus:py-2 focus:bg-background focus:text-foreground focus:border focus:border-gold/50 focus:rounded-md focus:shadow-lg"
+        >
+          Skip to main content
+        </a>
         <ThemeProvider>
           {children}
         </ThemeProvider>

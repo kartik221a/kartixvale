@@ -50,9 +50,9 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
       locale: "en_US",
       images: [
         {
-          url: "https://m.media-amazon.com/images/I/61kY61LNZ-L._SY522_.jpg",
-          width: 1200,
-          height: 630,
+          url: "/images/article-og-dark-romance.png",
+          width: 1344,
+          height: 768,
           alt: post.title,
         },
       ],
@@ -61,7 +61,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
       card: "summary_large_image",
       title: post.title,
       description: post.metaDescription,
-      images: ["https://m.media-amazon.com/images/I/61kY61LNZ-L._SY522_.jpg"],
+      images: ["/images/article-og-dark-romance.png"],
     },
     robots: {
       index: true,

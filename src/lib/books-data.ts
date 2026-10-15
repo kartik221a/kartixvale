@@ -618,3 +618,93 @@ export const featuredBooks: BookData[] = [
 export const allGenres: string[] = Array.from(
   new Set(booksData.map((b) => b.genre))
 ).sort();
+
+// ============================================================
+// DETAIL-PAGE HELPERS — used by /books/[slug] route
+// ============================================================
+
+/**
+ * Convert a book title into a URL-safe slug.
+ * "A Bargain in Shadows" → "a-bargain-in-shadows"
+ */
+export function bookToSlug(title: string): string {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+/** Inverse of bookToSlug — find a book whose slug matches. */
+export function getBookBySlug(slug: string): BookData | undefined {
+  return booksData.find((b) => bookToSlug(b.title) === slug);
+}
+
+/** Generate static params for /books/[slug] */
+export function getAllBookSlugs(): string[] {
+  return booksData.map((b) => bookToSlug(b.title));
+}
+
+/**
+ * Get related books for a given book.
+ * Strategy:
+ *  1. If book is in a series → other books in the same series (in order).
+ *  2. If standalone or series has only 1 book → books sharing the same genre.
+ *  3. Fallback → featured books.
+ */
+export function getRelatedBooks(book: BookData, limit = 4): BookData[] {
+  // Same series
+  if (book.series && book.series !== "Standalone") {
+    const sameSeries = booksData.filter(
+      (b) => b.series === book.series && b.title !== book.title
+    );
+    if (sameSeries.length > 0) {
+      return sameSeries
+        .sort((a, b) => (a.seriesNumber ?? 99) - (b.seriesNumber ?? 99))
+        .slice(0, limit);
+    }
+  }
+
+  // Same genre
+  const sameGenre = booksData.filter(
+    (b) => b.genre === book.genre && b.title !== book.title
+  );
+  if (sameGenre.length >= limit) {
+    return sameGenre.slice(0, limit);
+  }
+
+  // Same genre + fill with featured
+  const featured = featuredBooks.filter((b) => b.title !== book.title);
+  return [...sameGenre, ...featured]
+    .filter((b, i, arr) => arr.findIndex((x) => x.title === b.title) === i)
+    .slice(0, limit);
+}
+
+/**
+ * Get the next book in a series (or first book of next series if at end).
+ * Returns undefined for standalones.
+ */
+export function getNextInSeries(book: BookData): BookData | undefined {
+  if (!book.series || book.series === "Standalone") return undefined;
+  const seriesBooks = booksData
+    .filter((b) => b.series === book.series)
+    .sort((a, b) => (a.seriesNumber ?? 99) - (b.seriesNumber ?? 99));
+  const currentIndex = seriesBooks.findIndex((b) => b.title === book.title);
+  if (currentIndex === -1 || currentIndex === seriesBooks.length - 1) return undefined;
+  return seriesBooks[currentIndex + 1];
+}
+
+/**
+ * Get the previous book in a series.
+ * Returns undefined for standalones or first book in series.
+ */
+export function getPreviousInSeries(book: BookData): BookData | undefined {
+  if (!book.series || book.series === "Standalone") return undefined;
+  const seriesBooks = booksData
+    .filter((b) => b.series === book.series)
+    .sort((a, b) => (a.seriesNumber ?? 99) - (b.seriesNumber ?? 99));
+  const currentIndex = seriesBooks.findIndex((b) => b.title === book.title);
+  if (currentIndex <= 0) return undefined;
+  return seriesBooks[currentIndex - 1];
+}

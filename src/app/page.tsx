@@ -1,11 +1,10 @@
 "use client";
 
-import { useState } from "react";
+
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { BookCard } from "@/components/books/book-card";
-import { BookModal } from "@/components/books/book-modal";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
@@ -24,8 +23,6 @@ import {
   booksData,
   featuredBooks,
   bookSeries,
-  standaloneNovels,
-  type BookData,
 } from "@/lib/books-data";
 
 // ============================================================
@@ -38,11 +35,6 @@ const fadeUp = {
     y: 0,
     transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
   },
-};
-
-const fadeIn = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 0.9 } },
 };
 
 const stagger = {
@@ -91,45 +83,48 @@ const worlds = [
 // Page
 // ============================================================
 export default function HomePage() {
-  const [selectedBook, setSelectedBook] = useState<BookData | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const openBookModal = (book: BookData) => {
-    setSelectedBook(book);
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setTimeout(() => setSelectedBook(null), 300);
-  };
-
   return (
-    <main className="min-h-screen flex flex-col">
+    <main id="main-content" className="min-h-screen flex flex-col">
       <Navbar />
 
       {/* ============================================================
           HERO
           ============================================================ */}
       <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden">
-        {/* Atmospheric background */}
-        <div className="absolute inset-0 hero-gradient" />
+        {/* Atmospheric background image */}
+        <div className="absolute inset-0">
+          <Image
+            src="/images/hero-atmosphere.png"
+            alt=""
+            aria-hidden="true"
+            fill
+            priority
+            className="object-cover object-center"
+            sizes="100vw"
+          />
+        </div>
 
-        {/* Particulate texture (very subtle) */}
+        {/* Color grading overlays */}
         <div
-          className="absolute inset-0 opacity-30 pointer-events-none mix-blend-overlay"
+          className="absolute inset-0 pointer-events-none"
           style={{
-            backgroundImage:
-              "radial-gradient(circle at 25% 35%, rgba(184,146,74,0.18) 0%, transparent 25%), radial-gradient(circle at 75% 70%, rgba(92,10,10,0.22) 0%, transparent 30%)",
+            background:
+              "linear-gradient(180deg, rgba(12,9,7,0.55) 0%, rgba(12,9,7,0.45) 35%, rgba(12,9,7,0.70) 75%, rgba(12,9,7,0.92) 100%)",
           }}
         />
-
+        <div
+          className="absolute inset-0 pointer-events-none mix-blend-overlay opacity-50"
+          style={{
+            backgroundImage:
+              "radial-gradient(ellipse 70% 50% at 20% 30%, rgba(92,10,10,0.35) 0%, transparent 55%), radial-gradient(ellipse 70% 50% at 80% 70%, rgba(184,146,74,0.18) 0%, transparent 55%)",
+          }}
+        />
         {/* Vignette */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              "radial-gradient(ellipse 80% 100% at 50% 50%, transparent 0%, rgba(12,9,7,0.6) 100%)",
+              "radial-gradient(ellipse 80% 100% at 50% 50%, transparent 0%, rgba(12,9,7,0.55) 100%)",
           }}
         />
 
@@ -167,7 +162,7 @@ export default function HomePage() {
             {/* Subhead */}
             <motion.p
               variants={fadeUp}
-              className="font-body text-lg sm:text-xl md:text-2xl text-foreground/80 max-w-2xl mx-auto leading-relaxed"
+              className="font-body text-lg sm:text-xl md:text-2xl text-foreground/85 max-w-2xl mx-auto leading-relaxed"
             >
               The novels of Kartix Vale — atmospheric, morally grey, and unflinching
               about the rooms most romances only glance into on the way somewhere safer.
@@ -253,7 +248,7 @@ export default function HomePage() {
             >
               {featuredBooks.map((book) => (
                 <motion.div key={book.title} variants={fadeUp}>
-                  <BookCard book={book} onBookClick={openBookModal} compact />
+                  <BookCard book={book} compact />
                 </motion.div>
               ))}
             </motion.div>
@@ -421,7 +416,7 @@ export default function HomePage() {
       )}
 
       {/* ============================================================
-          EDITORIAL — latest article
+          EDITORIAL — latest articles
           ============================================================ */}
       <section className="relative py-20 md:py-32 bg-section-alt overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -445,8 +440,8 @@ export default function HomePage() {
               </p>
             </motion.div>
 
-            {/* Featured article */}
-            <motion.article variants={fadeUp}>
+            {/* Featured article 1 — primary */}
+            <motion.article variants={fadeUp} className="mb-6">
               <Link
                 href="/blog/what-is-dark-romance"
                 className="group block grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 card-dark rounded-md p-6 md:p-10 transition-all duration-500 hover:border-gold/40 hover:shadow-[0_0_60px_-20px_rgba(184,146,74,0.25)] focus-ring"
@@ -494,6 +489,58 @@ export default function HomePage() {
                     The mechanics matter too, and we will get to them. But the genre is
                     easier to recognize than to fence in...
                   </p>
+                </div>
+              </Link>
+            </motion.article>
+
+            {/* Featured article 2 — secondary */}
+            <motion.article variants={fadeUp}>
+              <Link
+                href="/blog/enemies-to-lovers-dark-romance"
+                className="group block grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 card-dark rounded-md p-6 md:p-10 transition-all duration-500 hover:border-gold/40 hover:shadow-[0_0_60px_-20px_rgba(184,146,74,0.25)] focus-ring"
+              >
+                <div className="lg:col-span-8 lg:order-1 order-2 lg:border-r lg:border-border/40 lg:pr-12">
+                  <p className="font-body text-base md:text-lg text-foreground/80 leading-relaxed mb-4">
+                    <span className="font-serif text-2xl md:text-3xl text-gold float-left mr-2 leading-none mt-1">
+                      E
+                    </span>
+                    nemies to lovers is the crown jewel of dark romance. Two people who
+                    should hate each other — who do hate each other — slowly (or
+                    devastatingly quickly) discovering that the line between hatred and
+                    desire is thinner than anyone admits.
+                  </p>
+                  <p className="font-body text-base md:text-lg text-foreground/70 leading-relaxed mb-4">
+                    The reason it works so well in dark romance is that the stakes are
+                    real. These aren't mild disagreements over coffee orders. These are
+                    people on opposite sides of a war, a conspiracy, a curse. The love
+                    that grows between them isn't convenient — it's a transgression.
+                  </p>
+                  <p className="font-body text-base text-muted-foreground italic">
+                    And that's what makes it irresistible...
+                  </p>
+                </div>
+
+                <div className="lg:col-span-4 lg:order-2 order-1 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center gap-3 mb-5">
+                      <span className="font-display text-[10px] tracking-[0.3em] uppercase px-2.5 py-1 bg-gold/15 text-gold border border-gold/30 rounded-sm">
+                        Trope Breakdown
+                      </span>
+                      <span className="font-body text-sm text-muted-foreground italic">
+                        15 min read
+                      </span>
+                    </div>
+                    <h3 className="font-serif text-2xl md:text-3xl lg:text-4xl text-foreground leading-tight mb-4 group-hover:text-gold transition-colors duration-300">
+                      Enemies to Lvers in Dark Romance
+                    </h3>
+                    <p className="font-body italic text-base text-blood-light dark:text-gold/90 mb-5">
+                      Why the trope works at its darkest.
+                    </p>
+                  </div>
+                  <div className="flex items-center text-[11px] font-display tracking-[0.3em] uppercase text-gold">
+                    Read Article
+                    <ArrowRight className="h-3 w-3 ml-2 transition-transform duration-300 group-hover:translate-x-1" />
+                  </div>
                 </div>
               </Link>
             </motion.article>
@@ -578,7 +625,6 @@ export default function HomePage() {
       {/* ============================================================
           BOOK MODAL
           ============================================================ */}
-      <BookModal isOpen={isModalOpen} onClose={closeModal} book={selectedBook} />
     </main>
   );
 }

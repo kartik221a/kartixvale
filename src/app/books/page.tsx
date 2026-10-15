@@ -4,7 +4,6 @@ import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { BookCard } from "@/components/books/book-card";
-import { BookModal } from "@/components/books/book-modal";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
@@ -14,12 +13,13 @@ import {
   ListOrdered,
   ExternalLink,
   ArrowRight,
+  ChevronDown,
+  SlidersHorizontal,
 } from "lucide-react";
 import {
   booksData,
   bookSeries,
   standaloneNovels,
-  type BookData,
 } from "@/lib/books-data";
 
 // ============================================================
@@ -43,33 +43,25 @@ const stagger = {
 };
 
 // ============================================================
-// Filter type
+// Filter + sort types
 // ============================================================
 type Filter = "all" | "series" | "standalones" | "ku";
+type Sort = "default" | "title" | "price-low" | "price-high" | "series";
 
 // ============================================================
 // Books page
 // ============================================================
 export default function BooksPage() {
-  const [selectedBook, setSelectedBook] = useState<BookData | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [filter, setFilter] = useState<Filter>("all");
+  const [genreFilter, setGenreFilter] = useState<string>("all");
+  const [sort, setSort] = useState<Sort>("default");
 
-  const openBookModal = (book: BookData) => {
-    setSelectedBook(book);
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setTimeout(() => setSelectedBook(null), 300);
-  };
-
-  // Filter logic — applies to "All Books" view
+  // Filter + sort logic — applies to "All Books" view
   const filteredBooks = useMemo(() => {
-    let books = booksData;
+    let books = [...booksData];
 
+    // Main filter
     if (filter === "series") {
       books = books.filter((b) => b.series !== "Standalone");
     } else if (filter === "standalones") {
@@ -78,6 +70,12 @@ export default function BooksPage() {
       books = books.filter((b) => b.kindleUnlimited);
     }
 
+    // Genre filter
+    if (genreFilter !== "all") {
+      books = books.filter((b) => b.genre === genreFilter);
+    }
+
+    // Search
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       books = books.filter(
@@ -89,11 +87,54 @@ export default function BooksPage() {
       );
     }
 
+    // Sort
+    if (sort === "title") {
+      books.sort((a, b) => a.title.localeCompare(b.title));
+    } else if (sort === "price-low") {
+      books.sort(
+        (a, b) =>
+          parseFloat((a.price || "$0").replace("$", "")) -
+          parseFloat((b.price || "$0").replace("$", ""))
+      );
+    } else if (sort === "price-high") {
+      books.sort(
+        (a, b) =>
+          parseFloat((b.price || "$0").replace("$", "")) -
+          parseFloat((a.price || "$0").replace("$", ""))
+      );
+    } else if (sort === "series") {
+      // Series books first (in series order), then standalones
+      books.sort((a, b) => {
+        const aSeries = a.series === "Standalone" ? 999 : 0;
+        const bSeries = b.series === "Standalone" ? 999 : 0;
+        if (aSeries !== bSeries) return aSeries - bSeries;
+        return (a.seriesNumber || 0) - (b.seriesNumber || 0);
+      });
+    }
+
     return books;
-  }, [filter, searchQuery]);
+  }, [filter, genreFilter, searchQuery, sort]);
+
+  const hasActiveFilters = searchQuery || filter !== "all" || genreFilter !== "all";
+
+  const resetFilters = () => {
+    setSearchQuery("");
+    setFilter("all");
+    setGenreFilter("all");
+    setSort("default");
+  };
+
+  // Genres actually present in current filtered set (for chip availability)
+  const availableGenres = useMemo(() => {
+    let books = [...booksData];
+    if (filter === "series") books = books.filter((b) => b.series !== "Standalone");
+    else if (filter === "standalones") books = books.filter((b) => b.series === "Standalone");
+    else if (filter === "ku") books = books.filter((b) => b.kindleUnlimited);
+    return Array.from(new Set(books.map((b) => b.genre))).sort();
+  }, [filter]);
 
   return (
-    <main className="min-h-screen flex flex-col">
+    <main id="main-content" className="min-h-screen flex flex-col">
       <Navbar />
 
       {/* ============================================================
@@ -150,73 +191,124 @@ export default function BooksPage() {
       </section>
 
       {/* ============================================================
-          SEARCH + FILTER BAR
+          SEARCH + FILTER BAR — sticky, refined
           ============================================================ */}
-      <section className="sticky top-16 md:top-20 z-30 bg-overlay/95 backdrop-blur-md border-y border-border/40 py-4">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row gap-3 md:items-center md:justify-between">
-          {/* Search */}
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-            <input
-              type="search"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search by title, genre, or series..."
-              className="w-full h-10 pl-10 pr-9 bg-card border border-border rounded-md text-sm text-foreground placeholder:text-muted-foreground focus-ring"
-              aria-label="Search books"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery("")}
-                className="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center text-muted-foreground hover:text-foreground rounded-sm focus-ring"
-                aria-label="Clear search"
+      <section className="sticky top-16 md:top-20 z-30 bg-overlay/95 backdrop-blur-md border-y border-border/40 py-3 md:py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
+          {/* Row 1: search + main filter tabs + sort */}
+          <div className="flex flex-col md:flex-row gap-3 md:items-center md:justify-between">
+            {/* Search */}
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+              <input
+                type="search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search by title, genre, or series..."
+                className="w-full h-10 pl-10 pr-9 bg-card border border-border rounded-md text-sm text-foreground placeholder:text-muted-foreground focus-ring"
+                aria-label="Search books"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center text-muted-foreground hover:text-foreground rounded-sm focus-ring"
+                  aria-label="Clear search"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              )}
+            </div>
+
+            {/* Main filter tabs */}
+            <div className="flex items-center gap-1 text-[11px] font-display tracking-[0.15em] uppercase overflow-x-auto">
+              {([
+                { id: "all", label: `All (${booksData.length})` },
+                { id: "series", label: "Series" },
+                { id: "standalones", label: "Standalones" },
+                { id: "ku", label: "Kindle U." },
+              ] as const).map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setFilter(tab.id)}
+                  className={`px-3 py-2 rounded-sm transition-colors whitespace-nowrap focus-ring ${
+                    filter === tab.id
+                      ? "text-gold bg-gold/10 border border-gold/30"
+                      : "text-muted-foreground hover:text-foreground border border-transparent"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Sort dropdown */}
+            <div className="relative">
+              <SlidersHorizontal className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
+              <select
+                value={sort}
+                onChange={(e) => setSort(e.target.value as Sort)}
+                className="appearance-none h-10 pl-9 pr-9 bg-card border border-border rounded-md text-xs font-display tracking-[0.1em] uppercase text-foreground focus-ring cursor-pointer"
+                aria-label="Sort books"
               >
-                <X className="h-3 w-3" />
-              </button>
-            )}
+                <option value="default">Default</option>
+                <option value="title">Title A-Z</option>
+                <option value="price-low">Price ↑</option>
+                <option value="price-high">Price ↓</option>
+                <option value="series">Series Order</option>
+              </select>
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
+            </div>
           </div>
 
-          {/* Filter tabs */}
-          <div className="flex items-center gap-1 text-xs font-display tracking-[0.15em] uppercase">
-            {([
-              { id: "all", label: `All (${booksData.length})` },
-              { id: "series", label: "Series" },
-              { id: "standalones", label: "Standalones" },
-              { id: "ku", label: "Kindle U." },
-            ] as const).map((tab) => (
+          {/* Row 2: genre chips */}
+          {availableGenres.length > 1 && (
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
+              <span className="text-[9px] font-display tracking-[0.2em] uppercase text-muted-foreground mr-2 whitespace-nowrap">
+                Genre:
+              </span>
               <button
-                key={tab.id}
-                onClick={() => setFilter(tab.id)}
-                className={`px-3 py-2 rounded-sm transition-colors focus-ring ${
-                  filter === tab.id
-                    ? "text-gold bg-gold/10 border border-gold/30"
-                    : "text-muted-foreground hover:text-foreground border border-transparent"
+                onClick={() => setGenreFilter("all")}
+                className={`text-[10px] font-display tracking-[0.15em] uppercase px-2.5 py-1 rounded-full transition-colors whitespace-nowrap focus-ring ${
+                  genreFilter === "all"
+                    ? "bg-gold/15 text-gold border border-gold/40"
+                    : "text-muted-foreground border border-border/60 hover:text-foreground hover:border-foreground/40"
                 }`}
               >
-                {tab.label}
+                All
               </button>
-            ))}
-          </div>
+              {availableGenres.map((g) => (
+                <button
+                  key={g}
+                  onClick={() => setGenreFilter(g)}
+                  className={`text-[10px] font-display tracking-[0.15em] uppercase px-2.5 py-1 rounded-full transition-colors whitespace-nowrap focus-ring ${
+                    genreFilter === g
+                      ? "bg-blood/15 text-blood-light dark:text-gold border border-gold/40"
+                      : "text-muted-foreground border border-border/60 hover:text-foreground hover:border-foreground/40"
+                  }`}
+                >
+                  {g}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
       {/* ============================================================
           SEARCH RESULTS (when searching or filtering)
           ============================================================ */}
-      {searchQuery || filter !== "all" ? (
+      {hasActiveFilters ? (
         <section className="py-16 md:py-20 bg-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="mb-8 flex items-baseline justify-between">
+            <div className="mb-8 flex items-baseline justify-between gap-4">
               <h2 className="font-serif text-2xl md:text-3xl text-foreground">
                 {filteredBooks.length} {filteredBooks.length === 1 ? "result" : "results"}
               </h2>
               <button
-                onClick={() => {
-                  setSearchQuery("");
-                  setFilter("all");
-                }}
-                className="text-xs font-display tracking-[0.2em] uppercase text-gold hover:text-foreground transition-colors focus-ring rounded-sm"
+                onClick={resetFilters}
+                className="text-xs font-display tracking-[0.2em] uppercase text-gold hover:text-foreground transition-colors focus-ring rounded-sm flex items-center gap-1.5"
               >
+                <X className="h-3 w-3" />
                 Reset
               </button>
             </div>
@@ -224,11 +316,18 @@ export default function BooksPage() {
             {filteredBooks.length === 0 ? (
               <div className="text-center py-16">
                 <p className="font-serif italic text-xl text-muted-foreground mb-2">
-                  No books matched &ldquo;{searchQuery}&rdquo;
+                  No books matched your filters
                 </p>
-                <p className="text-sm text-muted-foreground">
-                  Try a different title, genre, or series name.
+                <p className="text-sm text-muted-foreground mb-6">
+                  Try a different genre, search term, or reset all filters.
                 </p>
+                <Button
+                  variant="gold"
+                  onClick={resetFilters}
+                  className="h-10 px-6 text-xs tracking-wider uppercase font-semibold"
+                >
+                  Reset Filters
+                </Button>
               </div>
             ) : (
               <motion.div
@@ -239,7 +338,7 @@ export default function BooksPage() {
               >
                 {filteredBooks.map((book) => (
                   <motion.div key={book.title} variants={fadeUp}>
-                    <BookCard book={book} onBookClick={openBookModal} compact />
+                    <BookCard book={book} compact />
                   </motion.div>
                 ))}
               </motion.div>
@@ -312,7 +411,12 @@ export default function BooksPage() {
                           <span className="font-display text-[10px] tracking-[0.2em] uppercase px-2 py-1 bg-ink/80 dark:bg-card text-gold border border-gold/30 rounded-sm">
                             {book.seriesNumber === 0 ? "Prequel" : `Book ${i + 1}`}
                           </span>
-                          <span className="text-sm text-foreground/80">{book.title}</span>
+                          <Link
+                            href={`/books/${book.title.toLowerCase().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-")}`}
+                            className="text-sm text-foreground/80 hover:text-gold transition-colors"
+                          >
+                            {book.title}
+                          </Link>
                           {i < series.books.length - 1 && (
                             <span className="text-gold/40 mx-1">→</span>
                           )}
@@ -330,7 +434,7 @@ export default function BooksPage() {
                   >
                     {series.books.map((book) => (
                       <motion.div key={book.title} variants={fadeUp}>
-                        <BookCard book={book} onBookClick={openBookModal} />
+                        <BookCard book={book} />
                       </motion.div>
                     ))}
                   </motion.div>
@@ -380,7 +484,7 @@ export default function BooksPage() {
                 >
                   {standaloneNovels.map((book) => (
                     <motion.div key={book.title} variants={fadeUp}>
-                      <BookCard book={book} onBookClick={openBookModal} compact />
+                      <BookCard book={book} compact />
                     </motion.div>
                   ))}
                 </motion.div>
@@ -407,6 +511,9 @@ export default function BooksPage() {
                     All {booksData.length} Books
                   </h2>
                   <div className="divider-gold w-16 mx-auto" />
+                  <p className="text-xs text-muted-foreground mt-4">
+                    Click any cover for full synopsis, content warnings, and reading order
+                  </p>
                 </motion.div>
 
                 <motion.div
@@ -415,7 +522,7 @@ export default function BooksPage() {
                 >
                   {booksData.map((book) => (
                     <motion.div key={book.title} variants={fadeUp}>
-                      <BookCard book={book} onBookClick={openBookModal} compact showMeta={false} />
+                      <BookCard book={book} compact showMeta={false} />
                     </motion.div>
                   ))}
                 </motion.div>
@@ -497,9 +604,6 @@ export default function BooksPage() {
       )}
 
       <Footer />
-
-      {/* Book modal */}
-      <BookModal isOpen={isModalOpen} onClose={closeModal} book={selectedBook} />
     </main>
   );
 }

@@ -1,15 +1,16 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, BookMarked } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import type { BookData } from "@/lib/books-data";
+import { bookToSlug } from "@/lib/books-data";
 import { cn } from "@/lib/utils";
 
 interface BookCardProps {
   book: BookData;
-  onBookClick?: (book: BookData) => void;
   /** Compact = grid view (smaller title, smaller buy button) */
   compact?: boolean;
   /** Show full metadata (genre, KU badge, series number) */
@@ -20,15 +21,15 @@ interface BookCardProps {
 /**
  * Premium book cover card.
  * Designed to let the cover be the star — minimal chrome, restrained hover.
+ * Clicking the cover navigates to /books/[slug] (book detail page).
  */
 export function BookCard({
   book,
-  onBookClick,
   compact = false,
   showMeta = true,
   className,
 }: BookCardProps) {
-  const handleClick = () => onBookClick?.(book);
+  const detailHref = `/books/${bookToSlug(book.title)}`;
 
   return (
     <article
@@ -37,10 +38,9 @@ export function BookCard({
         className
       )}
     >
-      {/* Cover */}
-      <button
-        type="button"
-        onClick={handleClick}
+      {/* Cover — navigates to detail page */}
+      <Link
+        href={detailHref}
         className="relative block w-full aspect-[2/3] overflow-hidden rounded-sm cover-shadow cover-shadow-hover cursor-pointer focus-ring"
         aria-label={`View details for ${book.title}`}
       >
@@ -80,7 +80,7 @@ export function BookCard({
             View Details
           </span>
         </div>
-      </button>
+      </Link>
 
       {/* Meta */}
       <div className={cn("w-full mt-3", compact ? "max-w-[180px]" : "max-w-[220px]")}>
@@ -94,15 +94,16 @@ export function BookCard({
             </Badge>
           </div>
         )}
-        <h3
-          className={cn(
-            "font-serif text-foreground leading-tight cursor-pointer transition-colors duration-200 hover:text-gold",
-            compact ? "text-xs line-clamp-2" : "text-sm line-clamp-2"
-          )}
-          onClick={handleClick}
-        >
-          {book.title}
-        </h3>
+        <Link href={detailHref} tabIndex={-1}>
+          <h3
+            className={cn(
+              "font-serif text-foreground leading-tight transition-colors duration-200 hover:text-gold cursor-pointer",
+              compact ? "text-xs line-clamp-2" : "text-sm line-clamp-2"
+            )}
+          >
+            {book.title}
+          </h3>
+        </Link>
         {book.subtitle && !compact && (
           <p className="text-[11px] text-muted-foreground italic mt-1 line-clamp-1">
             {book.subtitle}
@@ -126,14 +127,13 @@ export function BookCard({
               {book.price ? `Buy · ${book.price}` : "Buy"}
             </Button>
           </a>
-          <button
-            type="button"
-            onClick={handleClick}
-            className="h-7 w-7 flex items-center justify-center rounded-sm border border-border text-muted-foreground hover:text-gold hover:border-gold/40 transition-colors focus-ring"
+          <Link
+            href={detailHref}
+            className="h-7 px-2.5 flex items-center justify-center rounded-sm border border-border text-muted-foreground hover:text-gold hover:border-gold/40 transition-colors focus-ring text-[10px] font-display tracking-[0.1em] uppercase"
             aria-label={`View details for ${book.title}`}
           >
-            <BookMarked className="h-3 w-3" />
-          </button>
+            Details
+          </Link>
         </div>
       </div>
     </article>

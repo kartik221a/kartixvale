@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { booksData, bookSeries } from "@/lib/books-data";
 
 const baseUrl = "https://kartixvale.vercel.app";
 
@@ -62,10 +63,94 @@ export const metadata: Metadata = {
   },
 };
 
+/**
+ * ItemList structured data — represents the entire Kartix Vale catalogue.
+ * Each book entry also has its own Book schema on /books/[slug] pages.
+ */
+function CatalogueJsonLd() {
+  const itemListSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Kartix Vale — Complete Book Catalogue",
+    description:
+      "All 17 published novels by dark romance author Kartix Vale, organized by series and standalones.",
+    itemListElement: booksData.map((book, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      item: {
+        "@type": "Book",
+        name: book.title,
+        author: { "@type": "Person", name: "Kartix Vale", url: baseUrl },
+        genre: book.genre,
+        url: `${baseUrl}/books/${book.title
+          .toLowerCase()
+          .replace(/[^a-z0-9\s-]/g, "")
+          .replace(/\s+/g, "-")}`,
+        image: book.coverUrl,
+        bookFormat: "EBook",
+        ...(book.series && book.series !== "Standalone"
+          ? {
+              isPartOf: {
+                "@type": "BookSeries",
+                name: book.series,
+              },
+            }
+          : {}),
+        offers: {
+          "@type": "Offer",
+          price: book.price?.replace("$", "") || "0",
+          priceCurrency: "USD",
+          availability: "https://schema.org/InStock",
+          url: book.amazonUrl,
+        },
+      },
+    })),
+  };
+
+  // Series as BookSeries schema
+  const seriesSchemas = bookSeries.map((series) => ({
+    "@context": "https://schema.org",
+    "@type": "BookSeries",
+    name: series.name,
+    author: { "@type": "Person", name: "Kartix Vale", url: baseUrl },
+    description: series.description,
+    hasPart: series.books.map((b) => ({
+      "@type": "Book",
+      name: b.title,
+      position: b.seriesNumber,
+      url: `${baseUrl}/books/${b.title
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, "")
+        .replace(/\s+/g, "-")}`,
+    })),
+  }));
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+      />
+      {seriesSchemas.map((schema, i) => (
+        <script
+          key={i}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+      ))}
+    </>
+  );
+}
+
 export default function BooksLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return (
+    <>
+      <CatalogueJsonLd />
+      {children}
+    </>
+  );
 }

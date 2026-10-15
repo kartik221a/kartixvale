@@ -68,7 +68,7 @@ const territories = [
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen flex flex-col">
+    <main id="main-content" className="min-h-screen flex flex-col">
       <Navbar />
 
       {/* ============================================================
