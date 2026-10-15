@@ -371,3 +371,172 @@ Unresolved issues / risks:
 - Old unused scripts in scripts/ folder (legacy from previous blog system) — could be cleaned up in future round
 - No mobile-specific screenshot testing (would be nice to add for next round)
 - Book modal component (BookModal) is now unused by homepage/books page, but kept for backward compat — could be removed in future round
+
+---
+Task ID: round2-article3
+Agent: Article Writer Agent (Round 2)
+Task: Write the third blog article for Kartix Vale
+
+Work Log:
+- Read worklog.md to absorb project context: prior two articles (what-is-dark-romance genre guide + enemies-to-lovers trope deep-dive), design system (oxblood/gold/ink/ivory, Cinzel + EB Garamond + Playfair Display), 17-book catalogue with verified Amazon ASINs, build pipeline (build-blog-data.mjs → seed-blogs.mjs --upsert)
+- Read both existing articles (what-is-dark-romance.md and enemies-to-lovers-dark-romance.md) to absorb voice, structure, quality bar, and to ensure the third article would not overlap with either
+- Reviewed scripts/build-blog-data.mjs to confirm frontmatter parsing pipeline and required fields
+- Chose topic 4: "Content Warnings in Dark Romance: Reader Tools, Not Judgment" (slug: dark-romance-content-warnings) — the most distinct angle from the first two articles. Article 1 was a broad genre guide (Genre Guide category); article 2 was a trope deep-dive on enemies-to-lovers (Trope Breakdown category). Article 1 only briefly touched on content warnings as a reader tool in a single subsection, and article 2 did not cover them. A reader-resources / meta-pedagogy angle (Reader Resources category) is genuinely fresh territory
+- Drafted article with original analytical framework: what a content warning actually is (vs trigger warning, vs heat rating); why dark romance in particular needs them (genre premise is difficulty, spectrum of darkness is wider than reputation suggests); what a good warning does (names, abstracts, is findable); what a bad warning does (euphemism, marketing-toned theft, moralizing, spoiler-obsessed refusal to disclose); the tension with spoilers (right level of abstraction exists, asymmetry of harm argument); how to read a warning as a reader (know your thresholds, read themes not heat ratings, attend to absence); how writers craft honest warnings (draft from manuscript, be specific, consult sensitivity readers, place findably); the case against paternalism (censorship objection and fragility objection both answered); the honest limits (warnings cannot catch everything, are not therapy, are not a substitute for craft, books still have right to be difficult)
+- Wrote 3,499 words of substantive prose (within 2,500–3,500 target), plus 12-item TOC with anchor links, 6 FAQ entries, and a "Continue into the books" section recommending 9 Kartix Vale books by darkness configuration
+- Used proper heading hierarchy: 12 H2 sections (no H3 — article has flat structure), no H1 in body (title in frontmatter)
+- Frontmatter: slug, title, excerpt, date (2026-02-22), publishDate (2026-02-22), readTime (13 min read), category (Reader Resources), categoryColor (#5C0A0A), metaDescription (150 chars, within 150-160 target), 6 keywords (within 3-7 target)
+- Referenced 9 Kartix Vale books that genuinely fit the article's topic of how content warnings would honestly describe each book's darkness: The Binding of Silk (psychological obsession), The Architecture of Silence (psychological obsession), The Art of Vanishing (Victorian psychopathic protagonist), The Sickle Bearer's Vessel (devotional surrender), The Bloom Beneath the Bone (decay and devotion), A Bargain in Shadows (institutional asymmetry), Behind the Veil (irreversible change), The Carved and The King (metaphysical coercion), Crimson Bond (fated-mates coercion) — all with correct Amazon ASIN links
+- Verified quality bar programmatically via Python script: no "in today's world" / "in a world" clichés; no fabricated statistics or citations; no quotes attributed to real people; no H1 in body; 6 keywords; metaDescription 150 chars
+- Iteratively trimmed article from 3,670 → 3,499 words via 10+ targeted edits to remove redundant sentences and tighten phrasing while preserving the analytical substance
+- Saved article at /home/z/my-project/kartixvale/content/blog/dark-romance-content-warnings.md
+- Ran `bun run scripts/build-blog-data.mjs` — all 3 articles parsed successfully (dark-romance-content-warnings: 4390 words total body; enemies-to-lovers: 4275 words; what-is-dark-romance: 3882 words)
+- Sourced .env and ran `bun run scripts/seed-blogs.mjs -- --upsert` — all 3 articles upserted to Turso database (0 inserted, 3 upserted, 0 skipped)
+- Verified scripts/blog-data.json contains 3 articles with correct slugs and titles (sorted by date descending: dark-romance-content-warnings 2026-02-22, enemies-to-lovers-dark-romance 2026-02-15, what-is-dark-romance 2026-01-30)
+
+Stage Summary:
+- Third blog article written and saved at /home/z/my-project/kartixvale/content/blog/dark-romance-content-warnings.md
+- Article is original, complementary to the first two articles (reader-resources angle vs. genre survey + trope deep-dive), 3,499 words substantive prose
+- All three articles now present in scripts/blog-data.json and upserted to the Turso blogs table
+- Database update confirmed: 3 articles upserted successfully
+- Tone and quality bar matches the first two articles (sophisticated longform magazine voice, honest treatment of sensitive themes, distinguishes fiction from real-world harm, distinguishes disclosure from judgment)
+- The three articles now span three different category types: Genre Guide, Trope Breakdown, Reader Resources — giving the blog genuine editorial range rather than three trope essays in a row
+
+---
+Task ID: round2
+Agent: Web Dev Review Agent (Round 2)
+Task: Continuous development — third article, search feature, reading progress, polish
+
+Work Log:
+
+QA Testing:
+- Verified dev server running on port 3001
+- All 10 routes return 200: /, /books, /books/[slug], /blog, /blog/what-is-dark-romance, /blog/enemies-to-lovers-dark-romance, /blog/dark-romance-content-warnings, /about, /sitemap.xml, /api/search-blogs
+- Lint passes with 0 errors
+- No runtime errors in dev.log
+
+Third Blog Article (parallel subagent, Task ID: round2-article3):
+- Article written: "Content Warnings in Dark Romance: Reader Tools, Not Judgment" at content/blog/dark-romance-content-warnings.md
+- 3,499 words of substantive prose + 6 FAQ entries + 9 Kartix Vale book recommendations
+- Article published in "Reader Resources" category (complements the first two: Genre Guide + Trope Breakdown)
+- Subagent ran build-blog-data.mjs + seed-blogs.mjs --upsert → 3 articles now in Turso DB
+- Slug: dark-romance-content-warnings (live at /blog/dark-romance-content-warnings)
+
+Blog Landing Dynamic Featured Article:
+- Fixed bug: blog-list-client.tsx had hardcoded opening text from the first article, regardless of which article was featured
+- Added new `extractOpeningPassage(content, paragraphCount)` helper that:
+  * Strips TOC sections, frontmatter, headings, blockquotes, list-only blocks
+  * Cleans Markdown inline formatting (links, bold, italic, code)
+  * Returns the first N prose paragraphs from the article body
+- Featured article panel now dynamically shows the actual opening 2 paragraphs of the latest article
+- Verified: blog landing now shows "Few subjects in romance publishing draw quicker heat..." (from Content Warnings article) instead of "Romance, as a genre..." (from What Is Dark Romance article)
+- All 3 articles appear in "More from the Library" grid below
+
+Marked Renderer with Heading IDs:
+- Updated src/lib/blog-service.ts to use a custom marked Renderer
+- H2 and H3 headings now get stable id attributes (slugified from text)
+- Enables in-page anchor links + IntersectionObserver-based active-heading tracking on article pages
+- Example: `## What dark romance actually is` → `<h2 id="what-dark-romance-actually-is">`
+
+Reading Progress Bar (article pages):
+- Added fixed-position reading progress bar at top of viewport on article pages
+- Gradient from blood-red to gold, animates width based on scroll position
+- 0.5px height (subtle, non-intrusive)
+- Updates via window scroll listener with passive:true for performance
+
+Sticky Table of Contents Sidebar (article pages):
+- Added desktop-only sticky TOC sidebar on article pages
+- Auto-populates from H2 headings in the article body (via querySelectorAll on rendered HTML)
+- Active heading tracking via IntersectionObserver with rootMargin "-80px 0px -70% 0px"
+- Active heading highlighted in gold with left border; inactive entries in muted-foreground
+- Smooth scroll-to-section on click
+- Only shows when article has 4+ H2 sections (avoid clutter on short articles)
+- Two-column layout on desktop: 3-col sidebar + 9-col article body
+
+Site-Wide Search Feature (NEW):
+- Created src/components/search/search-modal.tsx — full search modal with:
+  * Backdrop blur + escape-to-close
+  * Lazy-loads articles via /api/search-blogs on first open
+  * Real-time search across all 17 books + 3 articles
+  * Books matched against: title, subtitle, genre, series, hook, description
+  * Articles matched against: title, excerpt, category, slug
+  * Sectioned results (Books header + Articles header)
+  * Book results include cover thumbnail
+  * Article results include category + read time
+  * Keyboard navigation: Arrow Up/Down to move, Enter to open, Esc to close
+  * Active result highlighted with gold border-left
+  * Empty state with suggestion chips (dark romance, enemies to lovers, gothic, Beneath the Veil, fated mates)
+  * No-results state with helpful copy
+  * Body scroll lock when open
+- Created src/app/api/search-blogs/route.ts — server-side endpoint that:
+  * Calls getPublishedPosts() to fetch all blog posts
+  * Returns lightweight posts array (no full content) for fast client bundle
+  * Cached for 1 hour (revalidate = 3600)
+- Added SearchTrigger button to navbar (both desktop and mobile)
+- Added Cmd/Ctrl+K global keyboard shortcut to open search
+- Search button placed between nav links and theme toggle (desktop)
+- Search button placed first in mobile action group (before theme toggle + hamburger)
+- Verified via agent-browser: search modal opens, returns books + articles for "enemies" query
+
+Navbar Updates:
+- Imported SearchModal + Search icon
+- Added isSearchOpen state
+- Added Cmd/Ctrl+K keyboard shortcut listener
+- Added SearchTrigger button in desktop nav (between links and theme toggle)
+- Added SearchTrigger button in mobile action group (first position)
+- SearchModal rendered at end of header (always mounted, conditionally visible)
+
+Series Bundle CTA (books page):
+- Added "Complete Series Bundle" callout after books grid in each series section
+- Only shown for complete series (Beneath the Veil currently)
+- Two-column layout: title/description + Amazon button
+- Gold-tinted border + background to stand out from regular book cards
+- Links to https://www.amazon.com/author/kartixvale
+
+Homepage Updates:
+- Added "View All Articles" CTA button below the two featured article tiles
+- Outline button style with gold border + arrow icon
+- Links to /blog
+
+Cleanup:
+- Removed unused BookModal component (src/components/books/book-modal.tsx deleted)
+- Removed BookModal import + state from src/app/books/[slug]/book-detail-client.tsx
+- Removed unused useState import from book-detail-client.tsx
+- Deleted 12 legacy script files:
+  * all-new-blogs.json, batch1-blogs.json, batch2-blogs-new.json, batch2-blogs.json, batch3-blogs.json
+  * first-chapters.json, new-blogs.json, toft-chapters-final.json, toft-chapters.json
+  * convert-blogs.py, generate-new-blogs.py, patch-blogs.py, seed-new-blogs.mjs
+- scripts/ folder now contains only: blog-data.json, build-blog-data.mjs, deploy-daily.sh, seed-blogs.mjs
+
+Mobile QA:
+- Tested homepage at 375x812 viewport: hero renders correctly, headline scales, CTAs stack vertically
+- Tested books page at 375x812: hero text + filter bar layout adapts to mobile
+- Tested article page at 375x812: article readable, sticky TOC hidden on mobile (only shows lg+ breakpoint)
+- No horizontal overflow detected on any page
+
+Stage Summary:
+- All 10 routes return 200, lint passes, no runtime errors
+- Third article "Content Warnings in Dark Romance" published — 3,499 words
+- Site-wide search modal with Cmd+K shortcut — searches 17 books + 3 articles
+- Reading progress bar + sticky TOC sidebar on article pages (desktop)
+- Marked renderer adds heading IDs for in-page anchor links
+- Blog landing now dynamically extracts featured article's opening text
+- Series bundle CTA on complete series sections
+- Removed unused BookModal + 12 legacy script files (~1MB of dead code)
+- Mobile layouts verified at 375px width
+
+Current Project Status:
+- Stable, feature-complete, polished
+- 3 published articles spanning 3 categories (Genre Guide / Trope Breakdown / Reader Resources)
+- 17 verified books with detail pages
+- Site-wide search (Cmd+K)
+- Reading progress + sticky TOC on articles
+- Clean codebase (legacy scripts removed, unused components deleted)
+
+Unresolved issues / risks:
+- Production DB reseed still needed after Vercel deploy (`bun run seed:blogs -- --reset` in production env)
+- Could add 4th article in future round (e.g., "Morally Grey Characters" or "Fated Mates in Dark Romance")
+- Could add dynamic OG image generation route via @vercel/og (currently using static article-og-dark-romance.png for all articles)
+- Could add reading-time estimation that auto-calculates from word count (currently manual in frontmatter)
+- Could add book comparison feature (side-by-side book details)
+- Could add a "Save for later" feature via localStorage

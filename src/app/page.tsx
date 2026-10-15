@@ -544,6 +544,19 @@ export default function HomePage() {
                 </div>
               </Link>
             </motion.article>
+
+            {/* View all articles CTA */}
+            <motion.div variants={fadeUp} className="mt-10 text-center">
+              <Link href="/blog">
+                <Button
+                  variant="outline"
+                  className="h-11 px-7 text-xs tracking-[0.2em] uppercase font-semibold border-gold/30 text-gold hover:bg-gold/10 hover:border-gold/50"
+                >
+                  View All Articles
+                  <ArrowRight className="h-4 w-4 ml-2" />
+                </Button>
+              </Link>
+            </motion.div>
           </motion.div>
         </div>
       </section>

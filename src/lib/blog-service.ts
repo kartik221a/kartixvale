@@ -1,10 +1,30 @@
 import { turso, generateId } from "@/lib/db";
-import { marked } from "marked";
+import { marked, Renderer } from "marked";
 
-// Configure marked for safe rendering
+// Custom renderer — adds stable id attributes to H2/H3 headings for in-page anchor links
+// and IntersectionObserver-based active-heading tracking.
+const renderer = new Renderer();
+const originalHeading = renderer.heading.bind(renderer);
+renderer.heading = function ({ text, depth }: { text: string; depth: number }) {
+  // Strip HTML tags from text to make a clean slug
+  const plainText = String(text).replace(/<[^>]+>/g, "");
+  const slug = plainText
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+  if (depth >= 2 && depth <= 3) {
+    return `<h${depth} id="${slug}">${text}</h${depth}>`;
+  }
+  return originalHeading({ text, depth });
+};
+
+// Configure marked for safe rendering + heading IDs
 marked.setOptions({
   gfm: true,
   breaks: false,
+  renderer,
 });
 
 export interface BlogPost {

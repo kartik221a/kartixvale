@@ -5,7 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Sun, Moon } from "lucide-react";
+import { Menu, X, Sun, Moon, Search } from "lucide-react";
+import { SearchModal } from "@/components/search/search-modal";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -17,6 +18,7 @@ const navLinks = [
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
@@ -38,6 +40,18 @@ export function Navbar() {
   useEffect(() => {
     setIsMobileOpen(false);
   }, [pathname]);
+
+  // Global keyboard shortcut: Cmd/Ctrl+K to toggle search
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setIsSearchOpen((open) => !open);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   const closeMobileMenu = useCallback(() => {
     setIsMobileOpen(false);
@@ -99,6 +113,16 @@ export function Navbar() {
             );
           })}
 
+          {/* Search Trigger */}
+          <button
+            onClick={() => setIsSearchOpen(true)}
+            className="w-9 h-9 flex items-center justify-center rounded-full border border-border/50 text-muted-foreground hover:text-gold hover:border-gold/40 transition-all duration-300 focus-ring"
+            aria-label="Search books and articles"
+            title="Search (Ctrl+K)"
+          >
+            <Search className="h-4 w-4" />
+          </button>
+
           {/* Theme Toggle */}
           {mounted && (
             <button
@@ -135,8 +159,15 @@ export function Navbar() {
           )}
         </div>
 
-        {/* Mobile: Theme Toggle + Hamburger */}
+        {/* Mobile: Search + Theme Toggle + Hamburger */}
         <div className="md:hidden flex items-center gap-1.5">
+          <button
+            onClick={() => setIsSearchOpen(true)}
+            className="w-9 h-9 flex items-center justify-center rounded-full border border-border/50 text-muted-foreground hover:text-gold hover:border-gold/40 transition-all duration-300 focus-ring"
+            aria-label="Search books and articles"
+          >
+            <Search className="h-4 w-4" />
+          </button>
           {mounted && (
             <button
               onClick={toggleTheme}
@@ -198,6 +229,12 @@ export function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Site-wide Search Modal */}
+      <SearchModal
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+      />
     </header>
   );
 }

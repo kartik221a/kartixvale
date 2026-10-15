@@ -34,6 +34,54 @@ function formatDate(dateStr: string): string {
   });
 }
 
+/**
+ * Extract the opening paragraphs of an article from its Markdown content.
+ * Strips TOC lists, frontmatter, headings, and Markdown formatting to return clean prose.
+ * Used by the blog landing featured article panel for dynamic opening text.
+ */
+function extractOpeningPassage(content: string, paragraphCount = 2): string[] {
+  // Remove the TOC section if present (starts with "## Table of Contents" and ends at next ## or end of section)
+  const withoutToc = content.replace(/^##\s+Table of Contents[\s\S]*?(?=^##\s)/m, "");
+
+  // Split into blocks by double newlines
+  const blocks = withoutToc.split(/\n\s*\n/);
+
+  const paragraphs: string[] = [];
+  for (const block of blocks) {
+    const trimmed = block.trim();
+    if (!trimmed) continue;
+    // Skip headings
+    if (/^#{1,6}\s/.test(trimmed)) continue;
+    // Skip TOC list items (start with - or * and look like links)
+    if (/^[-*]\s+\[/.test(trimmed)) continue;
+    // Skip blockquotes (start with >)
+    if (/^>/.test(trimmed)) continue;
+    // Skip YAML frontmatter
+    if (/^---/.test(trimmed)) continue;
+    // Skip list-only blocks
+    if (/^[-*]\s/m.test(trimmed) && trimmed.split("\n").every((l) => /^[-*]\s/.test(l.trim()) || !l.trim())) continue;
+
+    // Clean Markdown inline formatting
+    const cleaned = trimmed
+      // Remove links, keep text: [text](url) → text
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+      // Bold: **text** → text
+      .replace(/\*\*([^*]+)\*\*/g, "$1")
+      // Italic: *text* → text (be careful with bold already removed)
+      .replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, "$1")
+      // Inline code: `text` → text
+      .replace(/`([^`]+)`/g, "$1")
+      .trim();
+
+    if (cleaned.length > 60) {
+      paragraphs.push(cleaned);
+    }
+    if (paragraphs.length >= paragraphCount) break;
+  }
+
+  return paragraphs;
+}
+
 interface BlogListClientProps {
   posts: BlogPost[];
 }
@@ -109,7 +157,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
             >
               <motion.div variants={fadeUp} className="mb-8">
                 <p className="font-display text-[11px] tracking-[0.4em] uppercase text-gold mb-2">
-                  Featured
+                  Featured · Latest
                 </p>
                 <div className="divider-gold w-16" />
               </motion.div>
@@ -163,24 +211,21 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
                       </div>
                     </div>
 
-                    {/* Opening passage panel */}
+                    {/* Opening passage panel — dynamically extracted from article content */}
                     <div className="lg:col-span-7 p-8 md:p-12 lg:p-14 lg:border-l lg:border-border/40 bg-section-alt">
                       <div className="prose-editorial max-w-none">
                         <p className="font-serif italic text-xl md:text-2xl text-gold leading-relaxed mb-6">
                           &ldquo;{featured.excerpt}&rdquo;
                         </p>
-                        <p>
-                          The opening of the article lives here. Tap through to read
-                          the full piece — {featured.readTime.toLowerCase()} of careful,
+                        {extractOpeningPassage(featured.content, 2).map((p, i) => (
+                          <p key={i} className={i === 1 ? "text-muted-foreground" : ""}>
+                            {p}
+                          </p>
+                        ))}
+                        <p className="text-muted-foreground italic">
+                          Tap through to read the full piece — {featured.readTime.toLowerCase()} of careful,
                           honest writing on dark romance, its tropes, its neighbours,
                           and the books that define it.
-                        </p>
-                        <p className="text-muted-foreground">
-                          Written for the reader curious about the genre rather than
-                          already fluent in it — and for the reader who has read a few
-                          dark romances, sensed that they were doing something more
-                          complicated than they are sometimes given credit for, and
-                          wanted a clearer language for what that something is.
                         </p>
                       </div>
                     </div>

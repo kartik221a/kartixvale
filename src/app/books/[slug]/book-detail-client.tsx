@@ -3,12 +3,10 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { BookModal } from "@/components/books/book-modal";
 import type { BookData } from "@/lib/books-data";
 import { bookToSlug } from "@/lib/books-data";
 import {
@@ -54,18 +52,6 @@ export default function BookDetailClient({
   nextBook,
   previousBook,
 }: BookDetailClientProps) {
-  const [modalBook, setModalBook] = useState<BookData | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const openModal = (b: BookData) => {
-    setModalBook(b);
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setTimeout(() => setModalBook(null), 300);
-  };
 
   return (
     <main id="main-content" className="min-h-screen flex flex-col">
@@ -519,7 +505,6 @@ export default function BookDetailClient({
       <Footer />
 
       {/* Modal for related book previews (optional click) */}
-      <BookModal isOpen={isModalOpen} onClose={closeModal} book={modalBook} />
     </main>
   );
 }

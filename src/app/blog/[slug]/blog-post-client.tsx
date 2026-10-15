@@ -52,14 +52,72 @@ interface BlogPostClientProps {
 
 export default function BlogPostClient({ post, relatedPosts }: BlogPostClientProps) {
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const [readingProgress, setReadingProgress] = useState(0);
+  const [activeHeading, setActiveHeading] = useState<string>("");
 
   useEffect(() => {
     const onScroll = () => {
       setShowBackToTop(window.scrollY > 800);
+      // Reading progress
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? (window.scrollY / docHeight) * 100 : 0;
+      setReadingProgress(Math.min(100, Math.max(0, progress)));
     };
     window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Active heading tracking — highlights current section in TOC
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    // Parse H2 headings from the post content
+    const headingMatches = post.content.match(/<h2[^>]*id="([^"]+)"/g);
+    if (!headingMatches) return;
+
+    const headingIds: string[] = headingMatches
+      .map((m) => m.match(/id="([^"]+)"/)?.[1])
+      .filter((id): id is string => Boolean(id));
+
+    if (headingIds.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (visible.length > 0) {
+          setActiveHeading(visible[0].target.id);
+        }
+      },
+      {
+        rootMargin: "-80px 0px -70% 0px",
+        threshold: 0,
+      }
+    );
+
+    headingIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, [post.content]);
+
+  // Parse TOC entries from post content's H2 headings (rendered HTML)
+  // Used to build the sticky TOC sidebar on desktop
+  const [tocEntries, setTocEntries] = useState<{ id: string; text: string }[]>([]);
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const h2Elements = document.querySelectorAll("article.prose-editorial h2[id]");
+    const entries: { id: string; text: string }[] = [];
+    h2Elements.forEach((el) => {
+      const id = el.getAttribute("id") || "";
+      const text = (el.textContent || "").trim();
+      if (id && text) entries.push({ id, text });
+    });
+    setTocEntries(entries);
+  }, [post.content]);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -68,6 +126,17 @@ export default function BlogPostClient({ post, relatedPosts }: BlogPostClientPro
   return (
     <main id="main-content" className="min-h-screen flex flex-col">
       <Navbar />
+
+      {/* Reading progress bar — fixed at top of viewport */}
+      <div
+        className="fixed top-0 left-0 right-0 z-[60] h-0.5 bg-transparent pointer-events-none"
+        aria-hidden="true"
+      >
+        <div
+          className="h-full bg-gradient-to-r from-blood via-gold to-gold-bright transition-[width] duration-100 ease-out"
+          style={{ width: `${readingProgress}%` }}
+        />
+      </div>
 
       {/* ============================================================
           ARTICLE HEADER — editorial masthead
@@ -180,27 +249,70 @@ export default function BlogPostClient({ post, relatedPosts }: BlogPostClientPro
       </section>
 
       {/* ============================================================
-          ARTICLE BODY — readable editorial typography
+          ARTICLE BODY — readable editorial typography + sticky TOC sidebar
           ============================================================ */}
       <section className="py-12 md:py-20 bg-background">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.article
-            initial="hidden"
-            animate="visible"
-            variants={stagger}
-            className="prose-editorial"
-            dangerouslySetInnerHTML={{ __html: post.content }}
-          />
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+            {/* Sticky TOC sidebar — desktop only */}
+            {tocEntries.length > 3 && (
+              <aside className="hidden lg:block lg:col-span-3">
+                <div className="sticky top-28 max-h-[calc(100vh-9rem)] overflow-y-auto pr-2">
+                  <p className="font-display text-[10px] tracking-[0.3em] uppercase text-gold mb-4">
+                    On this page
+                  </p>
+                  <div className="divider-gold w-12 mb-4" />
+                  <nav aria-label="Article table of contents">
+                    <ul className="space-y-1 text-sm">
+                      {tocEntries.map((entry) => (
+                        <li key={entry.id}>
+                          <a
+                            href={`#${entry.id}`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              document
+                                .getElementById(entry.id)
+                                ?.scrollIntoView({ behavior: "smooth", block: "start" });
+                            }}
+                            className={`block py-1 pl-3 border-l-2 transition-all duration-200 ${
+                              activeHeading === entry.id
+                                ? "border-gold text-gold font-medium"
+                                : "border-border/40 text-muted-foreground hover:text-foreground hover:border-gold/40"
+                            }`}
+                          >
+                            {entry.text}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </nav>
+                </div>
+              </aside>
+            )}
 
-          {/* Article footer — back to blog */}
-          <div className="mt-16 pt-8 border-t border-border/40">
-            <Link
-              href="/blog"
-              className="inline-flex items-center gap-2 text-sm font-display tracking-[0.15em] uppercase text-gold hover:text-foreground transition-colors focus-ring rounded-sm"
-            >
-              <ArrowLeft className="h-3.5 w-3.5" />
-              Back to The Dark Library
-            </Link>
+            {/* Article content */}
+            <div className={tocEntries.length > 3 ? "lg:col-span-9" : "lg:col-span-12"}>
+              <div className="max-w-3xl mx-auto">
+                <motion.article
+                  initial="hidden"
+                  animate="visible"
+                  variants={stagger}
+                  className="prose-editorial"
+                  dangerouslySetInnerHTML={{ __html: post.content }}
+                />
+
+                {/* Article footer — back to blog */}
+                <div className="mt-16 pt-8 border-t border-border/40">
+                  <Link
+                    href="/blog"
+                    className="inline-flex items-center gap-2 text-sm font-display tracking-[0.15em] uppercase text-gold hover:text-foreground transition-colors focus-ring rounded-sm"
+                  >
+                    <ArrowLeft className="h-3.5 w-3.5" />
+                    Back to The Dark Library
+                  </Link>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

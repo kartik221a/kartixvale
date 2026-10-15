@@ -438,6 +438,37 @@ export default function BooksPage() {
                       </motion.div>
                     ))}
                   </motion.div>
+
+                  {/* Series bundle CTA — for complete series, link to Amazon author page */}
+                  {series.complete && (
+                    <motion.div
+                      variants={fadeUp}
+                      className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 p-5 md:p-6 rounded-md border border-gold/20 bg-gold/5"
+                    >
+                      <div className="text-center sm:text-left">
+                        <p className="font-display text-[10px] tracking-[0.3em] uppercase text-gold mb-1.5">
+                          Complete Series Bundle
+                        </p>
+                        <p className="font-serif text-base md:text-lg text-foreground leading-snug">
+                          Read all {series.books.length} books in the {series.name} series — available on Kindle Unlimited.
+                        </p>
+                      </div>
+                      <a
+                        href="https://www.amazon.com/author/kartixvale"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-shrink-0"
+                      >
+                        <Button
+                          variant="oxblood"
+                          className="h-10 px-6 text-xs tracking-wider uppercase font-semibold whitespace-nowrap"
+                        >
+                          <ExternalLink className="h-3.5 w-3.5 mr-1.5" />
+                          Read on Amazon
+                        </Button>
+                      </a>
+                    </motion.div>
+                  )}
                 </motion.div>
               </div>
             </section>
