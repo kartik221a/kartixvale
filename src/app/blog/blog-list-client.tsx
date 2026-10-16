@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Navbar } from "@/components/layout/navbar";
@@ -88,6 +89,24 @@ interface BlogListClientProps {
 
 export default function BlogListClient({ posts }: BlogListClientProps) {
   const [featured, ...rest] = posts;
+  const [categoryFilter, setCategoryFilter] = useState<string>("all");
+
+  // Extract unique categories from all posts
+  const categories = useMemo(() => {
+    const seen = new Map<string, string>(); // category -> color
+    posts.forEach((p) => {
+      if (!seen.has(p.category)) {
+        seen.set(p.category, p.categoryColor);
+      }
+    });
+    return Array.from(seen.entries()).map(([name, color]) => ({ name, color }));
+  }, [posts]);
+
+  // Filter the "rest" (non-featured) posts by category
+  const filteredRest = useMemo(() => {
+    if (categoryFilter === "all") return rest;
+    return rest.filter((p) => p.category === categoryFilter);
+  }, [rest, categoryFilter]);
 
   return (
     <main id="main-content" className="min-h-screen flex flex-col">
@@ -249,32 +268,82 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
               viewport={{ once: true, margin: "-80px" }}
               variants={stagger}
             >
-              <motion.div variants={fadeUp} className="mb-10">
+              <motion.div variants={fadeUp} className="mb-6">
                 <p className="font-display text-[11px] tracking-[0.4em] uppercase text-gold mb-2">
                   More from the Library
                 </p>
-                <div className="divider-gold w-16" />
+                <div className="divider-gold w-16 mb-5" />
               </motion.div>
 
-              <motion.div
-                variants={stagger}
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-              >
-                {rest.map((post) => (
-                  <motion.div key={post.slug} variants={fadeUp}>
-                    <Link
-                      href={`/blog/${post.slug}`}
-                      className="group block h-full card-dark rounded-md p-6 transition-all duration-300 hover:border-gold/40 hover:shadow-[0_0_40px_-12px_rgba(184,146,74,0.2)] focus-ring"
-                    >
-                      <div className="mb-4 flex items-center gap-3">
-                        <span
-                          className="font-display text-[9px] tracking-[0.3em] uppercase px-2 py-1 border rounded-sm"
-                          style={{
-                            color: post.categoryColor,
-                            borderColor: `${post.categoryColor}55`,
-                            backgroundColor: `${post.categoryColor}15`,
-                          }}
-                        >
+              {/* Category filter chips */}
+              {categories.length > 1 && (
+                <motion.div variants={fadeUp} className="flex items-center gap-1.5 overflow-x-auto pb-2 mb-8">
+                  <button
+                    onClick={() => setCategoryFilter("all")}
+                    className={`text-[10px] font-display tracking-[0.15em] uppercase px-2.5 py-1 rounded-full transition-colors whitespace-nowrap focus-ring ${
+                      categoryFilter === "all"
+                        ? "bg-gold/15 text-gold border border-gold/40"
+                        : "text-muted-foreground border border-border/60 hover:text-foreground hover:border-foreground/40"
+                    }`}
+                  >
+                    All ({rest.length})
+                  </button>
+                  {categories.map((cat) => {
+                    const count = rest.filter((p) => p.category === cat.name).length;
+                    if (count === 0) return null;
+                    return (
+                      <button
+                        key={cat.name}
+                        onClick={() => setCategoryFilter(cat.name)}
+                        className={`text-[10px] font-display tracking-[0.15em] uppercase px-2.5 py-1 rounded-full transition-colors whitespace-nowrap focus-ring ${
+                          categoryFilter === cat.name
+                            ? "border text-foreground"
+                            : "text-muted-foreground border border-border/60 hover:text-foreground hover:border-foreground/40"
+                        }`}
+                        style={
+                          categoryFilter === cat.name
+                            ? {
+                                color: cat.color,
+                                borderColor: `${cat.color}55`,
+                                backgroundColor: `${cat.color}15`,
+                              }
+                            : undefined
+                        }
+                      >
+                        {cat.name} ({count})
+                      </button>
+                    );
+                  })}
+                </motion.div>
+              )}
+
+              {/* Filtered articles grid */}
+              {filteredRest.length === 0 ? (
+                <div className="text-center py-12">
+                  <p className="font-serif italic text-lg text-muted-foreground">
+                    No articles in this category yet.
+                  </p>
+                </div>
+              ) : (
+                <motion.div
+                  variants={stagger}
+                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                >
+                  {filteredRest.map((post) => (
+                    <motion.div key={post.slug} variants={fadeUp}>
+                      <Link
+                        href={`/blog/${post.slug}`}
+                        className="group block h-full card-dark rounded-md p-6 transition-all duration-300 hover:border-gold/40 hover:shadow-[0_0_40px_-12px_rgba(184,146,74,0.2)] focus-ring"
+                      >
+                        <div className="mb-4 flex items-center gap-3">
+                          <span
+                            className="font-display text-[9px] tracking-[0.3em] uppercase px-2 py-1 border rounded-sm"
+                            style={{
+                              color: post.categoryColor,
+                              borderColor: `${post.categoryColor}55`,
+                              backgroundColor: `${post.categoryColor}15`,
+                            }}
+                          >
                           {post.category}
                         </span>
                         <span className="font-body text-xs text-muted-foreground italic">
@@ -298,6 +367,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
                   </motion.div>
                 ))}
               </motion.div>
+              )}
             </motion.div>
           </div>
         </section>

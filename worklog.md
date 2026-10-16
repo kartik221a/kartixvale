@@ -1281,3 +1281,91 @@ Unresolved issues / risks:
 - Production DB reseed still needed after Vercel deploy
 - Could add 11th article in future round
 - Reading list is localStorage-only — could add user accounts for cross-device sync
+
+---
+Task ID: round10-article11
+Agent: Article Writer Agent (Round 10)
+Task: Write the eleventh blog article for Kartix Vale
+
+Work Log:
+- Read worklog.md to understand project context (10 existing articles across 5 editorial categories: genre guide, trope breakdowns, reader resources, character study, genre comparison) and the Kartix Vale book catalogue + ASINs.
+- Reviewed two existing articles for voice/structure conventions: `morally-grey-characters-dark-romance.md` (closest parallel — a Character Study) and `forbidden-love-dark-romance.md` (a Trope Breakdown) — to match the longform magazine voice, `##`/`###` heading hierarchy, TOC with anchor links, optional 6-entry FAQ, and "Continue into the books" closing section.
+- Selected topic 1 of 3 offered: "Possessive Heroes in Dark Romance: Possession, Protection, and the Line Between" (slug: `possessive-heroes-dark-romance`, category: Character Study). Chosen because it is a defining dark romance archetype with no direct overlap with any of the existing 10 articles — the morally-grey article treats villains/antiheroes generally; the possessive hero is a more specific structural figure organized around the claim of "mine," and the "where protection ends and possession begins" angle is genuinely fresh.
+- Drafted the article with the established longform analytical voice: intro → TOC → "What the possessive hero actually is" → "A brief lineage: from Gothic lord to dark romance's contested figure" → "Protection, possession, control: three different grammars" → "Five modes of possessiveness" (custodial / jealous / territorial / devotional / predatory) → "Where protection ends and possession begins" → "The other side of 'mine': the heroine's agency" → "The grammar of the claim: how the genre stages 'mine'" (recognition / enactment / negotiation / test) → "When the figure breaks" (4 failure modes) → 6 FAQ entries → "Continue into the books."
+- Built an original three-grammar taxonomy (protection / possession / control) — distinct from the morally-grey article's three-mode (compromised / principled monster / transformed villain) — and a separate five-mode taxonomy of possessive configurations (custodial / jealous / territorial / devotional / predatory) plus a four-stage grammar of how the genre stages the claim (recognition / enactment / negotiation / test). No overlap with any existing article's framework.
+- Wove in 10 Kartix Vale books with correctly formatted ASIN links, mapped to specific possessive modes: The Gotham Reaper's Bride + A Bargain in Shadows (custodial gothic), The Carved and The King + A Crown of Ashes (territorial dark romantasy), The Sickle Bearer's Vessel + The Bloom Beneath the Bone (devotional), Crimson Bond + Thorns of the Fae Thorne (predatory / fated claim), Behind the Veil + All the Hollow Places (gothic paranormal possessive).
+- Iteratively trimmed the article through multiple MultiEdit passes to land at ~3,674 words of pure main prose (4,827 total body incl. FAQ + Continue) — within the established precedent range (3,018–3,687 main prose across the existing 10 articles).
+- Fixed literal `\u2014`/`\u201c`/`\u201d`/`\u2019` escape sequences in the frontmatter and body (artifacts of the Write tool encoding) by replacing them with actual Unicode em-dash, curly-quote, and apostrophe characters — verified via Python regex scan that zero escape sequences remain.
+- Cliche scan confirmed no "in today's world" / "in a world" / "nowadays" usages.
+- Tightened the metaDescription to 151 characters (within the 150-160 spec).
+- Saved article to `/home/z/my-project/kartixvale/content/blog/possessive-heroes-dark-romance.md`.
+- Ran `bun run scripts/build-blog-data.mjs` — successfully parsed all 11 markdown files and wrote `scripts/blog-data.json`.
+- Ran `set -a && source .env && set +a && bun run scripts/seed-blogs.mjs -- --upsert` — 0 inserted, 11 upserted, 0 skipped (new article upserted to Turso database; all 10 existing articles re-upserted cleanly).
+- Verified `scripts/blog-data.json` contains 11 articles, with `possessive-heroes-dark-romance` listed first (most recent by date 2026-04-19).
+
+Stage Summary:
+- Eleventh blog article published: "Possessive Heroes in Dark Romance: Possession, Protection, and the Line Between" at `/home/z/my-project/kartixvale/content/blog/possessive-heroes-dark-romance.md`
+- Slug: `possessive-heroes-dark-romance`; Category: Character Study; readTime: 15 min read; date: 2026-04-19
+- Main prose word count: 3,674 (within established convention of 3,018–3,687 across the existing 10 articles); total article body: 4,827 words
+- Original three-grammar taxonomy (protection / possession / control) and five-mode taxonomy (custodial / jealous / territorial / devotional / predatory) — no overlap with the morally-grey character study's three-mode taxonomy or any other existing article
+- DB update confirmed: `scripts/blog-data.json` now contains 11 articles; Turso database upserted 11/11 articles (0 inserted, 11 upserted, 0 skipped)
+- Blog catalogue now spans: genre guide, enemies-to-lovers, content warnings, morally grey characters, fated mates, slow burn, dark-vs-gothic, marriage of convenience, forbidden love, beginner reading path, and possessive heroes
+
+---
+Task ID: round10
+Agent: Web Dev Review Agent (Round 10)
+Task: 11th article, blog category filter, polish
+
+Work Log:
+
+QA Testing:
+- All routes return 200: /, /books, /blog, /blog/possessive-heroes-dark-romance, /about, /api/search-blogs
+- Lint passes with 0 errors
+- Search API returns 11 articles
+
+Eleventh Blog Article (parallel subagent, Task ID: round10-article11):
+- Article: "Possessive Heroes in Dark Romance: Possession, Protection, and the Line Between" at content/blog/possessive-heroes-dark-romance.md
+- 3,674 words + 6 FAQ entries + 10 book recommendations mapped to 5 possessive configurations (custodial, jealous, territorial, devotional, predatory)
+- Category: Character Study (11 articles total)
+- Article upserted to Turso DB (11 articles live)
+- Slug: possessive-heroes-dark-romance
+
+Blog Category Filter (NEW):
+- Added category filter chips to blog landing page "More from the Library" section
+- Chips: All (10), Character Study (1), Reader Resources (2), Trope Breakdown (5), Genre Comparison (1), Genre Guide (1)
+- Each chip shows count of articles in that category
+- Active chip uses the category's own color (from categoryColor field)
+- Inactive chips use muted styling with hover effect
+- All chip uses gold accent
+- Empty state: "No articles in this category yet." when filter returns 0
+- Uses useMemo for category extraction and filtered list
+- Verified via agent-browser: all 6 category chips visible with correct counts
+
+Stage Summary:
+- 11 articles published (Genre Guide + 5 Trope Breakdowns + 2 Reader Resources + 2 Character Studies + Genre Comparison)
+- Blog landing page now has category filter chips
+- All routes 200, lint passes
+- VLM verified: category filter chips visible with counts
+
+Current Project Status:
+- Stable, feature-rich, polished
+- 11 published articles spanning 5 editorial categories
+- 17 verified books with detail pages
+- 3 series landing pages with reading order timelines
+- Site-wide search (Cmd+K) with 11 articles + 17 books
+- Blog category filter on landing page
+- Reading progress + sticky TOC on articles
+- Dynamic OG image generation per article
+- Save-for-later reading list with localStorage + navbar badge
+- Newsletter signup with working backend
+- Book comparison feature with localStorage persistence
+- Article share buttons
+- Branded 404 page
+- Global back-to-top button
+- Article drop-cap editorial typography
+- Series navigation links throughout the site
+
+Unresolved issues / risks:
+- Production DB reseed still needed after Vercel deploy
+- Could add 12th article in future round
+- Reading list is localStorage-only — could add user accounts for cross-device sync
